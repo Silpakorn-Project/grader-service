@@ -43,7 +43,8 @@ public class UsersService {
             }).orElseThrow( () -> new RuntimeException("User not found")));
     }
 
-    public void deleteUser(UserRequest userRequest) {
+    public Long deleteUser(UserRequest userRequest) {
         userRepository.deleteById(userRequest.getId());
+        return userRequest.getId();
     }
 }

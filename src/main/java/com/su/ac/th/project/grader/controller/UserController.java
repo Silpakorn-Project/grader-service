@@ -57,7 +57,7 @@ public class UserController {
                 .timestamp(getDateTimeNow())
                 .message("Delete Successfully")
                 .code("200")
-                .data(userRequest.getId())
+                .data(usersService.deleteUser(userRequest))
                 .build());
     }
 }

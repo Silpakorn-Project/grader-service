@@ -6,6 +6,9 @@ import com.su.ac.th.project.grader.repository.jpa.UsersRepository;
 import com.su.ac.th.project.grader.service.components.TransformUsersComponents;
 import org.springframework.stereotype.Service;
 
+import java.time.LocalDateTime;
+import java.util.List;
+
 @Service
 public class UsersService {
 
@@ -13,6 +16,10 @@ public class UsersService {
 
     public UsersService(UsersRepository usersRepository) {
         this.usersRepository = usersRepository;
+    }
+
+    public List<UsersModel> getAllUsers() {
+        return usersRepository.findAll();
     }
 
     public UsersRequest createUser(UsersRequest usersRequest){
@@ -24,4 +31,19 @@ public class UsersService {
         return transformUsersComponents.transformEntityToUser(usersModel);
     }
 
+    public UsersRequest updateUser(UsersRequest usersRequest) {
+        TransformUsersComponents transformUsersComponents = new TransformUsersComponents();
+        return transformUsersComponents.transformEntityToUser(
+                usersRepository.findById(usersRequest.getId()).map(existingUsers -> {
+                existingUsers.setUsername(usersRequest.getUsername());
+                existingUsers.setPassword(usersRequest.getPassword());
+                existingUsers.setEmail(usersRequest.getEmail());
+                existingUsers.setUpdatedAt(LocalDateTime.now());
+                return usersRepository.save(existingUsers);
+            }).orElseThrow( () -> new RuntimeException("User not found")));
+    }
+
+    public void deleteUser(UsersRequest usersRequest) {
+        usersRepository.deleteById(usersRequest.getId());
+    }
 }

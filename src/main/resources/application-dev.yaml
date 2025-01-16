@@ -20,7 +20,7 @@ security:
 server:
   servlet:
     context-path: /grader-service
-  port: 5000
+  port: 8000
 
 springdoc:
   api-docs:

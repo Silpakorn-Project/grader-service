@@ -4,6 +4,6 @@ WORKDIR /home/app
 
 COPY target/grader*.jar app.jar
 
-EXPOSE 5000
+EXPOSE 8000
 
 ENTRYPOINT exec java -jar app.jar

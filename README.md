@@ -23,7 +23,7 @@ brew install maven
 ## 1. Maven package
 
 ```shell
-mvn clean package -DskipTests
+mvn clean install -DskipTests
 ```
 
 ## 2. Run docker-compose

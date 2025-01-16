@@ -1,8 +1,8 @@
 package com.su.ac.th.project.grader.service;
 
-import com.su.ac.th.project.grader.entity.UsersEntity;
-import com.su.ac.th.project.grader.Model.request.UsersRequest;
-import com.su.ac.th.project.grader.repository.jpa.UsersRepository;
+import com.su.ac.th.project.grader.entity.UserEntity;
+import com.su.ac.th.project.grader.Model.request.UserRequest;
+import com.su.ac.th.project.grader.repository.jpa.UserRepository;
 import com.su.ac.th.project.grader.service.Transform.UsersTransform;
 import org.springframework.stereotype.Service;
 
@@ -12,38 +12,38 @@ import java.util.List;
 @Service
 public class UsersService {
 
-    private final UsersRepository usersRepository;
+    private final UserRepository userRepository;
 
-    public UsersService(UsersRepository usersRepository) {
-        this.usersRepository = usersRepository;
+    public UsersService(UserRepository userRepository) {
+        this.userRepository = userRepository;
     }
 
-    public List<UsersEntity> getAllUsers() {
-        return usersRepository.findAll();
+    public List<UserEntity> getAllUsers() {
+        return userRepository.findAll();
     }
 
-    public UsersRequest createUser(UsersRequest usersRequest){
+    public UserRequest createUser(UserRequest userRequest){
         UsersTransform usersTransform = new UsersTransform();
 
-        UsersEntity usersEntity = usersRepository.save(
-                usersTransform.transformUserToEntity(usersRequest));
+        UserEntity userEntity = userRepository.save(
+                usersTransform.transformUserToEntity(userRequest));
 
-        return usersTransform.transformEntityToUser(usersEntity);
+        return usersTransform.transformEntityToUser(userEntity);
     }
 
-    public UsersRequest updateUser(UsersRequest usersRequest) {
+    public UserRequest updateUser(UserRequest userRequest) {
         UsersTransform usersTransform = new UsersTransform();
         return usersTransform.transformEntityToUser(
-                usersRepository.findById(usersRequest.getId()).map(existingUsers -> {
-                existingUsers.setUsername(usersRequest.getUsername());
-                existingUsers.setPassword(usersRequest.getPassword());
-                existingUsers.setEmail(usersRequest.getEmail());
+                userRepository.findById(userRequest.getId()).map(existingUsers -> {
+                existingUsers.setUsername(userRequest.getUsername());
+                existingUsers.setPassword(userRequest.getPassword());
+                existingUsers.setEmail(userRequest.getEmail());
                 existingUsers.setUpdatedAt(LocalDateTime.now());
-                return usersRepository.save(existingUsers);
+                return userRepository.save(existingUsers);
             }).orElseThrow( () -> new RuntimeException("User not found")));
     }
 
-    public void deleteUser(UsersRequest usersRequest) {
-        usersRepository.deleteById(usersRequest.getId());
+    public void deleteUser(UserRequest userRequest) {
+        userRepository.deleteById(userRequest.getId());
     }
 }

@@ -1,7 +1,7 @@
 package com.su.ac.th.project.grader.controller;
 
 import com.su.ac.th.project.grader.Model.BaseResponseModel;
-import com.su.ac.th.project.grader.Model.request.UsersRequest;
+import com.su.ac.th.project.grader.Model.request.UserRequest;
 import com.su.ac.th.project.grader.service.UsersService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.web.bind.annotation.*;
@@ -11,11 +11,11 @@ import java.time.LocalDateTime;
 @RestController
 @RequestMapping("/api")
 @Slf4j
-public class UsersController {
+public class UserController {
 
     private final UsersService usersService;
 
-    public UsersController(UsersService usersService) {
+    public UserController(UsersService usersService) {
         this.usersService = usersService;
     }
 
@@ -30,32 +30,32 @@ public class UsersController {
     }
 
     @PostMapping("/create/user")
-    public BaseResponseModel createUser(@RequestBody UsersRequest usersRequest){
+    public BaseResponseModel createUser(@RequestBody UserRequest userRequest){
         return BaseResponseModel.builder()
                 .timestamp(LocalDateTime.now())
-                .message("Create User Sucessfully")
+                .message("Create User Successfully")
                 .code("200")
-                .data(usersService.createUser(usersRequest))
+                .data(usersService.createUser(userRequest))
                 .build();
     }
 
     @PutMapping("/update/user")
-    public BaseResponseModel updateUser(@RequestBody UsersRequest usersRequest){
+    public BaseResponseModel updateUser(@RequestBody UserRequest userRequest){
         return BaseResponseModel.builder()
                 .timestamp(LocalDateTime.now())
                 .message("Update Successfully")
                 .code("200")
-                .data(usersService.updateUser(usersRequest))
+                .data(usersService.updateUser(userRequest))
                 .build();
     }
 
     @DeleteMapping("/delete/user")
-    public BaseResponseModel deleteUser(@RequestBody UsersRequest usersRequest){
+    public BaseResponseModel deleteUser(@RequestBody UserRequest userRequest){
         return BaseResponseModel.builder()
                 .timestamp(LocalDateTime.now())
                 .message("Delete Successfully")
                 .code("200")
-                .data(usersRequest.getId())
+                .data(userRequest.getId())
                 .build();
     }
 }

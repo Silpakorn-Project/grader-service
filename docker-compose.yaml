@@ -1,7 +1,7 @@
 services:
 
   db:
-    image: mysql:latest
+    image: mysql:8.1
     environment:
       MYSQL_ROOT_PASSWORD: password
       MYSQL_DATABASE: grader

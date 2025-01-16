@@ -19,7 +19,6 @@ brew install maven
 # Swagger
 http://localhost:8000/grader-service/swagger-ui/index.html
 
-###
 
 # RUN
 ## 1. Maven package

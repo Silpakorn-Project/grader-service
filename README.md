@@ -16,6 +16,8 @@ homebrew link [here](https://formulae.brew.sh/formula/maven)
 ```shell
 brew install maven
 ```
+# Swagger
+http://localhost:8000/grader-service/swagger-ui/index.html
 
 ###
 
@@ -42,7 +44,7 @@ docker-compose down
 
 ### Test api
 ```shell
-curl -X GET http://localhost:8080/java-compiler-service/api/test
+curl -X GET http://localhost:8000/grader-service/api/health/check
 ```
 
 ###

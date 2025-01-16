@@ -11,10 +11,10 @@ public class SwaggerConfig {
     @Bean
     public OpenAPI openAPI(){
         return new OpenAPI().info(new Info()
-                .title("Spring Boot REST API")
-                .description("this is a REST API for grading")
+                .title("Spring Boot REST API Swagger")
+                .description("Spring Boot REST API Swagger")
                 .contact(new Contact()
-                        .name("Sutthirak")
+                        .name("Sutthirak Sutsaenya")
                         .email("sutsaenya_s@su.ac.th"))
                 .version("v1.0.0"));
     }

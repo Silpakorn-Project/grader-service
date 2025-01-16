@@ -1,4 +1,4 @@
-# java-compiler-service
+# grader-service
 this is a compiler java
 
 # INSTALL
@@ -41,7 +41,7 @@ docker-compose up --build
 docker-compose down
 ```
 
-### Test api
+### Health Check
 ```shell
 curl -X GET http://localhost:8000/grader-service/api/health/check
 ```

@@ -16,3 +16,9 @@ server:
   servlet:
     context-path: /grader-service
   port: 5000
+
+springdoc:
+  api-docs:
+    enabled: true
+  swagger-ui:
+    enabled: true

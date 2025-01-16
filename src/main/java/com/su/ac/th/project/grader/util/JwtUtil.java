@@ -2,6 +2,7 @@ package com.su.ac.th.project.grader.util;
 
 import io.jsonwebtoken.*;
 import io.jsonwebtoken.security.Keys;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 
 import java.security.Key;
@@ -10,8 +11,10 @@ import java.util.Date;
 @Component
 public class JwtUtil {
 
+    @Value( "${security.jwt.secret-key}")
+    private String SECRET_KEY;
+
     private Key getSigningKey() {
-        String SECRET_KEY = "mySecretKey123456789012345678901234";
         return Keys.hmacShaKeyFor(SECRET_KEY.getBytes());
     }
 

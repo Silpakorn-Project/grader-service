@@ -3,7 +3,7 @@ package com.su.ac.th.project.grader.service;
 import com.su.ac.th.project.grader.model.UsersModel;
 import com.su.ac.th.project.grader.dto.request.UsersRequest;
 import com.su.ac.th.project.grader.repository.jpa.UsersRepository;
-import com.su.ac.th.project.grader.service.components.TransformUsersComponents;
+import com.su.ac.th.project.grader.service.Transform.UsersTransform;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
@@ -23,17 +23,17 @@ public class UsersService {
     }
 
     public UsersRequest createUser(UsersRequest usersRequest){
-        TransformUsersComponents transformUsersComponents = new TransformUsersComponents();
+        UsersTransform usersTransform = new UsersTransform();
 
         UsersModel usersModel = usersRepository.save(
-                transformUsersComponents.transformUserToEntity(usersRequest));
+                usersTransform.transformUserToEntity(usersRequest));
 
-        return transformUsersComponents.transformEntityToUser(usersModel);
+        return usersTransform.transformEntityToUser(usersModel);
     }
 
     public UsersRequest updateUser(UsersRequest usersRequest) {
-        TransformUsersComponents transformUsersComponents = new TransformUsersComponents();
-        return transformUsersComponents.transformEntityToUser(
+        UsersTransform usersTransform = new UsersTransform();
+        return usersTransform.transformEntityToUser(
                 usersRepository.findById(usersRequest.getId()).map(existingUsers -> {
                 existingUsers.setUsername(usersRequest.getUsername());
                 existingUsers.setPassword(usersRequest.getPassword());

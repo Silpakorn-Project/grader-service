@@ -1,11 +1,11 @@
-package com.su.ac.th.project.grader.service.components;
+package com.su.ac.th.project.grader.service.Transform;
 
 import com.su.ac.th.project.grader.model.UsersModel;
 import com.su.ac.th.project.grader.dto.request.UsersRequest;
 import org.springframework.stereotype.Component;
 
 @Component
-public class TransformUsersComponents {
+public class UsersTransform {
 
     public UsersModel transformUserToEntity(UsersRequest usersRequest) {
         UsersModel usersModel = new UsersModel();

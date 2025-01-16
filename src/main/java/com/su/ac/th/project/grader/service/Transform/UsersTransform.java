@@ -1,7 +1,7 @@
 package com.su.ac.th.project.grader.service.Transform;
 
 import com.su.ac.th.project.grader.entity.UserEntity;
-import com.su.ac.th.project.grader.Model.request.UserRequest;
+import com.su.ac.th.project.grader.model.request.UserRequest;
 import org.springframework.stereotype.Component;
 
 @Component

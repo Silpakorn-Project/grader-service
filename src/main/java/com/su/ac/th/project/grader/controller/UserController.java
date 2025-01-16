@@ -1,10 +1,9 @@
 package com.su.ac.th.project.grader.controller;
 
-import com.su.ac.th.project.grader.Model.BaseResponseModel;
-import com.su.ac.th.project.grader.Model.request.UserRequest;
+import com.su.ac.th.project.grader.model.BaseResponseModel;
+import com.su.ac.th.project.grader.model.request.UserRequest;
 import com.su.ac.th.project.grader.service.UsersService;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 

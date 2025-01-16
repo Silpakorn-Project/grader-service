@@ -1,4 +1,4 @@
-package com.su.ac.th.project.grader.Model;
+package com.su.ac.th.project.grader.model;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;

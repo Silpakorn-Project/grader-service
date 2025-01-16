@@ -1,7 +1,7 @@
 package com.su.ac.th.project.grader.service;
 
 import com.su.ac.th.project.grader.entity.UserEntity;
-import com.su.ac.th.project.grader.Model.request.UserRequest;
+import com.su.ac.th.project.grader.model.request.UserRequest;
 import com.su.ac.th.project.grader.repository.jpa.UserRepository;
 import com.su.ac.th.project.grader.service.Transform.UsersTransform;
 import org.springframework.stereotype.Service;

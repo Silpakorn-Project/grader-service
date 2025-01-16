@@ -8,6 +8,7 @@ import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
 import java.util.List;
+import java.util.Objects;
 
 @Service
 public class UsersService {
@@ -23,6 +24,21 @@ public class UsersService {
     }
 
     public UserRequest createUser(UserRequest userRequest){
+
+        if (Objects.isNull(userRequest)) {
+            throw new RuntimeException("userRequest cannot be null");
+        }
+        if (Objects.isNull(userRequest.getUsername())) {
+            throw new RuntimeException("username cannot be null");
+        }
+        if (Objects.isNull(userRequest.getPassword())) {
+            throw new RuntimeException("password cannot be null");
+        }
+        if (Objects.isNull(userRequest.getEmail())) {
+            throw new RuntimeException("email cannot be null");
+        }
+
+
         UsersTransform usersTransform = new UsersTransform();
 
         UserEntity userEntity = userRepository.save(

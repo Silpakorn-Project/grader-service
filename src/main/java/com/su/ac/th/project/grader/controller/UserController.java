@@ -4,9 +4,11 @@ import com.su.ac.th.project.grader.Model.BaseResponseModel;
 import com.su.ac.th.project.grader.Model.request.UserRequest;
 import com.su.ac.th.project.grader.service.UsersService;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
-import java.time.LocalDateTime;
+import static com.su.ac.th.project.grader.util.CommonUtil.getDateTimeNow;
 
 @RestController
 @RequestMapping("/api")
@@ -20,42 +22,42 @@ public class UserController {
     }
 
     @GetMapping("/get/users")
-    public BaseResponseModel getUsers(){
-        return BaseResponseModel.builder()
-                .timestamp(LocalDateTime.now())
+    public ResponseEntity<BaseResponseModel> getUsers(){
+        return ResponseEntity.ok(BaseResponseModel.builder()
+                .timestamp(getDateTimeNow())
                 .message("Get all users")
                 .code("200")
                 .data(usersService.getAllUsers())
-                .build();
+                .build());
     }
 
     @PostMapping("/create/user")
-    public BaseResponseModel createUser(@RequestBody UserRequest userRequest){
-        return BaseResponseModel.builder()
-                .timestamp(LocalDateTime.now())
+    public ResponseEntity<BaseResponseModel> createUser(@RequestBody UserRequest userRequest){
+        return ResponseEntity.ok(BaseResponseModel.builder()
+                .timestamp(getDateTimeNow())
                 .message("Create User Successfully")
                 .code("200")
                 .data(usersService.createUser(userRequest))
-                .build();
+                .build());
     }
 
     @PutMapping("/update/user")
-    public BaseResponseModel updateUser(@RequestBody UserRequest userRequest){
-        return BaseResponseModel.builder()
-                .timestamp(LocalDateTime.now())
+    public ResponseEntity<BaseResponseModel> updateUser(@RequestBody UserRequest userRequest){
+        return ResponseEntity.ok(BaseResponseModel.builder()
+                .timestamp(getDateTimeNow())
                 .message("Update Successfully")
                 .code("200")
                 .data(usersService.updateUser(userRequest))
-                .build();
+                .build());
     }
 
     @DeleteMapping("/delete/user")
-    public BaseResponseModel deleteUser(@RequestBody UserRequest userRequest){
-        return BaseResponseModel.builder()
-                .timestamp(LocalDateTime.now())
+    public ResponseEntity<BaseResponseModel> deleteUser(@RequestBody UserRequest userRequest){
+        return ResponseEntity.ok(BaseResponseModel.builder()
+                .timestamp(getDateTimeNow())
                 .message("Delete Successfully")
                 .code("200")
                 .data(userRequest.getId())
-                .build();
+                .build());
     }
 }

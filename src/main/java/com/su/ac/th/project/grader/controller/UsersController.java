@@ -1,12 +1,12 @@
 package com.su.ac.th.project.grader.controller;
 
-import com.su.ac.th.project.grader.dto.request.UsersRequest;
-import com.su.ac.th.project.grader.model.UsersModel;
+import com.su.ac.th.project.grader.Model.BaseResponseModel;
+import com.su.ac.th.project.grader.Model.request.UsersRequest;
 import com.su.ac.th.project.grader.service.UsersService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.List;
+import java.time.LocalDateTime;
 
 @RestController
 @RequestMapping("/api")
@@ -20,23 +20,42 @@ public class UsersController {
     }
 
     @GetMapping("/get/users")
-    public List<UsersModel> getUsers(){
-        return usersService.getAllUsers();
+    public BaseResponseModel getUsers(){
+        return BaseResponseModel.builder()
+                .timestamp(LocalDateTime.now())
+                .message("Get all users")
+                .code("200")
+                .data(usersService.getAllUsers())
+                .build();
     }
 
     @PostMapping("/create/user")
-    public UsersRequest createUser(@RequestBody UsersRequest usersRequest){
-        return usersService.createUser(usersRequest);
+    public BaseResponseModel createUser(@RequestBody UsersRequest usersRequest){
+        return BaseResponseModel.builder()
+                .timestamp(LocalDateTime.now())
+                .message("Create User Sucessfully")
+                .code("200")
+                .data(usersService.createUser(usersRequest))
+                .build();
     }
 
     @PutMapping("/update/user")
-    public UsersRequest updateUser(@RequestBody UsersRequest usersRequest){
-        return usersService.updateUser(usersRequest);
+    public BaseResponseModel updateUser(@RequestBody UsersRequest usersRequest){
+        return BaseResponseModel.builder()
+                .timestamp(LocalDateTime.now())
+                .message("Update Successfully")
+                .code("200")
+                .data(usersService.updateUser(usersRequest))
+                .build();
     }
 
     @DeleteMapping("/delete/user")
-    public void deleteUser(@RequestBody UsersRequest usersRequest){
-        usersService.deleteUser(usersRequest);
+    public BaseResponseModel deleteUser(@RequestBody UsersRequest usersRequest){
+        return BaseResponseModel.builder()
+                .timestamp(LocalDateTime.now())
+                .message("Delete Successfully")
+                .code("200")
+                .data(usersRequest.getId())
+                .build();
     }
-
 }

@@ -1,4 +1,4 @@
-package com.su.ac.th.project.grader.model;
+package com.su.ac.th.project.grader.entity;
 
 import jakarta.persistence.*;
 import lombok.Data;
@@ -7,7 +7,7 @@ import java.time.LocalDateTime;
 
 @Data
 @Entity(name = "users")
-public class UsersModel {
+public class UsersEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(unique = true)

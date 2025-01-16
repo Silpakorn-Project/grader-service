@@ -1,4 +1,4 @@
-package com.su.ac.th.project.grader.dto.request;
+package com.su.ac.th.project.grader.Model.request;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;

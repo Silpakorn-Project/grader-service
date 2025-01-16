@@ -1,7 +1,7 @@
 package com.su.ac.th.project.grader.service;
 
-import com.su.ac.th.project.grader.model.UsersModel;
-import com.su.ac.th.project.grader.dto.request.UsersRequest;
+import com.su.ac.th.project.grader.entity.UsersEntity;
+import com.su.ac.th.project.grader.Model.request.UsersRequest;
 import com.su.ac.th.project.grader.repository.jpa.UsersRepository;
 import com.su.ac.th.project.grader.service.Transform.UsersTransform;
 import org.springframework.stereotype.Service;
@@ -18,17 +18,17 @@ public class UsersService {
         this.usersRepository = usersRepository;
     }
 
-    public List<UsersModel> getAllUsers() {
+    public List<UsersEntity> getAllUsers() {
         return usersRepository.findAll();
     }
 
     public UsersRequest createUser(UsersRequest usersRequest){
         UsersTransform usersTransform = new UsersTransform();
 
-        UsersModel usersModel = usersRepository.save(
+        UsersEntity usersEntity = usersRepository.save(
                 usersTransform.transformUserToEntity(usersRequest));
 
-        return usersTransform.transformEntityToUser(usersModel);
+        return usersTransform.transformEntityToUser(usersEntity);
     }
 
     public UsersRequest updateUser(UsersRequest usersRequest) {

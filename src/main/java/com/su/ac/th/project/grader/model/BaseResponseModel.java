@@ -13,7 +13,7 @@ import java.time.LocalDateTime;
 @NoArgsConstructor
 public class BaseResponseModel {
 
-    private LocalDateTime timestamp;
+    private String timestamp;
     private String message;
     private String code;
     private Object data;

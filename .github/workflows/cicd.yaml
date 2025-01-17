@@ -29,6 +29,10 @@ jobs:
         run: | 
           mvn clean install -DskipTests
 
+      - name: Create Docker Network
+        run: |
+          docker network create app-network
+
       - name: Run Container Mysql:8.1 Mock
         run: |
           docker run \

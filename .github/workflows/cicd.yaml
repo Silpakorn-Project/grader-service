@@ -20,7 +20,7 @@ jobs:
         uses: docker/setup-buildx-action@v3
 
       - name: Set up JDK 21
-        uses: actions/setup-java@3
+        uses: actions/setup-java@v3
         with:
           java-version: '21'
           distribution: 'openjdk'
@@ -35,7 +35,7 @@ jobs:
           --name db \
           --network app-network \
           -e MYSQL_ROOT_PASSWORD=password \
-          -e MYSQL_DATABASE=grader
+          -e MYSQL_DATABASE=grader \
           -p 3307:3306
           --health-interval=10s \
           --health-timeout=5s \

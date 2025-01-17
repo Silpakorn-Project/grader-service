@@ -1,26 +1,26 @@
 package com.su.ac.th.project.grader.service.Transform;
 
-import com.su.ac.th.project.grader.entity.UserEntity;
+import com.su.ac.th.project.grader.entity.UsersEntity;
 import com.su.ac.th.project.grader.model.request.UserRequest;
 import org.springframework.stereotype.Component;
 
 @Component
 public class UsersTransform {
 
-    public UserEntity transformUserToEntity(UserRequest userRequest) {
-        UserEntity userEntity = new UserEntity();
-        userEntity.setUsername(userRequest.getUsername());
-        userEntity.setPassword(userRequest.getPassword());
-        userEntity.setEmail(userRequest.getEmail());
-        return userEntity;
+    public UsersEntity transformUserToEntity(UserRequest userRequest) {
+        UsersEntity usersEntity = new UsersEntity();
+        usersEntity.setUsername(userRequest.getUsername());
+        usersEntity.setPassword(userRequest.getPassword());
+        usersEntity.setEmail(userRequest.getEmail());
+        return usersEntity;
     }
 
-    public UserRequest transformEntityToUser(UserEntity userEntity) {
+    public UserRequest transformEntityToUser(UsersEntity usersEntity) {
         return UserRequest.builder()
-                .id(userEntity.getId())
-                .username(userEntity.getUsername())
-                .password(userEntity.getPassword())
-                .email(userEntity.getEmail())
+                .id(usersEntity.getId())
+                .username(usersEntity.getUsername())
+                .password(usersEntity.getPassword())
+                .email(usersEntity.getEmail())
                 .build();
     }
 

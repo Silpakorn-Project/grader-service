@@ -1,6 +1,6 @@
 package com.su.ac.th.project.grader.service;
 
-import com.su.ac.th.project.grader.entity.UserEntity;
+import com.su.ac.th.project.grader.entity.UsersEntity;
 import com.su.ac.th.project.grader.model.request.UserRequest;
 import com.su.ac.th.project.grader.repository.jpa.UserRepository;
 import com.su.ac.th.project.grader.service.Transform.UsersTransform;
@@ -19,7 +19,7 @@ public class UsersService {
         this.userRepository = userRepository;
     }
 
-    public List<UserEntity> getAllUsers() {
+    public List<UsersEntity> getAllUsers() {
         return userRepository.findAll();
     }
 
@@ -41,10 +41,10 @@ public class UsersService {
 
         UsersTransform usersTransform = new UsersTransform();
 
-        UserEntity userEntity = userRepository.save(
+        UsersEntity usersEntity = userRepository.save(
                 usersTransform.transformUserToEntity(userRequest));
 
-        return usersTransform.transformEntityToUser(userEntity);
+        return usersTransform.transformEntityToUser(usersEntity);
     }
 
     public UserRequest updateUser(UserRequest userRequest) {

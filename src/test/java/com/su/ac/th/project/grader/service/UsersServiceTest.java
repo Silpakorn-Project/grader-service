@@ -1,6 +1,6 @@
 package com.su.ac.th.project.grader.service;
 
-import com.su.ac.th.project.grader.entity.UserEntity;
+import com.su.ac.th.project.grader.entity.UsersEntity;
 import com.su.ac.th.project.grader.model.request.UserRequest;
 import com.su.ac.th.project.grader.repository.jpa.UserRepository;
 import com.su.ac.th.project.grader.service.Transform.UsersTransform;
@@ -84,16 +84,16 @@ public class UsersServiceTest {
         userRequest.setPassword("testPassword");
         userRequest.setEmail("test@example.com");
 
-        UserEntity userEntity = new UserEntity();
-        userEntity.setId(1L);
-        userEntity.setUsername("testUser");
-        userEntity.setPassword("testPassword");
-        userEntity.setEmail("test@example.com");
+        UsersEntity usersEntity = new UsersEntity();
+        usersEntity.setId(1L);
+        usersEntity.setUsername("testUser");
+        usersEntity.setPassword("testPassword");
+        usersEntity.setEmail("test@example.com");
 
         // Mock the behavior of UsersTransform and UserRepository
-        when(usersTransform.transformUserToEntity(userRequest)).thenReturn(userEntity);
-        when(userRepository.save(any(UserEntity.class))).thenReturn(userEntity);
-        when(usersTransform.transformEntityToUser(userEntity)).thenReturn(userRequest);
+        when(usersTransform.transformUserToEntity(userRequest)).thenReturn(usersEntity);
+        when(userRepository.save(any(UsersEntity.class))).thenReturn(usersEntity);
+        when(usersTransform.transformEntityToUser(usersEntity)).thenReturn(userRequest);
 
         // Act
         UserRequest result = userService.createUser(userRequest);
@@ -103,7 +103,7 @@ public class UsersServiceTest {
         assertEquals("testUser", result.getUsername());
         assertEquals("testPassword", result.getPassword());
         assertEquals("test@example.com", result.getEmail());
-        verify(userRepository, times(1)).save(any(UserEntity.class));  // Ensure save is called once
+        verify(userRepository, times(1)).save(any(UsersEntity.class));  // Ensure save is called once
     }
 
 }

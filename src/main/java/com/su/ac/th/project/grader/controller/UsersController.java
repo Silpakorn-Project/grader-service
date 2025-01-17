@@ -12,11 +12,11 @@ import static com.su.ac.th.project.grader.util.CommonUtil.getDateTimeNow;
 @RestController
 @RequestMapping("/api")
 @Slf4j
-public class UserController {
+public class UsersController {
 
     private final UsersService usersService;
 
-    public UserController(UsersService usersService) {
+    public UsersController(UsersService usersService) {
         this.usersService = usersService;
     }
 

@@ -36,7 +36,7 @@ jobs:
           --network app-network \
           -e MYSQL_ROOT_PASSWORD=password \
           -e MYSQL_DATABASE=grader \
-          -p 3307:3306
+          -p 3307:3306 \
           --health-interval=10s \
           --health-timeout=5s \
           --health-retries=5 \

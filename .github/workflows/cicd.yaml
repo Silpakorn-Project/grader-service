@@ -46,7 +46,7 @@ jobs:
           --health-retries=5 \
           mysql:8.1
 
-      - name: Run Test Grader-Service
+      - name: Run Integration Test
         run: |
           mvn test
 

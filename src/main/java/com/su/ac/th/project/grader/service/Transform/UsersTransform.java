@@ -17,7 +17,6 @@ public class UsersTransform {
 
     public UsersRequest transformEntityToUser(UsersEntity usersEntity) {
         return UsersRequest.builder()
-                .id(usersEntity.getId())
                 .username(usersEntity.getUsername())
                 .password(usersEntity.getPassword())
                 .email(usersEntity.getEmail())

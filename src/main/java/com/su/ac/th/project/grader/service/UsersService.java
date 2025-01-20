@@ -19,14 +19,6 @@ public class UsersService {
         this.userRepository = userRepository;
     }
 
-    public static String register() {
-
-
-
-
-        return null;
-    }
-
     public List<UsersEntity> getAllUsers() {
         return userRepository.findAll();
     }

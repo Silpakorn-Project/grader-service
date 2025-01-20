@@ -19,8 +19,11 @@ public class UsersEntity {
     @Column(nullable = false, length = 150)
     private String password;
 
-    @Column(nullable = false, length = 80)
+    @Column(nullable = false, length = 150)
     private String email;
+
+    @Column(nullable = false)
+    private Long score = 0L;
 
     @Column(nullable = false)
     private LocalDateTime createdAt = LocalDateTime.now();

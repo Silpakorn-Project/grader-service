@@ -6,24 +6,22 @@ import lombok.Data;
 import java.time.LocalDateTime;
 
 @Data
-@Entity(name = "users")
-public class UsersEntity {
+@Entity(name = "testcases")
+public class TestcasesEntity {
+
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(unique = true, nullable = false)
-    private Long id;
-
-    @Column(nullable = false, length = 80)
-    private String username;
-
-    @Column(nullable = false, length = 150)
-    private String password;
-
-    @Column(nullable = false, length = 150)
-    private String email;
+    private Long testcaseId;
 
     @Column(nullable = false)
-    private Long score = 0L;
+    private Long problemId;
+
+    @Column(nullable = false)
+    private String inputData;
+
+    @Column(nullable = false)
+    private String expectedOutput;
 
     @Column(nullable = false)
     private LocalDateTime createdAt = LocalDateTime.now();

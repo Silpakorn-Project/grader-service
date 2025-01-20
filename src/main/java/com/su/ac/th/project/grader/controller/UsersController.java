@@ -24,8 +24,7 @@ public class UsersController {
 
     @Operation(summary = "Get all users")
     @GetMapping("/get/users")
-    public ResponseEntity<BaseResponseModel> getUsers(@RequestHeader(value = "Authorization", required = true)
-                                                          @Parameter(description = "Bearer token") String token){
+    public ResponseEntity<BaseResponseModel> getUsers(){
         return ResponseEntity.ok(BaseResponseModel.builder()
                 .timestamp(getDateTimeNow())
                 .message("Get all users")

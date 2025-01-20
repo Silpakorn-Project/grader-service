@@ -1,7 +1,7 @@
 package com.su.ac.th.project.grader.service;
 
 import com.su.ac.th.project.grader.entity.UsersEntity;
-import com.su.ac.th.project.grader.model.request.UserRequest;
+import com.su.ac.th.project.grader.model.request.UsersRequest;
 import com.su.ac.th.project.grader.repository.jpa.UserRepository;
 import com.su.ac.th.project.grader.service.Transform.UsersTransform;
 import org.springframework.stereotype.Service;
@@ -19,22 +19,30 @@ public class UsersService {
         this.userRepository = userRepository;
     }
 
+    public static String register() {
+
+
+
+
+        return null;
+    }
+
     public List<UsersEntity> getAllUsers() {
         return userRepository.findAll();
     }
 
-    public UserRequest createUser(UserRequest userRequest){
+    public UsersRequest createUser(UsersRequest usersRequest){
 
-        if (Objects.isNull(userRequest)) {
+        if (Objects.isNull(usersRequest)) {
             throw new RuntimeException("userRequest cannot be null");
         }
-        if (Objects.isNull(userRequest.getUsername())) {
+        if (Objects.isNull(usersRequest.getUsername())) {
             throw new RuntimeException("username cannot be null");
         }
-        if (Objects.isNull(userRequest.getPassword())) {
+        if (Objects.isNull(usersRequest.getPassword())) {
             throw new RuntimeException("password cannot be null");
         }
-        if (Objects.isNull(userRequest.getEmail())) {
+        if (Objects.isNull(usersRequest.getEmail())) {
             throw new RuntimeException("email cannot be null");
         }
 
@@ -42,25 +50,25 @@ public class UsersService {
         UsersTransform usersTransform = new UsersTransform();
 
         UsersEntity usersEntity = userRepository.save(
-                usersTransform.transformUserToEntity(userRequest));
+                usersTransform.transformUserToEntity(usersRequest));
 
         return usersTransform.transformEntityToUser(usersEntity);
     }
 
-    public UserRequest updateUser(UserRequest userRequest) {
+    public UsersRequest updateUser(UsersRequest usersRequest) {
         UsersTransform usersTransform = new UsersTransform();
         return usersTransform.transformEntityToUser(
-                userRepository.findById(userRequest.getId()).map(existingUsers -> {
-                existingUsers.setUsername(userRequest.getUsername());
-                existingUsers.setPassword(userRequest.getPassword());
-                existingUsers.setEmail(userRequest.getEmail());
+                userRepository.findById(usersRequest.getId()).map(existingUsers -> {
+                existingUsers.setUsername(usersRequest.getUsername());
+                existingUsers.setPassword(usersRequest.getPassword());
+                existingUsers.setEmail(usersRequest.getEmail());
                 existingUsers.setUpdatedAt(LocalDateTime.now());
                 return userRepository.save(existingUsers);
             }).orElseThrow( () -> new RuntimeException("User not found")));
     }
 
-    public Long deleteUser(UserRequest userRequest) {
-        userRepository.deleteById(userRequest.getId());
-        return userRequest.getId();
+    public Long deleteUser(UsersRequest usersRequest) {
+        userRepository.deleteById(usersRequest.getId());
+        return usersRequest.getId();
     }
 }

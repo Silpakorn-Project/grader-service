@@ -1,7 +1,7 @@
 package com.su.ac.th.project.grader.controller;
 
 import com.su.ac.th.project.grader.model.BaseResponseModel;
-import com.su.ac.th.project.grader.model.request.UserRequest;
+import com.su.ac.th.project.grader.model.request.UsersRequest;
 import com.su.ac.th.project.grader.service.UsersService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.ResponseEntity;
@@ -31,32 +31,32 @@ public class UsersController {
     }
 
     @PostMapping("/create/user")
-    public ResponseEntity<BaseResponseModel> createUser(@RequestBody UserRequest userRequest){
+    public ResponseEntity<BaseResponseModel> createUser(@RequestBody UsersRequest usersRequest){
         return ResponseEntity.ok(BaseResponseModel.builder()
                 .timestamp(getDateTimeNow())
                 .message("Create User Successfully")
                 .code("200")
-                .data(usersService.createUser(userRequest))
+                .data(usersService.createUser(usersRequest))
                 .build());
     }
 
     @PutMapping("/update/user")
-    public ResponseEntity<BaseResponseModel> updateUser(@RequestBody UserRequest userRequest){
+    public ResponseEntity<BaseResponseModel> updateUser(@RequestBody UsersRequest usersRequest){
         return ResponseEntity.ok(BaseResponseModel.builder()
                 .timestamp(getDateTimeNow())
                 .message("Update Successfully")
                 .code("200")
-                .data(usersService.updateUser(userRequest))
+                .data(usersService.updateUser(usersRequest))
                 .build());
     }
 
     @DeleteMapping("/delete/user")
-    public ResponseEntity<BaseResponseModel> deleteUser(@RequestBody UserRequest userRequest){
+    public ResponseEntity<BaseResponseModel> deleteUser(@RequestBody UsersRequest usersRequest){
         return ResponseEntity.ok(BaseResponseModel.builder()
                 .timestamp(getDateTimeNow())
                 .message("Delete Successfully")
                 .code("200")
-                .data(usersService.deleteUser(userRequest))
+                .data(usersService.deleteUser(usersRequest))
                 .build());
     }
 }

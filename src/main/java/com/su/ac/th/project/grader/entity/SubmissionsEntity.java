@@ -6,8 +6,8 @@ import lombok.Data;
 import java.time.LocalDateTime;
 
 @Data
-@Entity
-public class SubmissionEntity {
+@Entity(name = "submissions")
+public class SubmissionsEntity {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)

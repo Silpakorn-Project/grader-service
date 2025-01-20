@@ -28,6 +28,7 @@ server:
 security:
   jwt:
     secret-key: mySecretKey123456789012345678901234
+    expire-time: 3600000
 
 springdoc:
   api-docs:

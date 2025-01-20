@@ -4,6 +4,7 @@ import com.su.ac.th.project.grader.entity.UsersEntity;
 import com.su.ac.th.project.grader.model.request.UsersRegRequest;
 import com.su.ac.th.project.grader.repository.jpa.AuthenticationRepository;
 import com.su.ac.th.project.grader.util.DtoEntityMapper;
+import com.su.ac.th.project.grader.util.JwtUtil;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
@@ -15,10 +16,12 @@ public class AuthenticationService {
 
     private final AuthenticationRepository authenticationRepository;
     private final PasswordEncoder passwordEncoder;
+    private final JwtUtil jwtUtil;
 
-    public AuthenticationService(AuthenticationRepository authenticationRepository, PasswordEncoder passwordEncoder) {
+    public AuthenticationService(AuthenticationRepository authenticationRepository, PasswordEncoder passwordEncoder, JwtUtil jwtUtil) {
         this.authenticationRepository = authenticationRepository;
         this.passwordEncoder = passwordEncoder;
+        this.jwtUtil = jwtUtil;
     }
 
     public String register(UsersRegRequest usersRegRequest) {
@@ -62,7 +65,8 @@ public class AuthenticationService {
         }
 
         if (passwordEncoder.matches(u.getPassword(), userEntity.get().getPassword())) {
-            return "Login successfully";
+            String token = jwtUtil.generateToken(usersRegRequest.getUsername());
+            return "Login successfully" + " " + token;
         }
 
         return "Invalid email or password";

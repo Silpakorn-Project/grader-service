@@ -3,6 +3,8 @@ package com.su.ac.th.project.grader.controller;
 import com.su.ac.th.project.grader.model.BaseResponseModel;
 import com.su.ac.th.project.grader.model.request.UsersRequest;
 import com.su.ac.th.project.grader.service.UsersService;
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.Parameter;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -20,8 +22,10 @@ public class UsersController {
         this.usersService = usersService;
     }
 
+    @Operation(summary = "Get all users")
     @GetMapping("/get/users")
-    public ResponseEntity<BaseResponseModel> getUsers(){
+    public ResponseEntity<BaseResponseModel> getUsers(@RequestHeader(value = "Authorization", required = true)
+                                                          @Parameter(description = "Bearer token") String token){
         return ResponseEntity.ok(BaseResponseModel.builder()
                 .timestamp(getDateTimeNow())
                 .message("Get all users")

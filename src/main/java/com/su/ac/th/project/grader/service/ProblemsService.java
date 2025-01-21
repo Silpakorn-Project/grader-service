@@ -10,7 +10,6 @@ import java.util.List;
 
 import static com.su.ac.th.project.grader.exception.BusinessException.notFound;
 
-
 @Service
 public class ProblemsService {
 
@@ -23,18 +22,18 @@ public class ProblemsService {
     public List<ProblemsResponse> getAllProblems() {
 
         List<ProblemsEntity> p = problemsRepository.findAll();
-        List<ProblemsResponse> data = DtoEntityMapper.mapListToDto(p, ProblemsResponse.class);
 
-        return data;
+        return DtoEntityMapper.mapListToDto(p, ProblemsResponse.class);
 
     }
 
     public ProblemsResponse getProblemById(Long id) {
-        ProblemsEntity p = problemsRepository.findById(id).orElseThrow(
-                () -> notFound(String.valueOf(id)));
-        ProblemsResponse data = DtoEntityMapper.mapToDto(p, ProblemsResponse.class);
 
-        return data;
+        ProblemsEntity p = problemsRepository
+                .findById(id)
+                .orElseThrow(() -> notFound(String.valueOf(id)));
+
+        return DtoEntityMapper.mapToDto(p, ProblemsResponse.class);
     }
 
 }

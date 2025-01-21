@@ -15,7 +15,7 @@ public class JwtUtil {
     private String SECRET_KEY;
 
     @Value("${security.jwt.expire-time}")
-    private int EXPIRATION_TIME;
+    private int EXPIRATION_TIME_ONE_HOUR;
 
     private Key getSigningKey() {
         return Keys.hmacShaKeyFor(SECRET_KEY.getBytes());
@@ -25,7 +25,7 @@ public class JwtUtil {
         return Jwts.builder()
                 .setSubject(username)
                 .setIssuedAt(new Date())
-                .setExpiration(new Date(System.currentTimeMillis() + EXPIRATION_TIME))
+                .setExpiration(new Date(System.currentTimeMillis() + EXPIRATION_TIME_ONE_HOUR))
                 .signWith(getSigningKey(), SignatureAlgorithm.HS256)
                 .compact();
     }

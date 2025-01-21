@@ -32,12 +32,8 @@ public class UsersServiceTest {
 
     @Test
     void createUser_shouldThrowException_whenUserRequestIsNull() {
-        // Test for null username in userRequest
-        UsersRequest usersRequest = null;
 
-        RuntimeException exception = assertThrows(RuntimeException.class, () -> {
-            userService.createUser(usersRequest);
-        });
+        RuntimeException exception = assertThrows(RuntimeException.class, () -> userService.createUser(null));
         assertEquals("userRequest cannot be null", exception.getMessage());
     }
 
@@ -47,9 +43,7 @@ public class UsersServiceTest {
         // Test for null username in userRequest
         UsersRequest usersRequest = new UsersRequest(1L, null, "password", "email@example.com");  // Add a Long value for the ID
 
-        RuntimeException exception = assertThrows(RuntimeException.class, () -> {
-            userService.createUser(usersRequest);
-        });
+        RuntimeException exception = assertThrows(RuntimeException.class, () -> userService.createUser(usersRequest));
         assertEquals("username cannot be null", exception.getMessage());
     }
 
@@ -58,9 +52,7 @@ public class UsersServiceTest {
         // Test for null password in userRequest
         UsersRequest usersRequest = new UsersRequest(1L, "username", null, "email@example.com");  // Add a Long value for the ID
 
-        RuntimeException exception = assertThrows(RuntimeException.class, () -> {
-            userService.createUser(usersRequest);
-        });
+        RuntimeException exception = assertThrows(RuntimeException.class, () -> userService.createUser(usersRequest));
         assertEquals("password cannot be null", exception.getMessage());
     }
 
@@ -69,9 +61,7 @@ public class UsersServiceTest {
         // Test for null email in userRequest
         UsersRequest usersRequest = new UsersRequest(1L, "username", "password", null);  // Add a Long value for the ID
 
-        RuntimeException exception = assertThrows(RuntimeException.class, () -> {
-            userService.createUser(usersRequest);
-        });
+        RuntimeException exception = assertThrows(RuntimeException.class, () -> userService.createUser(usersRequest));
         assertEquals("email cannot be null", exception.getMessage());
     }
 

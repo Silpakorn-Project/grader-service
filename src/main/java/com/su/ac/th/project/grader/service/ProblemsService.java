@@ -8,6 +8,8 @@ import org.springframework.stereotype.Service;
 
 import java.util.List;
 
+import static com.su.ac.th.project.grader.exception.BusinessException.notFound;
+
 
 @Service
 public class ProblemsService {
@@ -29,7 +31,7 @@ public class ProblemsService {
 
     public ProblemsResponse getProblemById(Long id) {
         ProblemsEntity p = problemsRepository.findById(id).orElseThrow(
-                () -> new RuntimeException("id not found"));
+                () -> notFound(String.valueOf(id)));
         ProblemsResponse data = DtoEntityMapper.mapToDto(p, ProblemsResponse.class);
 
         return data;

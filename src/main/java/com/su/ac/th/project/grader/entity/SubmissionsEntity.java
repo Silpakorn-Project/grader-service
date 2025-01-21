@@ -28,7 +28,7 @@ public class SubmissionsEntity {
     private Language language;
 
     @Enumerated(EnumType.STRING)
-    private Status status = Status.PENDING;
+    private Status status = Status.Pending;
 
     @Column(nullable = false)
     private BigDecimal scorePercent;
@@ -40,11 +40,11 @@ public class SubmissionsEntity {
     private LocalDateTime updatedAt;
 
     public enum Language {
-        JAVA, PYTHON, C, C_PLUS_PLUS, JAVASCRIPT, RUBY, OTHER
+        JAVA, PYTHON, C
     }
 
     public enum Status {
-        PENDING, PASSED, FAILED
+        Pending, Passed, Failed
     }
 
 }

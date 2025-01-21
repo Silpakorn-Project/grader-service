@@ -1,10 +1,10 @@
 package com.su.ac.th.project.grader.controller;
 
+import com.su.ac.th.project.grader.constant.HttpConstant;
 import com.su.ac.th.project.grader.model.BaseResponseModel;
 import com.su.ac.th.project.grader.model.request.UsersRequest;
 import com.su.ac.th.project.grader.service.UsersService;
 import io.swagger.v3.oas.annotations.Operation;
-import io.swagger.v3.oas.annotations.Parameter;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -28,7 +28,7 @@ public class UsersController {
         return ResponseEntity.ok(BaseResponseModel.builder()
                 .timestamp(getDateTimeNow())
                 .message("Get all users")
-                .code("200")
+                .code(HttpConstant.Status.SUCCESS)
                 .data(usersService.getAllUsers())
                 .build());
     }
@@ -38,7 +38,7 @@ public class UsersController {
         return ResponseEntity.ok(BaseResponseModel.builder()
                 .timestamp(getDateTimeNow())
                 .message("Create User Successfully")
-                .code("200")
+                .code(HttpConstant.Status.SUCCESS)
                 .data(usersService.createUser(usersRequest))
                 .build());
     }
@@ -48,7 +48,7 @@ public class UsersController {
         return ResponseEntity.ok(BaseResponseModel.builder()
                 .timestamp(getDateTimeNow())
                 .message("Update Successfully")
-                .code("200")
+                .code(HttpConstant.Status.SUCCESS)
                 .data(usersService.updateUser(usersRequest))
                 .build());
     }
@@ -58,7 +58,7 @@ public class UsersController {
         return ResponseEntity.ok(BaseResponseModel.builder()
                 .timestamp(getDateTimeNow())
                 .message("Delete Successfully")
-                .code("200")
+                .code(HttpConstant.Status.SUCCESS)
                 .data(usersService.deleteUser(usersRequest))
                 .build());
     }

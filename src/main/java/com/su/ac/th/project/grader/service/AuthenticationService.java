@@ -1,6 +1,7 @@
 package com.su.ac.th.project.grader.service;
 
 import com.su.ac.th.project.grader.entity.UsersEntity;
+import com.su.ac.th.project.grader.model.request.UsersLoginRequest;
 import com.su.ac.th.project.grader.model.request.UsersRegRequest;
 import com.su.ac.th.project.grader.repository.jpa.AuthenticationRepository;
 import com.su.ac.th.project.grader.util.DtoEntityMapper;
@@ -47,17 +48,17 @@ public class AuthenticationService {
         return "successfully";
     }
 
-    public String login(UsersRegRequest usersRegRequest) {
-        if (Objects.isNull(usersRegRequest.getEmail()) ||
-                Objects.isNull(usersRegRequest.getPassword())) {
+    public String login(UsersLoginRequest usersLoginRequest) {
+        if (Objects.isNull(usersLoginRequest.getUsername()) ||
+                Objects.isNull(usersLoginRequest.getPassword())) {
             return "Invalid request";
         }
 
         //transform
-        UsersEntity u = DtoEntityMapper.mapToEntity(usersRegRequest, UsersEntity.class);
+        UsersEntity u = DtoEntityMapper.mapToEntity(usersLoginRequest, UsersEntity.class);
 
         //find database
-        Optional<UsersEntity> userEntity = authenticationRepository.findByEmail(u.getEmail());
+        Optional<UsersEntity> userEntity = authenticationRepository.findByUsername(u.getUsername());
 
         //validate is Empty
         if (userEntity.isEmpty()) {
@@ -65,7 +66,7 @@ public class AuthenticationService {
         }
 
         if (passwordEncoder.matches(u.getPassword(), userEntity.get().getPassword())) {
-            String token = jwtUtil.generateToken(usersRegRequest.getUsername());
+            String token = jwtUtil.generateToken(usersLoginRequest.getUsername());
             return "Login successfully" + " " + token;
         }
 

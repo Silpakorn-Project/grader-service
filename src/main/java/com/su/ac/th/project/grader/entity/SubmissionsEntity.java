@@ -12,7 +12,7 @@ public class SubmissionsEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(unique = true, nullable = false)
-    private int submissionId;
+    private Long submissionId;
 
     @Column(nullable = false)
     private Long userId;

@@ -30,7 +30,7 @@ public class ProblemsEntity {
 
     @Enumerated(EnumType.STRING)
     @Column(nullable = false)
-    private ProblemType problemType = ProblemType.STRING;
+    private ProblemType type = ProblemType.STRING;
 
     private enum ProblemType {
         MATH, DATA_STRUCTURE, GRAPH, STRING

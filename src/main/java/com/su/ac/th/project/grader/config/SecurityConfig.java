@@ -1,6 +1,6 @@
 package com.su.ac.th.project.grader.config;
 
-import com.su.ac.th.project.grader.filter.JwtAuthenticationFilter;
+import com.su.ac.th.project.grader.config.filter.JwtAuthenticationFilter;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;

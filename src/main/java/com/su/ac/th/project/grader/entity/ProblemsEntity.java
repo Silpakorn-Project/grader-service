@@ -24,7 +24,7 @@ public class ProblemsEntity {
     @Column(nullable = false)
     private ProblemDifficulty difficulty = ProblemDifficulty.EASY;
 
-    private enum ProblemDifficulty {
+    public enum ProblemDifficulty {
         EASY, MEDIUM, HARD
     }
 
@@ -32,7 +32,7 @@ public class ProblemsEntity {
     @Column(nullable = false)
     private ProblemType type = ProblemType.STRING;
 
-    private enum ProblemType {
+    public enum ProblemType {
         MATH, DATA_STRUCTURE, GRAPH, STRING
     }
 

@@ -1,12 +1,16 @@
 package com.su.ac.th.project.grader.service;
 
 import com.su.ac.th.project.grader.entity.ProblemsEntity;
+import com.su.ac.th.project.grader.model.request.ProblemRequest;
+import com.su.ac.th.project.grader.model.request.ProblemUpdateRequest;
 import com.su.ac.th.project.grader.model.response.ProblemsResponse;
 import com.su.ac.th.project.grader.repository.jpa.ProblemsRepository;
 import com.su.ac.th.project.grader.util.DtoEntityMapper;
 import org.springframework.stereotype.Service;
 
+import java.time.LocalDateTime;
 import java.util.List;
+import java.util.Objects;
 
 import static com.su.ac.th.project.grader.exception.BusinessException.notFound;
 
@@ -21,19 +25,82 @@ public class ProblemsService {
 
     public List<ProblemsResponse> getAllProblems() {
 
-        List<ProblemsEntity> p = problemsRepository.findAll();
-
-        return DtoEntityMapper.mapListToDto(p, ProblemsResponse.class);
+        List<ProblemsEntity> problemsEntityList = problemsRepository.findAll();
+        return DtoEntityMapper.mapListToDto(problemsEntityList, ProblemsResponse.class);
 
     }
 
     public ProblemsResponse getProblemById(Long id) {
 
-        ProblemsEntity p = problemsRepository
+        ProblemsEntity problemsEntity = problemsRepository
                 .findById(id)
                 .orElseThrow(() -> notFound(String.valueOf(id)));
 
-        return DtoEntityMapper.mapToDto(p, ProblemsResponse.class);
+        return DtoEntityMapper.mapToDto(problemsEntity, ProblemsResponse.class);
     }
 
+    public int createProblem(ProblemRequest problemRequest) {
+
+        ProblemsEntity problemsEntity = DtoEntityMapper.mapToEntity(problemRequest, ProblemsEntity.class);
+        problemsRepository.save(problemsEntity);
+
+        return 1;
+    }
+
+    public int updateProblem(ProblemUpdateRequest problemUpdateRequest) {
+
+        int rowUpdated = 0;
+        ProblemsEntity problemsEntity = problemsRepository
+                .findById(problemUpdateRequest.getProblemId())
+                .orElseThrow(() -> notFound(String.valueOf(problemUpdateRequest.getProblemId())));
+
+        if (problemsEntity.getTitle() != null) {
+            problemsEntity.setTitle(problemUpdateRequest.getTitle());
+            rowUpdated += 1;
+        }
+
+        if (problemsEntity.getDescription() != null) {
+            problemsEntity.setDescription(problemUpdateRequest.getDescription());
+            rowUpdated += 1;
+        }
+
+        if (problemUpdateRequest.getDifficulty() != null) {
+            problemsEntity.setDifficulty(
+                    switch (problemUpdateRequest.getDifficulty()) {
+                        case "EASY" -> ProblemsEntity.ProblemDifficulty.EASY;
+                        case "MEDIUM" -> ProblemsEntity.ProblemDifficulty.MEDIUM;
+                        case "HARD" -> ProblemsEntity.ProblemDifficulty.HARD;
+                        default -> throw new RuntimeException("Invalid difficulty");
+                    }
+            );
+            rowUpdated += 1;
+        }
+
+        if (problemUpdateRequest.getType() != null) {
+            problemsEntity.setType(
+                    switch (problemUpdateRequest.getType()) {
+                        case "MATH" -> ProblemsEntity.ProblemType.MATH;
+                        case "STRING" -> ProblemsEntity.ProblemType.STRING;
+                        case "DATA_STRUCTURE" -> ProblemsEntity.ProblemType.DATA_STRUCTURE;
+                        case "GRAPH" -> ProblemsEntity.ProblemType.GRAPH;
+                        default -> throw new RuntimeException("Invalid type");
+                    }
+            );
+            rowUpdated += 1;
+        }
+
+        problemsEntity.setUpdatedAt(LocalDateTime.now());
+
+        problemsRepository.save(problemsEntity);
+        return rowUpdated;
+    }
+
+    public Object deleteProblemById(ProblemUpdateRequest problemUpdateRequest) {
+
+        if (Objects.isNull(problemUpdateRequest.getProblemId())) {
+            throw new RuntimeException("problemId cannot be null");
+        }
+        problemsRepository.deleteById(problemUpdateRequest.getProblemId());
+        return null;
+    }
 }

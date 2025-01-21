@@ -13,7 +13,7 @@ public class BaseResponseModel {
 
     private String timestamp;
     private String message;
-    private String code;
+    private Integer code;
     private Object data;
 
 }

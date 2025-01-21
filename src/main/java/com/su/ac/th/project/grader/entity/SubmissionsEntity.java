@@ -3,6 +3,7 @@ package com.su.ac.th.project.grader.entity;
 import jakarta.persistence.*;
 import lombok.Data;
 
+import java.math.BigDecimal;
 import java.time.LocalDateTime;
 
 @Data
@@ -30,7 +31,7 @@ public class SubmissionsEntity {
     private Status status = Status.PENDING;
 
     @Column(nullable = false)
-    private double scorePercent;
+    private BigDecimal scorePercent;
 
     @Column(nullable = false, updatable = false)
     private LocalDateTime createdAt;

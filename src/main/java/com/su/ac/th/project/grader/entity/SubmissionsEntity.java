@@ -34,10 +34,10 @@ public class SubmissionsEntity {
     private BigDecimal scorePercent;
 
     @Column(nullable = false, updatable = false)
-    private LocalDateTime createdAt;
+    private LocalDateTime createdAt = LocalDateTime.now();
 
     @Column(nullable = false)
-    private LocalDateTime updatedAt;
+    private LocalDateTime updatedAt = LocalDateTime.now();
 
     public enum Language {
         JAVA, PYTHON, C

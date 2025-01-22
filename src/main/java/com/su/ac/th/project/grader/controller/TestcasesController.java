@@ -1,10 +1,73 @@
 package com.su.ac.th.project.grader.controller;
 
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import com.su.ac.th.project.grader.constant.HttpConstant;
+import com.su.ac.th.project.grader.model.BaseResponseModel;
+import com.su.ac.th.project.grader.model.request.TestcasesRequest;
+import com.su.ac.th.project.grader.model.request.TestcasesUpdateRequest;
+import com.su.ac.th.project.grader.service.TestcasesService;
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.*;
+
+import static com.su.ac.th.project.grader.util.CommonUtil.getDateTimeNow;
 
 @RestController
 @RequestMapping("/api/testcases")
 public class TestcasesController {
+
+    private final TestcasesService testcasesService;
+
+    public TestcasesController(TestcasesService testcasesService) {
+        this.testcasesService = testcasesService;
+    }
+
+    @GetMapping("/")
+    public ResponseEntity<BaseResponseModel> getAllProblems() {
+        return ResponseEntity.ok(BaseResponseModel.builder()
+                .timestamp(getDateTimeNow())
+                .code(HttpConstant.Status.SUCCESS)
+                .message(HttpConstant.Message.SUCCESS)
+                .data(testcasesService.getAllTestcases())
+                .build());
+    }
+
+    @GetMapping("/{id}")
+    public ResponseEntity<BaseResponseModel> getProblemById(@PathVariable("id") Long id) {
+        return ResponseEntity.ok(BaseResponseModel.builder()
+                .timestamp(getDateTimeNow())
+                .code(HttpConstant.Status.SUCCESS)
+                .message(HttpConstant.Message.SUCCESS)
+                .data(testcasesService.getTestcasesById(id))
+                .build());
+    }
+
+    @PostMapping("/")
+    public ResponseEntity<BaseResponseModel> createProblem(@RequestBody TestcasesRequest testcasesRequest) {
+        return ResponseEntity.ok(BaseResponseModel.builder()
+                .timestamp(getDateTimeNow())
+                .code(HttpConstant.Status.SUCCESS)
+                .message(HttpConstant.Message.SUCCESS)
+                .data(testcasesService.createTestcase(testcasesRequest))
+                .build());
+    }
+
+    @PutMapping("/")
+    public ResponseEntity<BaseResponseModel> updateProblem(@RequestBody TestcasesUpdateRequest testcasesUpdateRequest) {
+        return ResponseEntity.ok(BaseResponseModel.builder()
+                .timestamp(getDateTimeNow())
+                .code(HttpConstant.Status.SUCCESS)
+                .message(HttpConstant.Message.SUCCESS)
+                .data(testcasesService.updateTestcases(testcasesUpdateRequest))
+                .build());
+    }
+
+    @DeleteMapping("/")
+    public ResponseEntity<BaseResponseModel> deleteProblemById(@RequestBody TestcasesUpdateRequest testcasesUpdateRequest) {
+        return ResponseEntity.ok(BaseResponseModel.builder()
+                .timestamp(getDateTimeNow())
+                .code(HttpConstant.Status.SUCCESS)
+                .message(HttpConstant.Message.SUCCESS)
+                .data(testcasesService.deleteTestcasesById(testcasesUpdateRequest))
+                .build());
+    }
 
 }

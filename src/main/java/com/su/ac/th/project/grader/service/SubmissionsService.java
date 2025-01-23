@@ -91,7 +91,6 @@ public class SubmissionsService {
             );
             rowUpdated += 1;
         }
-
         submissionsEntity.setUpdatedAt(LocalDateTime.now());
 
         submissionsRepository.save(submissionsEntity);
@@ -105,4 +104,5 @@ public class SubmissionsService {
         submissionsRepository.deleteById(submissionsUpdateRequest.getSubmissionId());
         return null;
     }
+
 }

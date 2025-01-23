@@ -1,5 +1,6 @@
 package com.su.ac.th.project.grader.entity;
 
+import com.su.ac.th.project.grader.constant.CommonConstant.*;
 import jakarta.persistence.*;
 import lombok.Data;
 
@@ -39,12 +40,6 @@ public class SubmissionsEntity {
     @Column(nullable = false)
     private LocalDateTime updatedAt = LocalDateTime.now();
 
-    public enum Language {
-        JAVA, PYTHON, C
-    }
 
-    public enum Status {
-        Pending, Passed, Failed
-    }
 
 }

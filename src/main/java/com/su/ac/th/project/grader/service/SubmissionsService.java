@@ -1,5 +1,6 @@
 package com.su.ac.th.project.grader.service;
 
+import com.su.ac.th.project.grader.constant.CommonConstant.*;
 import com.su.ac.th.project.grader.entity.SubmissionsEntity;
 import com.su.ac.th.project.grader.model.request.SubmissionsRequest;
 import com.su.ac.th.project.grader.model.request.SubmissionsUpdateRequest;
@@ -71,9 +72,9 @@ public class SubmissionsService {
         if (!Objects.isNull(submissionsUpdateRequest.getLanguage())) {
             submissionsEntity.setLanguage(
                     switch (submissionsUpdateRequest.getLanguage()) {
-                        case "C" -> SubmissionsEntity.Language.C;
-                        case "JAVA" -> SubmissionsEntity.Language.JAVA;
-                        case "PYTHON" -> SubmissionsEntity.Language.PYTHON;
+                        case "C" -> Language.C;
+                        case "JAVA" -> Language.JAVA;
+                        case "PYTHON" -> Language.PYTHON;
                         default -> throw new RuntimeException("Invalid language");
                     }
             );
@@ -83,9 +84,9 @@ public class SubmissionsService {
         if (!Objects.isNull(submissionsUpdateRequest.getStatus())) {
             submissionsEntity.setStatus(
                     switch (submissionsUpdateRequest.getStatus()) {
-                        case "Pending" -> SubmissionsEntity.Status.Pending;
-                        case "Passed" -> SubmissionsEntity.Status.Passed;
-                        case "Failed" -> SubmissionsEntity.Status.Failed;
+                        case "Pending" -> Status.Pending;
+                        case "Passed" -> Status.Passed;
+                        case "Failed" -> Status.Failed;
                         default -> throw new RuntimeException("Invalid status");
                     }
             );

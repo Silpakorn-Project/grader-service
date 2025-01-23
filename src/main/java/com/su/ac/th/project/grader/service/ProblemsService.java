@@ -1,5 +1,6 @@
 package com.su.ac.th.project.grader.service;
 
+import com.su.ac.th.project.grader.constant.CommonConstant.*;
 import com.su.ac.th.project.grader.entity.ProblemsEntity;
 import com.su.ac.th.project.grader.model.request.ProblemRequest;
 import com.su.ac.th.project.grader.model.request.ProblemUpdateRequest;
@@ -67,9 +68,9 @@ public class ProblemsService {
         if (problemUpdateRequest.getDifficulty() != null) {
             problemsEntity.setDifficulty(
                     switch (problemUpdateRequest.getDifficulty()) {
-                        case "EASY" -> ProblemsEntity.ProblemDifficulty.EASY;
-                        case "MEDIUM" -> ProblemsEntity.ProblemDifficulty.MEDIUM;
-                        case "HARD" -> ProblemsEntity.ProblemDifficulty.HARD;
+                        case "EASY" -> ProblemDifficulty.EASY;
+                        case "MEDIUM" -> ProblemDifficulty.MEDIUM;
+                        case "HARD" -> ProblemDifficulty.HARD;
                         default -> throw new RuntimeException("Invalid difficulty");
                     }
             );
@@ -79,10 +80,10 @@ public class ProblemsService {
         if (problemUpdateRequest.getType() != null) {
             problemsEntity.setType(
                     switch (problemUpdateRequest.getType()) {
-                        case "MATH" -> ProblemsEntity.ProblemType.MATH;
-                        case "STRING" -> ProblemsEntity.ProblemType.STRING;
-                        case "DATA_STRUCTURE" -> ProblemsEntity.ProblemType.DATA_STRUCTURE;
-                        case "GRAPH" -> ProblemsEntity.ProblemType.GRAPH;
+                        case "MATH" -> ProblemType.MATH;
+                        case "STRING" -> ProblemType.STRING;
+                        case "DATA_STRUCTURE" -> ProblemType.DATA_STRUCTURE;
+                        case "GRAPH" -> ProblemType.GRAPH;
                         default -> throw new RuntimeException("Invalid type");
                     }
             );

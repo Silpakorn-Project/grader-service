@@ -3,7 +3,7 @@ package com.su.ac.th.project.grader.service;
 import com.su.ac.th.project.grader.entity.UsersEntity;
 import com.su.ac.th.project.grader.model.request.UsersRequest;
 import com.su.ac.th.project.grader.repository.jpa.UserRepository;
-import com.su.ac.th.project.grader.service.Transform.UsersTransform;
+import com.su.ac.th.project.grader.util.DtoEntityMapper;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
@@ -38,25 +38,23 @@ public class UsersService {
             throw new RuntimeException("email cannot be null");
         }
 
+        UsersEntity u = DtoEntityMapper.mapToEntity(usersRequest, UsersEntity.class);
+        UsersEntity u1 = userRepository.save(u);
 
-        UsersTransform usersTransform = new UsersTransform();
-
-        UsersEntity usersEntity = userRepository.save(
-                usersTransform.transformUserToEntity(usersRequest));
-
-        return usersTransform.transformEntityToUser(usersEntity);
+        return DtoEntityMapper.mapToDto(u1, UsersRequest.class);
     }
 
     public UsersRequest updateUser(UsersRequest usersRequest) {
-        UsersTransform usersTransform = new UsersTransform();
-        return usersTransform.transformEntityToUser(
-                userRepository.findById(usersRequest.getId()).map(existingUsers -> {
-                existingUsers.setUsername(usersRequest.getUsername());
-                existingUsers.setPassword(usersRequest.getPassword());
-                existingUsers.setEmail(usersRequest.getEmail());
-                existingUsers.setUpdatedAt(LocalDateTime.now());
-                return userRepository.save(existingUsers);
-            }).orElseThrow( () -> new RuntimeException("User not found")));
+
+        UsersEntity u = userRepository.findById(usersRequest.getId()).map(existingUsers -> {
+            existingUsers.setUsername(usersRequest.getUsername());
+            existingUsers.setPassword(usersRequest.getPassword());
+            existingUsers.setEmail(usersRequest.getEmail());
+            existingUsers.setUpdatedAt(LocalDateTime.now());
+            return userRepository.save(existingUsers);
+        }).orElseThrow( () -> new RuntimeException("User not found"));
+
+        return DtoEntityMapper.mapToDto(u, UsersRequest.class);
     }
 
     public Long deleteUser(UsersRequest usersRequest) {

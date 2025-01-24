@@ -92,4 +92,5 @@ public class UsersServiceTest {
        verify(userRepository, times(1)).save(any(UsersEntity.class));  // Ensure save is called once
    }
 
+
 }

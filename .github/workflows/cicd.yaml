@@ -81,3 +81,4 @@ jobs:
         run: |
             docker tag grader-service:latest ${{ secrets.DOCKER_USERNAME }}/grader-service:latest
             docker push ${{ secrets.DOCKER_USERNAME }}/grader-service:latest
+          

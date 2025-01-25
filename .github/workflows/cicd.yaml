@@ -56,7 +56,7 @@ jobs:
 
       - name: Run Container Grader Service
         run: |
-          docker run \
+          docker run -d \
           --name grader-service \
           --network app-network \
           -e SPRING_DATASOURCE_URL=jdbc:mysql://db:3306/grader \

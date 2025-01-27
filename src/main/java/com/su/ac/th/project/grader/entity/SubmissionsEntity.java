@@ -21,7 +21,8 @@ public class SubmissionsEntity {
     @Column(nullable = false)
     private Long problemId;
 
-    @Column(nullable = false)
+    @Lob
+    @Column(nullable = false, columnDefinition = "LONGTEXT")
     private String code;
 
     @Enumerated(EnumType.STRING)

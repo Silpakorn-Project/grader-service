@@ -4,6 +4,7 @@ import com.su.ac.th.project.grader.constant.HttpConstant;
 import com.su.ac.th.project.grader.model.BaseResponseModel;
 import com.su.ac.th.project.grader.model.request.SubmissionsRequest;
 import com.su.ac.th.project.grader.model.request.SubmissionsUpdateRequest;
+import com.su.ac.th.project.grader.model.request.SubmitRequest;
 import com.su.ac.th.project.grader.service.SubmissionsService;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -21,7 +22,7 @@ public class SubmissionsController {
     }
 
     @GetMapping("/")
-    public ResponseEntity<BaseResponseModel> getAllProblems() {
+    public ResponseEntity<BaseResponseModel> getAllSubmissions() {
         return ResponseEntity.ok(BaseResponseModel.builder()
                 .timestamp(getDateTimeNow())
                 .code(HttpConstant.Status.SUCCESS)
@@ -31,7 +32,7 @@ public class SubmissionsController {
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<BaseResponseModel> getProblemById(@PathVariable("id") Long id) {
+    public ResponseEntity<BaseResponseModel> getSubmissionById(@PathVariable("id") Long id) {
         return ResponseEntity.ok(BaseResponseModel.builder()
                 .timestamp(getDateTimeNow())
                 .code(HttpConstant.Status.SUCCESS)
@@ -41,7 +42,7 @@ public class SubmissionsController {
     }
 
     @PostMapping("/")
-    public ResponseEntity<BaseResponseModel> createProblem(@RequestBody SubmissionsRequest submissionsRequest) {
+    public ResponseEntity<BaseResponseModel> createSubmission(@RequestBody SubmissionsRequest submissionsRequest) {
         return ResponseEntity.ok(BaseResponseModel.builder()
                 .timestamp(getDateTimeNow())
                 .code(HttpConstant.Status.SUCCESS)
@@ -51,7 +52,7 @@ public class SubmissionsController {
     }
 
     @PutMapping("/")
-    public ResponseEntity<BaseResponseModel> updateProblem(@RequestBody SubmissionsUpdateRequest submissionsUpdateRequest) {
+    public ResponseEntity<BaseResponseModel> updateSubmission(@RequestBody SubmissionsUpdateRequest submissionsUpdateRequest) {
         return ResponseEntity.ok(BaseResponseModel.builder()
                 .timestamp(getDateTimeNow())
                 .code(HttpConstant.Status.SUCCESS)
@@ -61,7 +62,7 @@ public class SubmissionsController {
     }
 
     @DeleteMapping("/")
-    public ResponseEntity<BaseResponseModel> deleteProblemById(@RequestBody SubmissionsUpdateRequest submissionsUpdateRequest) {
+    public ResponseEntity<BaseResponseModel> deleteSubmissionById(@RequestBody SubmissionsUpdateRequest submissionsUpdateRequest) {
         return ResponseEntity.ok(BaseResponseModel.builder()
                 .timestamp(getDateTimeNow())
                 .code(HttpConstant.Status.SUCCESS)
@@ -70,4 +71,13 @@ public class SubmissionsController {
                 .build());
     }
 
+    @PostMapping("/submit")
+    public ResponseEntity<BaseResponseModel> submit(@RequestBody SubmitRequest submitRequest) {
+        return ResponseEntity.ok(BaseResponseModel.builder()
+                .timestamp(getDateTimeNow())
+                .code(HttpConstant.Status.SUCCESS)
+                .message(HttpConstant.Message.SUCCESS)
+                .data(submissionsService.submit(submitRequest))
+                .build());
+    }
 }

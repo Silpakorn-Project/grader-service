@@ -36,6 +36,12 @@ public class TestcasesService {
         return DtoEntityMapper.mapToDto(testcasesEntity, TestcasesResponse.class);
     }
 
+    public List<TestcasesResponse> getTestcasesByProblemId(Long problemId) {
+        List<TestcasesEntity> testcasesEntities = testcasesRepository.findByProblemId(problemId);
+
+        return DtoEntityMapper.mapListToDto(testcasesEntities, TestcasesResponse.class);
+    }
+
     public int createTestcase(TestcasesRequest testcasesRequest) {
         TestcasesEntity testcasesEntity = DtoEntityMapper.mapToEntity(testcasesRequest, TestcasesEntity.class);
         testcasesRepository.save(testcasesEntity);

@@ -1,4 +1,4 @@
-package com.su.ac.th.project.grader.config.filter;
+package com.su.ac.th.project.grader.config.security.filter;
 
 import com.su.ac.th.project.grader.util.JwtUtil;
 import jakarta.servlet.FilterChain;

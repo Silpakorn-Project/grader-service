@@ -2,6 +2,7 @@ package com.su.ac.th.project.grader.service;
 
 import com.su.ac.th.project.grader.constant.CommonConstant.*;
 import com.su.ac.th.project.grader.entity.SubmissionsEntity;
+import com.su.ac.th.project.grader.exception.submission.SubmissionNotFoundException;
 import com.su.ac.th.project.grader.model.request.SubmissionsRequest;
 import com.su.ac.th.project.grader.model.request.SubmissionsUpdateRequest;
 import com.su.ac.th.project.grader.model.response.SubmissionsResponse;
@@ -12,8 +13,6 @@ import org.springframework.stereotype.Service;
 import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Objects;
-
-import static com.su.ac.th.project.grader.exception.BusinessException.notFound;
 
 @Service
 public class SubmissionsService {
@@ -34,7 +33,7 @@ public class SubmissionsService {
 
         SubmissionsEntity submissionsEntity = submissionsRepository
                 .findById(id)
-                .orElseThrow(() -> notFound(String.valueOf(id)));
+                .orElseThrow(() -> new SubmissionNotFoundException(id));
 
         return DtoEntityMapper.mapToDto(submissionsEntity, SubmissionsResponse.class);
     }
@@ -52,7 +51,7 @@ public class SubmissionsService {
         int rowUpdated = 0;
         SubmissionsEntity submissionsEntity = submissionsRepository
                 .findById(submissionsUpdateRequest.getProblemId())
-                .orElseThrow(() -> notFound(String.valueOf(submissionsUpdateRequest.getProblemId())));
+                .orElseThrow(() -> new SubmissionNotFoundException(submissionsUpdateRequest.getSubmissionId()));
 
         if (!Objects.isNull(submissionsUpdateRequest.getUserId())) {
             submissionsEntity.setUserId(submissionsUpdateRequest.getUserId());

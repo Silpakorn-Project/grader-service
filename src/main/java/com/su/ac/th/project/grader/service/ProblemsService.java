@@ -2,6 +2,7 @@ package com.su.ac.th.project.grader.service;
 
 import com.su.ac.th.project.grader.constant.CommonConstant.*;
 import com.su.ac.th.project.grader.entity.ProblemsEntity;
+import com.su.ac.th.project.grader.exception.problem.ProblemNotFoundException;
 import com.su.ac.th.project.grader.model.request.ProblemRequest;
 import com.su.ac.th.project.grader.model.request.ProblemUpdateRequest;
 import com.su.ac.th.project.grader.model.response.ProblemsResponse;
@@ -12,8 +13,6 @@ import org.springframework.stereotype.Service;
 import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Objects;
-
-import static com.su.ac.th.project.grader.exception.BusinessException.notFound;
 
 @Service
 public class ProblemsService {
@@ -35,7 +34,7 @@ public class ProblemsService {
 
         ProblemsEntity problemsEntity = problemsRepository
                 .findById(id)
-                .orElseThrow(() -> notFound(String.valueOf(id)));
+                .orElseThrow(() -> new ProblemNotFoundException(id));
 
         return DtoEntityMapper.mapToDto(problemsEntity, ProblemsResponse.class);
     }
@@ -53,7 +52,7 @@ public class ProblemsService {
         int rowUpdated = 0;
         ProblemsEntity problemsEntity = problemsRepository
                 .findById(problemUpdateRequest.getProblemId())
-                .orElseThrow(() -> notFound(String.valueOf(problemUpdateRequest.getProblemId())));
+                .orElseThrow(() -> new ProblemNotFoundException(problemUpdateRequest.getProblemId()));
 
         if (problemsEntity.getTitle() != null) {
             problemsEntity.setTitle(problemUpdateRequest.getTitle());

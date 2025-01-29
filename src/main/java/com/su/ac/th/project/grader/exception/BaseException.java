@@ -1,7 +1,12 @@
 package com.su.ac.th.project.grader.exception;
 
-public class BaseException extends RuntimeException {
-    public BaseException(String message) {
-        super(message);
-    }
+import lombok.AllArgsConstructor;
+import lombok.Data;
+
+@Data
+@AllArgsConstructor
+public class BaseException {
+    private String timestamp;
+    private String message;
+    private Integer code;
 }

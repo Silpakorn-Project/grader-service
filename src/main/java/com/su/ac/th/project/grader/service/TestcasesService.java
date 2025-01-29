@@ -1,6 +1,7 @@
 package com.su.ac.th.project.grader.service;
 
 import com.su.ac.th.project.grader.entity.TestcasesEntity;
+import com.su.ac.th.project.grader.exception.testcase.TestCaseNotFoundException;
 import com.su.ac.th.project.grader.model.request.TestcasesRequest;
 import com.su.ac.th.project.grader.model.request.TestcasesUpdateRequest;
 import com.su.ac.th.project.grader.model.response.TestcasesResponse;
@@ -11,8 +12,6 @@ import org.springframework.stereotype.Service;
 import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Objects;
-
-import static com.su.ac.th.project.grader.exception.BusinessException.notFound;
 
 @Service
 public class TestcasesService {
@@ -31,8 +30,7 @@ public class TestcasesService {
     public TestcasesResponse getTestcasesById(Long id) {
         TestcasesEntity testcasesEntity = testcasesRepository
                 .findById(id)
-                .orElseThrow(() -> notFound(String.valueOf(id)));
-
+                .orElseThrow(() -> new TestCaseNotFoundException(id));
         return DtoEntityMapper.mapToDto(testcasesEntity, TestcasesResponse.class);
     }
 
@@ -47,7 +45,7 @@ public class TestcasesService {
         int rowUpdated = 0;
         TestcasesEntity testcasesEntity = testcasesRepository
                 .findById(testcasesUpdateRequest.getTestcaseId())
-                .orElseThrow(() -> notFound(String.valueOf(testcasesUpdateRequest.getTestcaseId())));
+                .orElseThrow(() -> new TestCaseNotFoundException(testcasesUpdateRequest.getTestcaseId()));
 
         if (testcasesEntity.getProblemId() != null) {
             testcasesEntity.setProblemId(testcasesUpdateRequest.getProblemId());

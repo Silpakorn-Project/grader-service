@@ -82,13 +82,10 @@ public class UsersServiceTest {
        UsersRequest usersRequest1 = DtoEntityMapper.mapToDto(usersEntity, UsersRequest.class);
 
        // Act
-       UsersRequest result = userService.createUser(usersRequest);
+       int result = userService.createUser(usersRequest);
 
        // Assert
-       assertNotNull(result);
-       assertEquals("testUser", result.getUsername());
-       assertEquals("testPassword", result.getPassword());
-       assertEquals("test@example.com", result.getEmail());
+       assertEquals(1, result);
        verify(userRepository, times(1)).save(any(UsersEntity.class));  // Ensure save is called once
    }
 

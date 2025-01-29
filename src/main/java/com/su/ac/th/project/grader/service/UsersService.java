@@ -24,38 +24,39 @@ public class UsersService {
         return userRepository.findAll();
     }
 
-    public UsersRequest createUser(UsersRequest usersRequest){
+    public int createUser(UsersRequest usersRequest) {
+        UsersEntity usersEntity = DtoEntityMapper.mapToEntity(usersRequest, UsersEntity.class);
+        userRepository.save(usersEntity);
 
-        if (Objects.isNull(usersRequest)) {
-            throw new RuntimeException("userRequest cannot be null");
-        }
-        if (Objects.isNull(usersRequest.getUsername())) {
-            throw new RuntimeException("username cannot be null");
-        }
-        if (Objects.isNull(usersRequest.getPassword())) {
-            throw new RuntimeException("password cannot be null");
-        }
-        if (Objects.isNull(usersRequest.getEmail())) {
-            throw new RuntimeException("email cannot be null");
-        }
-
-        UsersEntity u = DtoEntityMapper.mapToEntity(usersRequest, UsersEntity.class);
-        UsersEntity u1 = userRepository.save(u);
-
-        return DtoEntityMapper.mapToDto(u1, UsersRequest.class);
+        return 1;
     }
 
-    public UsersRequest updateUser(UsersRequest usersRequest) {
+    public int updateUser(UsersRequest usersRequest) {
+        int rowUpdated = 0;
 
-        UsersEntity u = userRepository.findById(usersRequest.getId()).map(existingUsers -> {
-            existingUsers.setUsername(usersRequest.getUsername());
-            existingUsers.setPassword(usersRequest.getPassword());
-            existingUsers.setEmail(usersRequest.getEmail());
-            existingUsers.setUpdatedAt(LocalDateTime.now());
-            return userRepository.save(existingUsers);
-        }).orElseThrow( () -> new UserNotFoundException(usersRequest.getId()));
+        UsersEntity usersEntity = userRepository
+                .findById(usersRequest.getId())
+                .orElseThrow(() -> new UserNotFoundException(usersRequest.getId()));
 
-        return DtoEntityMapper.mapToDto(u, UsersRequest.class);
+        if (usersEntity.getUsername() != null) {
+            usersEntity.setUsername(usersRequest.getUsername());
+            rowUpdated += 1;
+        }
+
+        if (usersEntity.getPassword() != null) {
+            usersEntity.setPassword(usersRequest.getPassword());
+            rowUpdated += 1;
+        }
+
+        if (usersEntity.getEmail() != null) {
+            usersEntity.setEmail(usersRequest.getEmail());
+            rowUpdated += 1;
+        }
+
+        usersEntity.setUpdatedAt(LocalDateTime.now());
+
+        userRepository.save(usersEntity);
+        return rowUpdated;
     }
 
     public Long deleteUser(UsersRequest usersRequest) {

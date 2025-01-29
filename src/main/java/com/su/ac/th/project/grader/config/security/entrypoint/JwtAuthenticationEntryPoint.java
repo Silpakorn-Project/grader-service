@@ -16,16 +16,21 @@ import static com.su.ac.th.project.grader.util.CommonUtil.getDateTimeNow;
 
 @Component
 public class JwtAuthenticationEntryPoint implements AuthenticationEntryPoint {
+    private final ObjectMapper objectMapper;
+
+    public JwtAuthenticationEntryPoint(ObjectMapper objectMapper) {
+        this.objectMapper = objectMapper;
+    }
+
     @Override
     public void commence(HttpServletRequest request,
                          HttpServletResponse response,
-                         AuthenticationException authException) throws IOException, IOException {
+                         AuthenticationException authException) throws IOException{
         response.setContentType(MediaType.APPLICATION_JSON_VALUE);
         response.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
 
         BaseException exception = new BaseException(getDateTimeNow(), HttpConstant.Message.UNAUTHORIZED, HttpConstant.Status.UNAUTHORIZED);
 
-        ObjectMapper mapper = new ObjectMapper();
-        mapper.writeValue(response.getOutputStream(), exception);
+        objectMapper.writeValue(response.getOutputStream(), exception);
     }
 }

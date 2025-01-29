@@ -17,13 +17,14 @@ import static com.su.ac.th.project.grader.util.CommonUtil.getDateTimeNow;
 public class GlobalExceptionHandler {
 
     @ExceptionHandler(Exception.class)
-    public ResponseEntity<BaseException> handleInternalError(Exception ex) {
-        BaseException exception = new BaseException(
-                getDateTimeNow(),
-                Message.INTERNAL_SERVER_ERROR,
-                Status.INTERNAL_SERVER_ERROR
-        );
-        return new ResponseEntity<>(exception, HttpStatus.INTERNAL_SERVER_ERROR);
+    public ResponseEntity<BaseException> handleInternalError(Exception exception) {
+        BaseException body = BaseException.builder()
+                .timestamp(getDateTimeNow())
+                .message(Message.INTERNAL_SERVER_ERROR)
+                .code(Status.INTERNAL_SERVER_ERROR)
+                .build();
+
+        return new ResponseEntity<>(body, HttpStatus.INTERNAL_SERVER_ERROR);
     }
 
     @ExceptionHandler({
@@ -32,12 +33,13 @@ public class GlobalExceptionHandler {
             TestCaseNotFoundException.class,
             TestCasesNotFoundForProblemIdException.class
     })
-    public ResponseEntity<BaseException> handleNotFoundError(Exception ex) {
-        BaseException exception = new BaseException(
-                getDateTimeNow(),
-                ex.getMessage(),
-                Status.NOT_FOUND
-        );
-        return new ResponseEntity<>(exception, HttpStatus.NOT_FOUND);
+    public ResponseEntity<BaseException> handleNotFoundError(Exception exception) {
+        BaseException body = BaseException.builder()
+                .timestamp(getDateTimeNow())
+                .message(exception.getMessage())
+                .code(Status.NOT_FOUND)
+                .build();
+
+        return new ResponseEntity<>(body, HttpStatus.NOT_FOUND);
     }
 }

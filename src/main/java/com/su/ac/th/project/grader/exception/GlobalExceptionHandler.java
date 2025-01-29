@@ -4,6 +4,7 @@ import com.su.ac.th.project.grader.exception.problem.ProblemNotFoundException;
 import com.su.ac.th.project.grader.exception.submission.SubmissionNotFoundException;
 import com.su.ac.th.project.grader.exception.testcase.TestCaseNotFoundException;
 import com.su.ac.th.project.grader.exception.testcase.TestCasesNotFoundForProblemIdException;
+import com.su.ac.th.project.grader.exception.user.UserNotFoundException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.ControllerAdvice;
@@ -31,7 +32,8 @@ public class GlobalExceptionHandler {
             ProblemNotFoundException.class,
             SubmissionNotFoundException.class,
             TestCaseNotFoundException.class,
-            TestCasesNotFoundForProblemIdException.class
+            TestCasesNotFoundForProblemIdException.class,
+            UserNotFoundException.class
     })
     public ResponseEntity<BaseException> handleNotFoundError(Exception exception) {
         BaseException body = BaseException.builder()

@@ -1,6 +1,7 @@
 package com.su.ac.th.project.grader.service;
 
 import com.su.ac.th.project.grader.entity.UsersEntity;
+import com.su.ac.th.project.grader.exception.user.UserNotFoundException;
 import com.su.ac.th.project.grader.model.request.UsersRequest;
 import com.su.ac.th.project.grader.repository.jpa.UserRepository;
 import com.su.ac.th.project.grader.util.DtoEntityMapper;
@@ -52,7 +53,7 @@ public class UsersService {
             existingUsers.setEmail(usersRequest.getEmail());
             existingUsers.setUpdatedAt(LocalDateTime.now());
             return userRepository.save(existingUsers);
-        }).orElseThrow( () -> new RuntimeException("User not found"));
+        }).orElseThrow( () -> new UserNotFoundException(usersRequest.getId()));
 
         return DtoEntityMapper.mapToDto(u, UsersRequest.class);
     }

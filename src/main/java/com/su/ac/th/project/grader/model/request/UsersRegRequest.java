@@ -9,16 +9,16 @@ import lombok.Data;
 public class UsersRegRequest {
 
     @Schema(description = "Username", example = "admin")
-    @NotBlank(message = "Username cannot be empty")
+    @NotBlank
     private String username;
 
     @Schema(description = "Password", example = "1234")
-    @NotBlank(message = "Password cannot be empty")
+    @NotBlank
     private String password;
 
     @Schema(description = "Email", example = "admin@gmail.com")
-    @NotBlank(message = "Email cannot be empty")
-    @Email(message = "Invalid email format")
+    @NotBlank
+    @Email
     private String email;
 
 }

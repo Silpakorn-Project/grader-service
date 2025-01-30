@@ -8,11 +8,11 @@ import lombok.Data;
 public class UsersLoginRequest {
 
     @Schema(description = "Username", example = "admin")
-    @NotBlank(message = "Username cannot be empty")
+    @NotBlank
     private String username;
 
     @Schema(description = "Password", example = "1234")
-    @NotBlank(message = "Password cannot be empty")
+    @NotBlank
     private String password;
 
 }

@@ -1,5 +1,6 @@
 package com.su.ac.th.project.grader.model.request;
 
+import com.su.ac.th.project.grader.util.validator.optionalnotblank.OptionalNotBlank;
 import io.swagger.v3.oas.annotations.media.Schema;
 import jakarta.validation.constraints.*;
 import lombok.AllArgsConstructor;
@@ -14,7 +15,7 @@ import lombok.NoArgsConstructor;
 public class UsersUpdateRequest {
 
     @Schema(description = "User ID", example = "1")
-    @NotNull(message = "User id is required")
+    @NotNull
     private Long id;
 
     @Schema(description = "Username", example = "admin")
@@ -24,7 +25,7 @@ public class UsersUpdateRequest {
     private String password;
 
     @Schema(description = "Email", example = "admin@gmail.com")
-    @Email(message = "Invalid email format")
+    @Email
     private String email;
 
 }

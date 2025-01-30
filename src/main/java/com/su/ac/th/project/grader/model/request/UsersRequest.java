@@ -18,16 +18,16 @@ public class UsersRequest {
     private Long id;
 
     @Schema(description = "Username", example = "updated")
-    @NotBlank(message = "Username cannot be empty")
+    @NotBlank
     private String username;
 
     @Schema(description = "Password", example = "updated1234")
-    @NotBlank(message = "Password cannot be empty")
+    @NotBlank
     private String password;
 
     @Schema(description = "Email", example = "updated@gmail.com")
-    @NotBlank(message = "Email cannot be empty")
-    @Email(message = "Invalid email format")
+    @NotBlank
+    @Email
     private String email;
 
 }

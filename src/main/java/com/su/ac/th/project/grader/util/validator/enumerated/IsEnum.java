@@ -7,11 +7,11 @@ import jakarta.validation.ReportAsSingleViolation;
 import java.lang.annotation.*;
 
 @Documented
-@Constraint(validatedBy = EnumValidatorConstraint.class)
+@Constraint(validatedBy = IsEnumValidator.class)
 @Target({ElementType.FIELD})
 @Retention(RetentionPolicy.RUNTIME)
 @ReportAsSingleViolation
-public @interface EnumValidator {
+public @interface IsEnum {
     String message() default "Invalid value. Allowed values are: {allowedValues}";
 
     Class<?>[] groups() default {};

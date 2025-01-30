@@ -1,6 +1,6 @@
 package com.su.ac.th.project.grader.model.request;
 
-import com.su.ac.th.project.grader.util.validator.enumerated.EnumValidator;
+import com.su.ac.th.project.grader.util.validator.enumerated.IsEnum;
 import io.swagger.v3.oas.annotations.media.Schema;
 import jakarta.validation.constraints.NotNull;
 import lombok.Data;
@@ -12,7 +12,7 @@ import static com.su.ac.th.project.grader.constant.CommonConstant.ProblemType;
 public class ProblemUpdateRequest {
 
     @Schema(description = "Problem ID", example = "1")
-    @NotNull(message = "Problem id is required")
+    @NotNull
     private Long problemId;
 
     @Schema(
@@ -32,7 +32,7 @@ public class ProblemUpdateRequest {
             example = "HARD",
             defaultValue = "EASY"
     )
-    @EnumValidator(enumClass = ProblemDifficulty.class)
+    @IsEnum(enumClass = ProblemDifficulty.class)
     private String difficulty = String.valueOf(ProblemDifficulty.EASY);
 
     @Schema(
@@ -40,7 +40,7 @@ public class ProblemUpdateRequest {
             example = "STRING",
             defaultValue = "MATH"
     )
-    @EnumValidator(enumClass = ProblemType.class)
+    @IsEnum(enumClass = ProblemType.class)
     private String type = String.valueOf(ProblemType.MATH);
 
 }

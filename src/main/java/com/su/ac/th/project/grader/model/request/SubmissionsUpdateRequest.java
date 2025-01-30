@@ -1,6 +1,6 @@
 package com.su.ac.th.project.grader.model.request;
 
-import com.su.ac.th.project.grader.util.validator.enumerated.EnumValidator;
+import com.su.ac.th.project.grader.util.validator.enumerated.IsEnum;
 import io.swagger.v3.oas.annotations.media.Schema;
 import jakarta.validation.constraints.Max;
 import jakarta.validation.constraints.Min;
@@ -16,25 +16,25 @@ import static com.su.ac.th.project.grader.constant.CommonConstant.Status;
 public class SubmissionsUpdateRequest {
 
     @Schema(description = "Submission ID", example = "1")
-    @NotNull(message = "Submission id is required")
+    @NotNull
     private Long submissionId;
 
     @Schema(description = "User ID", example = "1")
     private Long userId;
 
     @Schema(description = "Problem ID", example = "1")
-    @NotNull(message = "Problem id is required")
+    @NotNull
     private Long problemId;
 
     @Schema(description = "Code submitted by the user", example = "public class Main { ... }")
     private String code;
 
     @Schema(description = "Programming language used", example = "JAVA")
-    @EnumValidator(enumClass = Language.class)
+    @IsEnum(enumClass = Language.class)
     private String language;
 
     @Schema(description = "Status of the submission", example = "PASSED")
-    @EnumValidator(enumClass = Status.class)
+    @IsEnum(enumClass = Status.class)
     private String status;
 
     @Schema(description = "Score percentage (0-100)", example = "85.5")

@@ -6,11 +6,11 @@ import java.util.Arrays;
 import java.util.stream.Collectors;
 
 
-public class EnumValidatorConstraint implements ConstraintValidator<EnumValidator, String> {
-    private EnumValidator annotation;
+public class IsEnumValidator implements ConstraintValidator<IsEnum, String> {
+    private IsEnum annotation;
 
     @Override
-    public void initialize(EnumValidator constraintAnnotation) {
+    public void initialize(IsEnum constraintAnnotation) {
         this.annotation = constraintAnnotation;
     }
 

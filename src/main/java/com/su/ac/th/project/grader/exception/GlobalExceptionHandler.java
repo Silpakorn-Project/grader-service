@@ -7,10 +7,13 @@ import com.su.ac.th.project.grader.exception.testcase.TestCasesNotFoundForProble
 import com.su.ac.th.project.grader.exception.user.UserNotFoundException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 
-import static com.su.ac.th.project.grader.constant.HttpConstant.Message;
+import java.util.HashMap;
+import java.util.Map;
+
 import static com.su.ac.th.project.grader.constant.HttpConstant.Status;
 import static com.su.ac.th.project.grader.util.CommonUtil.getDateTimeNow;
 
@@ -21,7 +24,7 @@ public class GlobalExceptionHandler {
     public ResponseEntity<BaseException> handleInternalError(Exception exception) {
         BaseException body = BaseException.builder()
                 .timestamp(getDateTimeNow())
-                .message(Message.INTERNAL_SERVER_ERROR)
+                .message(exception.getMessage())
                 .code(Status.INTERNAL_SERVER_ERROR)
                 .build();
 
@@ -43,5 +46,21 @@ public class GlobalExceptionHandler {
                 .build();
 
         return new ResponseEntity<>(body, HttpStatus.NOT_FOUND);
+    }
+
+    @ExceptionHandler(MethodArgumentNotValidException.class)
+    public ResponseEntity<BaseException> handleValidationExceptions(MethodArgumentNotValidException ex) {
+        Map<String, String> errors = new HashMap<>();
+        ex.getBindingResult()
+                .getFieldErrors()
+                .forEach(error -> errors.put(error.getField(), error.getDefaultMessage()));
+
+        BaseException body = BaseException.builder()
+                .timestamp(getDateTimeNow())
+                .message(errors.toString())
+                .code(Status.BAD_REQUEST)
+                .build();
+
+        return new ResponseEntity<>(body, HttpStatus.BAD_REQUEST);
     }
 }

@@ -15,6 +15,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 import static com.su.ac.th.project.grader.constant.HttpConstant.Status;
+import static com.su.ac.th.project.grader.constant.HttpConstant.Message;
 import static com.su.ac.th.project.grader.util.CommonUtil.getDateTimeNow;
 
 @ControllerAdvice
@@ -24,7 +25,7 @@ public class GlobalExceptionHandler {
     public ResponseEntity<BaseException> handleInternalError(Exception exception) {
         BaseException body = BaseException.builder()
                 .timestamp(getDateTimeNow())
-                .message(exception.getMessage())
+                .message(Message.INTERNAL_SERVER_ERROR)
                 .code(Status.INTERNAL_SERVER_ERROR)
                 .build();
 

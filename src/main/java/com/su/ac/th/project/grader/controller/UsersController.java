@@ -45,13 +45,16 @@ public class UsersController {
                 .build());
     }
 
-    @PutMapping("/")
-    public ResponseEntity<BaseResponseModel> updateUser(@Valid @RequestBody UsersUpdateRequest usersUpdateRequest) {
+    @PutMapping("/{id}")
+    public ResponseEntity<BaseResponseModel> updateUser(
+            @Valid @RequestBody UsersUpdateRequest usersUpdateRequest,
+            @PathVariable Long id
+    ) {
         return ResponseEntity.ok(BaseResponseModel.builder()
                 .timestamp(getDateTimeNow())
                 .message(HttpConstant.Message.SUCCESS)
                 .code(HttpConstant.Status.SUCCESS)
-                .data(usersService.updateUser(usersUpdateRequest))
+                .data(usersService.updateUser(usersUpdateRequest, id))
                 .build());
     }
 

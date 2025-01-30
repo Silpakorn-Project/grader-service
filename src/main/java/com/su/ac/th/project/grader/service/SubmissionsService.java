@@ -46,11 +46,11 @@ public class SubmissionsService {
         return 1;
     }
 
-    public int updateSubmission(SubmissionsUpdateRequest submissionsUpdateRequest) {
+    public int updateSubmission(SubmissionsUpdateRequest submissionsUpdateRequest, Long id) {
         int rowUpdated = 0;
         SubmissionsEntity submissionsEntity = submissionsRepository
-                .findById(submissionsUpdateRequest.getProblemId())
-                .orElseThrow(() -> new SubmissionNotFoundException(submissionsUpdateRequest.getSubmissionId()));
+                .findById(id)
+                .orElseThrow(() -> new SubmissionNotFoundException(id));
 
         if (!Objects.isNull(submissionsUpdateRequest.getUserId())) {
             submissionsEntity.setUserId(submissionsUpdateRequest.getUserId());

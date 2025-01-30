@@ -31,11 +31,11 @@ public class UsersService {
         return 1;
     }
 
-    public int updateUser(UsersUpdateRequest usersUpdateRequest) {
+    public int updateUser(UsersUpdateRequest usersUpdateRequest, Long id) {
         int rowUpdated = 0;
         UsersEntity usersEntity = userRepository
-                .findById(usersUpdateRequest.getId())
-                .orElseThrow(() -> new UserNotFoundException(usersUpdateRequest.getId()));
+                .findById(id)
+                .orElseThrow(() -> new UserNotFoundException(id));
 
         if (usersUpdateRequest.getUsername() != null) {
             usersEntity.setUsername(usersUpdateRequest.getUsername());

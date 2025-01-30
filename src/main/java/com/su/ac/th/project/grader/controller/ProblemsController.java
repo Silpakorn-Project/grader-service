@@ -55,13 +55,14 @@ public class ProblemsController {
 
     @PutMapping("/{id}")
     public ResponseEntity<BaseResponseModel> updateProblem(
-            @Valid @RequestBody ProblemUpdateRequest problemUpdateRequest
+            @Valid @RequestBody ProblemUpdateRequest problemUpdateRequest,
+            @PathVariable Long id
     ) {
         return ResponseEntity.ok(BaseResponseModel.builder()
                 .timestamp(getDateTimeNow())
                 .code(HttpConstant.Status.SUCCESS)
                 .message(HttpConstant.Message.SUCCESS)
-                .data(problemsService.updateProblem(problemUpdateRequest))
+                .data(problemsService.updateProblem(problemUpdateRequest, id))
                 .build());
     }
 

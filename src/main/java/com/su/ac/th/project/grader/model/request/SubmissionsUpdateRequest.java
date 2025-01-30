@@ -5,7 +5,6 @@ import com.su.ac.th.project.grader.util.validator.optionalnotblank.OptionalNotBl
 import io.swagger.v3.oas.annotations.media.Schema;
 import jakarta.validation.constraints.Max;
 import jakarta.validation.constraints.Min;
-import jakarta.validation.constraints.NotNull;
 import lombok.Data;
 
 import java.math.BigDecimal;
@@ -15,10 +14,6 @@ import static com.su.ac.th.project.grader.constant.CommonConstant.Status;
 
 @Data
 public class SubmissionsUpdateRequest {
-
-    @Schema(description = "Submission ID", example = "1")
-    @NotNull
-    private Long submissionId;
 
     @Schema(description = "User ID", example = "1")
     private Long userId;

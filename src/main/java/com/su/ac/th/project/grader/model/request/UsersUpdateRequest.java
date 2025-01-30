@@ -14,10 +14,6 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 public class UsersUpdateRequest {
 
-    @Schema(description = "User ID", example = "1")
-    @NotNull
-    private Long id;
-
     @Schema(description = "Username", example = "admin")
     @OptionalNotBlank
     private String username;

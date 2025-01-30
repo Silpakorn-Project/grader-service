@@ -53,15 +53,16 @@ public class TestcasesController {
                 .build());
     }
 
-    @PutMapping("/")
+    @PutMapping("/{id}")
     public ResponseEntity<BaseResponseModel> updateProblem(
-            @Valid @RequestBody TestcasesUpdateRequest testcasesUpdateRequest
+            @Valid @RequestBody TestcasesUpdateRequest testcasesUpdateRequest,
+            @PathVariable Long id
     ) {
         return ResponseEntity.ok(BaseResponseModel.builder()
                 .timestamp(getDateTimeNow())
                 .code(HttpConstant.Status.SUCCESS)
                 .message(HttpConstant.Message.SUCCESS)
-                .data(testcasesService.updateTestcases(testcasesUpdateRequest))
+                .data(testcasesService.updateTestcases(testcasesUpdateRequest, id))
                 .build());
     }
 

@@ -40,11 +40,11 @@ public class TestcasesService {
         return 1;
     }
 
-    public Object updateTestcases(TestcasesUpdateRequest testcasesUpdateRequest) {
+    public Object updateTestcases(TestcasesUpdateRequest testcasesUpdateRequest, Long id) {
         int rowUpdated = 0;
         TestcasesEntity testcasesEntity = testcasesRepository
-                .findById(testcasesUpdateRequest.getTestcaseId())
-                .orElseThrow(() -> new TestCaseNotFoundException(testcasesUpdateRequest.getTestcaseId()));
+                .findById(id)
+                .orElseThrow(() -> new TestCaseNotFoundException(id));
 
         if (testcasesEntity.getProblemId() != null) {
             testcasesEntity.setProblemId(testcasesUpdateRequest.getProblemId());

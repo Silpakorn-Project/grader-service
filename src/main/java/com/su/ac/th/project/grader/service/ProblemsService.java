@@ -46,11 +46,11 @@ public class ProblemsService {
         return 1;
     }
 
-    public int updateProblem(ProblemUpdateRequest problemUpdateRequest) {
+    public int updateProblem(ProblemUpdateRequest problemUpdateRequest, Long id) {
         int rowUpdated = 0;
         ProblemsEntity problemsEntity = problemsRepository
-                .findById(problemUpdateRequest.getProblemId())
-                .orElseThrow(() -> new ProblemNotFoundException(problemUpdateRequest.getProblemId()));
+                .findById(id)
+                .orElseThrow(() -> new ProblemNotFoundException(id));
 
         if (problemsEntity.getTitle() != null) {
             problemsEntity.setTitle(problemUpdateRequest.getTitle());

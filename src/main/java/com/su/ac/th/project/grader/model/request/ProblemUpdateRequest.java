@@ -3,7 +3,6 @@ package com.su.ac.th.project.grader.model.request;
 import com.su.ac.th.project.grader.util.validator.enumerated.IsEnum;
 import com.su.ac.th.project.grader.util.validator.optionalnotblank.OptionalNotBlank;
 import io.swagger.v3.oas.annotations.media.Schema;
-import jakarta.validation.constraints.NotNull;
 import lombok.Data;
 
 import static com.su.ac.th.project.grader.constant.CommonConstant.ProblemDifficulty;
@@ -11,10 +10,6 @@ import static com.su.ac.th.project.grader.constant.CommonConstant.ProblemType;
 
 @Data
 public class ProblemUpdateRequest {
-
-    @Schema(description = "Problem ID", example = "1")
-    @NotNull
-    private Long problemId;
 
     @Schema(
             description = "Title of the problem",

@@ -53,15 +53,16 @@ public class SubmissionsController {
                 .build());
     }
 
-    @PutMapping("/")
+    @PutMapping("/{id}")
     public ResponseEntity<BaseResponseModel> updateProblem(
-            @Valid @RequestBody SubmissionsUpdateRequest submissionsUpdateRequest
+            @Valid @RequestBody SubmissionsUpdateRequest submissionsUpdateRequest,
+            @PathVariable Long id
     ) {
         return ResponseEntity.ok(BaseResponseModel.builder()
                 .timestamp(getDateTimeNow())
                 .code(HttpConstant.Status.SUCCESS)
                 .message(HttpConstant.Message.SUCCESS)
-                .data(submissionsService.updateSubmission(submissionsUpdateRequest))
+                .data(submissionsService.updateSubmission(submissionsUpdateRequest, id))
                 .build());
     }
 

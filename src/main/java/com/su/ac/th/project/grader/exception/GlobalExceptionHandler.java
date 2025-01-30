@@ -1,5 +1,6 @@
 package com.su.ac.th.project.grader.exception;
 
+import com.su.ac.th.project.grader.exception.authentication.AuthenticationException;
 import com.su.ac.th.project.grader.exception.problem.ProblemNotFoundException;
 import com.su.ac.th.project.grader.exception.submission.SubmissionNotFoundException;
 import com.su.ac.th.project.grader.exception.testcase.TestCaseNotFoundException;
@@ -30,6 +31,17 @@ public class GlobalExceptionHandler {
                 .build();
 
         return new ResponseEntity<>(body, HttpStatus.INTERNAL_SERVER_ERROR);
+    }
+
+    @ExceptionHandler(AuthenticationException.class)
+    public ResponseEntity<BaseException> handleAuthenticationException(AuthenticationException ex) {
+        BaseException body = BaseException.builder()
+                .timestamp(getDateTimeNow())
+                .message(ex.getMessage())
+                .code(Status.UNAUTHORIZED)
+                .build();
+
+        return new ResponseEntity<>(body, HttpStatus.UNAUTHORIZED);
     }
 
     @ExceptionHandler({

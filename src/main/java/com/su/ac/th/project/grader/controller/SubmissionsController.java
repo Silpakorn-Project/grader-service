@@ -22,7 +22,7 @@ public class SubmissionsController {
     }
 
     @GetMapping("/")
-    public ResponseEntity<BaseResponseModel> getAllProblems() {
+    public ResponseEntity<BaseResponseModel> getAllSubmissions() {
         return ResponseEntity.ok(BaseResponseModel.builder()
                 .timestamp(getDateTimeNow())
                 .code(HttpConstant.Status.SUCCESS)
@@ -32,7 +32,7 @@ public class SubmissionsController {
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<BaseResponseModel> getProblemById(@PathVariable("id") Long id) {
+    public ResponseEntity<BaseResponseModel> getSubmissionById(@PathVariable("id") Long id) {
         return ResponseEntity.ok(BaseResponseModel.builder()
                 .timestamp(getDateTimeNow())
                 .code(HttpConstant.Status.SUCCESS)
@@ -42,7 +42,7 @@ public class SubmissionsController {
     }
 
     @PostMapping("/")
-    public ResponseEntity<BaseResponseModel> createProblem(
+    public ResponseEntity<BaseResponseModel> createSubmission(
             @Valid @RequestBody SubmissionsRequest submissionsRequest
     ) {
         return ResponseEntity.ok(BaseResponseModel.builder()
@@ -54,7 +54,7 @@ public class SubmissionsController {
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity<BaseResponseModel> updateProblem(
+    public ResponseEntity<BaseResponseModel> updateSubmission(
             @Valid @RequestBody SubmissionsUpdateRequest submissionsUpdateRequest,
             @PathVariable Long id
     ) {
@@ -67,7 +67,7 @@ public class SubmissionsController {
     }
 
     @DeleteMapping("/{id}")
-    public ResponseEntity<BaseResponseModel> deleteProblemById(
+    public ResponseEntity<BaseResponseModel> deleteSubmissionById(
             @PathVariable Long id
     ) {
         return ResponseEntity.ok(BaseResponseModel.builder()

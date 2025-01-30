@@ -22,7 +22,7 @@ public class TestcasesController {
     }
 
     @GetMapping("/")
-    public ResponseEntity<BaseResponseModel> getAllProblems() {
+    public ResponseEntity<BaseResponseModel> getAllTestCases() {
         return ResponseEntity.ok(BaseResponseModel.builder()
                 .timestamp(getDateTimeNow())
                 .code(HttpConstant.Status.SUCCESS)
@@ -32,7 +32,7 @@ public class TestcasesController {
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<BaseResponseModel> getProblemById(@PathVariable("id") Long id) {
+    public ResponseEntity<BaseResponseModel> getTestCaseById(@PathVariable("id") Long id) {
         return ResponseEntity.ok(BaseResponseModel.builder()
                 .timestamp(getDateTimeNow())
                 .code(HttpConstant.Status.SUCCESS)
@@ -42,7 +42,7 @@ public class TestcasesController {
     }
 
     @PostMapping("/")
-    public ResponseEntity<BaseResponseModel> createProblem(
+    public ResponseEntity<BaseResponseModel> createTestCase(
             @Valid @RequestBody TestcasesRequest testcasesRequest
     ) {
         return ResponseEntity.ok(BaseResponseModel.builder()
@@ -54,7 +54,7 @@ public class TestcasesController {
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity<BaseResponseModel> updateProblem(
+    public ResponseEntity<BaseResponseModel> updateTestCase(
             @Valid @RequestBody TestcasesUpdateRequest testcasesUpdateRequest,
             @PathVariable Long id
     ) {

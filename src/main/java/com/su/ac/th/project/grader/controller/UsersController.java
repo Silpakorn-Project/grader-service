@@ -26,7 +26,7 @@ public class UsersController {
 
     @Operation(summary = "Get all users")
     @GetMapping("/")
-    public ResponseEntity<BaseResponseModel> getUsers() {
+    public ResponseEntity<BaseResponseModel> getAllUsers() {
         return ResponseEntity.ok(BaseResponseModel.builder()
                 .timestamp(getDateTimeNow())
                 .message(HttpConstant.Message.SUCCESS)
@@ -59,7 +59,7 @@ public class UsersController {
     }
 
     @DeleteMapping("/{id}")
-    public ResponseEntity<BaseResponseModel> deleteUser(@PathVariable Long id) {
+    public ResponseEntity<BaseResponseModel> deleteUserById(@PathVariable Long id) {
         return ResponseEntity.ok(BaseResponseModel.builder()
                 .timestamp(getDateTimeNow())
                 .message(HttpConstant.Message.SUCCESS)

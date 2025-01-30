@@ -65,15 +65,15 @@ public class SubmissionsController {
                 .build());
     }
 
-    @DeleteMapping("/")
+    @DeleteMapping("/{id}")
     public ResponseEntity<BaseResponseModel> deleteProblemById(
-            @Valid @RequestBody SubmissionsUpdateRequest submissionsUpdateRequest
+            @PathVariable Long id
     ) {
         return ResponseEntity.ok(BaseResponseModel.builder()
                 .timestamp(getDateTimeNow())
                 .code(HttpConstant.Status.SUCCESS)
                 .message(HttpConstant.Message.SUCCESS)
-                .data(submissionsService.deleteSubmissionById(submissionsUpdateRequest))
+                .data(submissionsService.deleteSubmissionById(id))
                 .build());
     }
 

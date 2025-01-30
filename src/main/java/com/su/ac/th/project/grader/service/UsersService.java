@@ -58,8 +58,8 @@ public class UsersService {
         return rowUpdated;
     }
 
-    public Long deleteUser(UsersRequest usersRequest) {
-        userRepository.deleteById(usersRequest.getId());
-        return usersRequest.getId();
+    public Long deleteUser(Long id) {
+        userRepository.deleteById(id);
+        return id;
     }
 }

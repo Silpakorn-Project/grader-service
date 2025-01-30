@@ -65,15 +65,15 @@ public class TestcasesController {
                 .build());
     }
 
-    @DeleteMapping("/")
+    @DeleteMapping("/{id}")
     public ResponseEntity<BaseResponseModel> deleteProblemById(
-            @Valid @RequestBody TestcasesUpdateRequest testcasesUpdateRequest
+            @PathVariable() Long id
     ) {
         return ResponseEntity.ok(BaseResponseModel.builder()
                 .timestamp(getDateTimeNow())
                 .code(HttpConstant.Status.SUCCESS)
                 .message(HttpConstant.Message.SUCCESS)
-                .data(testcasesService.deleteTestcasesById(testcasesUpdateRequest))
+                .data(testcasesService.deleteTestcasesById(id))
                 .build());
     }
 

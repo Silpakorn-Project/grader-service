@@ -11,7 +11,6 @@ import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
 import java.util.List;
-import java.util.Objects;
 
 @Service
 public class TestcasesService {
@@ -68,12 +67,8 @@ public class TestcasesService {
         return rowUpdated;
     }
 
-    public Object deleteTestcasesById(TestcasesUpdateRequest testcasesUpdateRequest) {
-
-        if (Objects.isNull(testcasesUpdateRequest.getTestcaseId())) {
-            throw new RuntimeException("testcaseId cannot be null");
-        }
-        testcasesRepository.deleteById(testcasesUpdateRequest.getTestcaseId());
+    public Object deleteTestcasesById(Long id) {
+        testcasesRepository.deleteById(id);
         return null;
     }
 }

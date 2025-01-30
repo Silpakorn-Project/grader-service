@@ -82,11 +82,8 @@ public class SubmissionsService {
         return rowUpdated;
     }
 
-    public Object deleteSubmissionById(SubmissionsUpdateRequest submissionsUpdateRequest) {
-        if (Objects.isNull(submissionsUpdateRequest.getSubmissionId())) {
-            throw new RuntimeException("submission cannot be null");
-        }
-        submissionsRepository.deleteById(submissionsUpdateRequest.getSubmissionId());
+    public Object deleteSubmissionById(Long id) {
+        submissionsRepository.deleteById(id);
         return null;
     }
 

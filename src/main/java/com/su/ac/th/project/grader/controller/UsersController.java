@@ -14,7 +14,7 @@ import org.springframework.web.bind.annotation.*;
 import static com.su.ac.th.project.grader.util.CommonUtil.getDateTimeNow;
 
 @RestController
-@RequestMapping("/api")
+@RequestMapping("/api/users")
 @Slf4j
 public class UsersController {
 
@@ -25,7 +25,7 @@ public class UsersController {
     }
 
     @Operation(summary = "Get all users")
-    @GetMapping("/get/users")
+    @GetMapping("/")
     public ResponseEntity<BaseResponseModel> getUsers() {
         return ResponseEntity.ok(BaseResponseModel.builder()
                 .timestamp(getDateTimeNow())
@@ -35,7 +35,7 @@ public class UsersController {
                 .build());
     }
 
-    @PostMapping("/create/user")
+    @PostMapping("/")
     public ResponseEntity<BaseResponseModel> createUser(@Valid @RequestBody UsersRequest usersRequest) {
         return ResponseEntity.ok(BaseResponseModel.builder()
                 .timestamp(getDateTimeNow())
@@ -45,7 +45,7 @@ public class UsersController {
                 .build());
     }
 
-    @PutMapping("/update/user")
+    @PutMapping("/")
     public ResponseEntity<BaseResponseModel> updateUser(@Valid @RequestBody UsersUpdateRequest usersUpdateRequest) {
         return ResponseEntity.ok(BaseResponseModel.builder()
                 .timestamp(getDateTimeNow())
@@ -55,13 +55,13 @@ public class UsersController {
                 .build());
     }
 
-    @DeleteMapping("/delete/user")
-    public ResponseEntity<BaseResponseModel> deleteUser(@Valid @RequestBody UsersRequest usersRequest) {
+    @DeleteMapping("/{id}")
+    public ResponseEntity<BaseResponseModel> deleteUser(@PathVariable Long id) {
         return ResponseEntity.ok(BaseResponseModel.builder()
                 .timestamp(getDateTimeNow())
                 .message(HttpConstant.Message.SUCCESS)
                 .code(HttpConstant.Status.SUCCESS)
-                .data(usersService.deleteUser(usersRequest))
+                .data(usersService.deleteUser(id))
                 .build());
     }
 }

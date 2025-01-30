@@ -53,7 +53,7 @@ public class ProblemsController {
                 .build());
     }
 
-    @PutMapping("/")
+    @PutMapping("/{id}")
     public ResponseEntity<BaseResponseModel> updateProblem(
             @Valid @RequestBody ProblemUpdateRequest problemUpdateRequest
     ) {
@@ -65,15 +65,15 @@ public class ProblemsController {
                 .build());
     }
 
-    @DeleteMapping("/")
+    @DeleteMapping("/{id}")
     public ResponseEntity<BaseResponseModel> deleteProblemById(
-            @Valid @RequestBody ProblemUpdateRequest problemUpdateRequest
+            @PathVariable Long id
     ) {
         return ResponseEntity.ok(BaseResponseModel.builder()
                 .timestamp(getDateTimeNow())
                 .code(HttpConstant.Status.SUCCESS)
                 .message(HttpConstant.Message.SUCCESS)
-                .data(problemsService.deleteProblemById(problemUpdateRequest))
+                .data(problemsService.deleteProblemById(id))
                 .build());
     }
 

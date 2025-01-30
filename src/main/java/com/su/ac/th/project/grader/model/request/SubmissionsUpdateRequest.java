@@ -1,6 +1,7 @@
 package com.su.ac.th.project.grader.model.request;
 
 import com.su.ac.th.project.grader.util.validator.enumerated.IsEnum;
+import com.su.ac.th.project.grader.util.validator.optionalnotblank.OptionalNotBlank;
 import io.swagger.v3.oas.annotations.media.Schema;
 import jakarta.validation.constraints.Max;
 import jakarta.validation.constraints.Min;
@@ -23,10 +24,10 @@ public class SubmissionsUpdateRequest {
     private Long userId;
 
     @Schema(description = "Problem ID", example = "1")
-    @NotNull
     private Long problemId;
 
     @Schema(description = "Code submitted by the user", example = "public class Main { ... }")
+    @OptionalNotBlank
     private String code;
 
     @Schema(description = "Programming language used", example = "JAVA")

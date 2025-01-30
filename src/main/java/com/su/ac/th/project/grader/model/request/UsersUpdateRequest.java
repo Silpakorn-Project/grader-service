@@ -19,12 +19,15 @@ public class UsersUpdateRequest {
     private Long id;
 
     @Schema(description = "Username", example = "admin")
+    @OptionalNotBlank
     private String username;
 
     @Schema(description = "Password", example = "1234")
+    @OptionalNotBlank
     private String password;
 
     @Schema(description = "Email", example = "admin@gmail.com")
+    @OptionalNotBlank
     @Email
     private String email;
 

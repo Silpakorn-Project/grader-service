@@ -1,6 +1,7 @@
 package com.su.ac.th.project.grader.model.request;
 
 import com.su.ac.th.project.grader.util.validator.enumerated.IsEnum;
+import com.su.ac.th.project.grader.util.validator.optionalnotblank.OptionalNotBlank;
 import io.swagger.v3.oas.annotations.media.Schema;
 import jakarta.validation.constraints.NotNull;
 import lombok.Data;
@@ -19,12 +20,14 @@ public class ProblemUpdateRequest {
             description = "Title of the problem",
             example = "Calculate the Sum of Two Numbers"
     )
+    @OptionalNotBlank
     private String title;
 
     @Schema(
             description = "Description of the problem",
             example = "Write a program to calculate the sum of two integers."
     )
+    @OptionalNotBlank
     private String description;
 
     @Schema(

@@ -1,5 +1,6 @@
 package com.su.ac.th.project.grader.model.request;
 
+import com.su.ac.th.project.grader.util.validator.optionalnotblank.OptionalNotBlank;
 import io.swagger.v3.oas.annotations.media.Schema;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
@@ -16,11 +17,11 @@ public class TestcasesUpdateRequest {
     private Long problemId;
 
     @Schema(description = "Input data for the testcase", example = "4 5")
-    @NotBlank
+    @OptionalNotBlank
     private String inputData;
 
     @Schema(description = "Expected output for the given input data", example = "9")
-    @NotBlank
+    @OptionalNotBlank
     private String expectedOutput;
 
 }

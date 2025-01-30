@@ -2,9 +2,11 @@ package com.su.ac.th.project.grader.controller;
 
 import com.su.ac.th.project.grader.constant.HttpConstant;
 import com.su.ac.th.project.grader.model.BaseResponseModel;
-import com.su.ac.th.project.grader.model.request.UsersRequest;
+import com.su.ac.th.project.grader.model.request.user.UsersRequest;
+import com.su.ac.th.project.grader.model.request.user.UsersUpdateRequest;
 import com.su.ac.th.project.grader.service.UsersService;
 import io.swagger.v3.oas.annotations.Operation;
+import jakarta.validation.Valid;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -12,7 +14,7 @@ import org.springframework.web.bind.annotation.*;
 import static com.su.ac.th.project.grader.util.CommonUtil.getDateTimeNow;
 
 @RestController
-@RequestMapping("/api")
+@RequestMapping("/api/users")
 @Slf4j
 public class UsersController {
 
@@ -23,43 +25,46 @@ public class UsersController {
     }
 
     @Operation(summary = "Get all users")
-    @GetMapping("/get/users")
-    public ResponseEntity<BaseResponseModel> getUsers(){
+    @GetMapping("/")
+    public ResponseEntity<BaseResponseModel> getAllUsers() {
         return ResponseEntity.ok(BaseResponseModel.builder()
                 .timestamp(getDateTimeNow())
-                .message("Get all users")
+                .message(HttpConstant.Message.SUCCESS)
                 .code(HttpConstant.Status.SUCCESS)
                 .data(usersService.getAllUsers())
                 .build());
     }
 
-    @PostMapping("/create/user")
-    public ResponseEntity<BaseResponseModel> createUser(@RequestBody UsersRequest usersRequest){
+    @PostMapping("/")
+    public ResponseEntity<BaseResponseModel> createUser(@Valid @RequestBody UsersRequest usersRequest) {
         return ResponseEntity.ok(BaseResponseModel.builder()
                 .timestamp(getDateTimeNow())
-                .message("Create User Successfully")
+                .message(HttpConstant.Message.SUCCESS)
                 .code(HttpConstant.Status.SUCCESS)
                 .data(usersService.createUser(usersRequest))
                 .build());
     }
 
-    @PutMapping("/update/user")
-    public ResponseEntity<BaseResponseModel> updateUser(@RequestBody UsersRequest usersRequest){
+    @PutMapping("/{id}")
+    public ResponseEntity<BaseResponseModel> updateUser(
+            @Valid @RequestBody UsersUpdateRequest usersUpdateRequest,
+            @PathVariable Long id
+    ) {
         return ResponseEntity.ok(BaseResponseModel.builder()
                 .timestamp(getDateTimeNow())
-                .message("Update Successfully")
+                .message(HttpConstant.Message.SUCCESS)
                 .code(HttpConstant.Status.SUCCESS)
-                .data(usersService.updateUser(usersRequest))
+                .data(usersService.updateUser(usersUpdateRequest, id))
                 .build());
     }
 
-    @DeleteMapping("/delete/user")
-    public ResponseEntity<BaseResponseModel> deleteUser(@RequestBody UsersRequest usersRequest){
+    @DeleteMapping("/{id}")
+    public ResponseEntity<BaseResponseModel> deleteUserById(@PathVariable Long id) {
         return ResponseEntity.ok(BaseResponseModel.builder()
                 .timestamp(getDateTimeNow())
-                .message("Delete Successfully")
+                .message(HttpConstant.Message.SUCCESS)
                 .code(HttpConstant.Status.SUCCESS)
-                .data(usersService.deleteUser(usersRequest))
+                .data(usersService.deleteUser(id))
                 .build());
     }
 }

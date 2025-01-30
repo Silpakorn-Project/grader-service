@@ -1,7 +1,7 @@
 package com.su.ac.th.project.grader.service;
 
 import com.su.ac.th.project.grader.entity.UsersEntity;
-import com.su.ac.th.project.grader.model.request.UsersRequest;
+import com.su.ac.th.project.grader.model.request.user.UsersRequest;
 import com.su.ac.th.project.grader.repository.jpa.UserRepository;
 import com.su.ac.th.project.grader.util.DtoEntityMapper;
 import org.junit.jupiter.api.BeforeEach;
@@ -28,69 +28,31 @@ public class UsersServiceTest {
     }
 
     @Test
-    void createUser_shouldThrowException_whenUserRequestIsNull() {
+    void createUser_shouldSuccess() {
+        // Arrange
+        UsersRequest usersRequest = new UsersRequest();
+        usersRequest.setId(1L);
+        usersRequest.setUsername("testUser");
+        usersRequest.setPassword("testPassword");
+        usersRequest.setEmail("test@example.com");
 
-        RuntimeException exception = assertThrows(RuntimeException.class, () -> userService.createUser(null));
-        assertEquals("userRequest cannot be null", exception.getMessage());
+        UsersEntity usersEntity = new UsersEntity();
+        usersEntity.setId(1L);
+        usersEntity.setUsername("testUser");
+        usersEntity.setPassword("testPassword");
+        usersEntity.setEmail("test@example.com");
+
+        UsersEntity usersEntity1 = DtoEntityMapper.mapToEntity(usersRequest, UsersEntity.class);
+        when(userRepository.save(any(UsersEntity.class))).thenReturn(usersEntity);
+        UsersRequest usersRequest1 = DtoEntityMapper.mapToDto(usersEntity, UsersRequest.class);
+
+        // Act
+        int result = userService.createUser(usersRequest);
+
+        // Assert
+        assertEquals(1, result);
+        verify(userRepository, times(1)).save(any(UsersEntity.class));  // Ensure save is called once
     }
-
-
-    @Test
-    void createUser_shouldThrowException_whenUsernameIsNull() {
-        // Test for null username in userRequest
-        UsersRequest usersRequest = new UsersRequest(1L, null, "password", "email@example.com");  // Add a Long value for the ID
-
-        RuntimeException exception = assertThrows(RuntimeException.class, () -> userService.createUser(usersRequest));
-        assertEquals("username cannot be null", exception.getMessage());
-    }
-
-    @Test
-    void createUser_shouldThrowException_whenPasswordIsNull() {
-        // Test for null password in userRequest
-        UsersRequest usersRequest = new UsersRequest(1L, "username", null, "email@example.com");  // Add a Long value for the ID
-
-        RuntimeException exception = assertThrows(RuntimeException.class, () -> userService.createUser(usersRequest));
-        assertEquals("password cannot be null", exception.getMessage());
-    }
-
-    @Test
-    void createUser_shouldThrowException_whenEmailIsNull() {
-        // Test for null email in userRequest
-        UsersRequest usersRequest = new UsersRequest(1L, "username", "password", null);  // Add a Long value for the ID
-
-        RuntimeException exception = assertThrows(RuntimeException.class, () -> userService.createUser(usersRequest));
-        assertEquals("email cannot be null", exception.getMessage());
-    }
-
-   @Test
-   void createUser_shouldSuccess() {
-       // Arrange
-       UsersRequest usersRequest = new UsersRequest();
-       usersRequest.setId(1L);
-       usersRequest.setUsername("testUser");
-       usersRequest.setPassword("testPassword");
-       usersRequest.setEmail("test@example.com");
-
-       UsersEntity usersEntity = new UsersEntity();
-       usersEntity.setId(1L);
-       usersEntity.setUsername("testUser");
-       usersEntity.setPassword("testPassword");
-       usersEntity.setEmail("test@example.com");
-
-       UsersEntity usersEntity1 = DtoEntityMapper.mapToEntity(usersRequest, UsersEntity.class);
-       when(userRepository.save(any(UsersEntity.class))).thenReturn(usersEntity);
-       UsersRequest usersRequest1 = DtoEntityMapper.mapToDto(usersEntity, UsersRequest.class);
-
-       // Act
-       UsersRequest result = userService.createUser(usersRequest);
-
-       // Assert
-       assertNotNull(result);
-       assertEquals("testUser", result.getUsername());
-       assertEquals("testPassword", result.getPassword());
-       assertEquals("test@example.com", result.getEmail());
-       verify(userRepository, times(1)).save(any(UsersEntity.class));  // Ensure save is called once
-   }
 
 
 }

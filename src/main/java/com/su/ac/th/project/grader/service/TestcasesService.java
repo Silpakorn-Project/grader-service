@@ -2,8 +2,8 @@ package com.su.ac.th.project.grader.service;
 
 import com.su.ac.th.project.grader.entity.TestcasesEntity;
 import com.su.ac.th.project.grader.exception.testcase.TestCaseNotFoundException;
-import com.su.ac.th.project.grader.model.request.TestcasesRequest;
-import com.su.ac.th.project.grader.model.request.TestcasesUpdateRequest;
+import com.su.ac.th.project.grader.model.request.testcase.TestcasesRequest;
+import com.su.ac.th.project.grader.model.request.testcase.TestcasesUpdateRequest;
 import com.su.ac.th.project.grader.model.response.TestcasesResponse;
 import com.su.ac.th.project.grader.repository.jpa.TestcasesRepository;
 import com.su.ac.th.project.grader.util.DtoEntityMapper;

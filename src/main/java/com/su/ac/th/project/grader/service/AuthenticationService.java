@@ -1,8 +1,8 @@
 package com.su.ac.th.project.grader.service;
 
 import com.su.ac.th.project.grader.entity.UsersEntity;
-import com.su.ac.th.project.grader.model.request.UsersLoginRequest;
-import com.su.ac.th.project.grader.model.request.UsersRegRequest;
+import com.su.ac.th.project.grader.model.request.authentication.UsersLoginRequest;
+import com.su.ac.th.project.grader.model.request.authentication.UsersRegRequest;
 import com.su.ac.th.project.grader.repository.jpa.AuthenticationRepository;
 import com.su.ac.th.project.grader.util.DtoEntityMapper;
 import com.su.ac.th.project.grader.util.JwtUtil;

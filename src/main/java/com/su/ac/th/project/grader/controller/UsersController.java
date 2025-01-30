@@ -2,8 +2,8 @@ package com.su.ac.th.project.grader.controller;
 
 import com.su.ac.th.project.grader.constant.HttpConstant;
 import com.su.ac.th.project.grader.model.BaseResponseModel;
-import com.su.ac.th.project.grader.model.request.UsersRequest;
-import com.su.ac.th.project.grader.model.request.UsersUpdateRequest;
+import com.su.ac.th.project.grader.model.request.user.UsersRequest;
+import com.su.ac.th.project.grader.model.request.user.UsersUpdateRequest;
 import com.su.ac.th.project.grader.service.UsersService;
 import io.swagger.v3.oas.annotations.Operation;
 import jakarta.validation.Valid;

@@ -1,4 +1,4 @@
-package com.su.ac.th.project.grader.model.request;
+package com.su.ac.th.project.grader.model.request.user;
 
 import io.swagger.v3.oas.annotations.media.Schema;
 import jakarta.validation.constraints.Email;

@@ -2,8 +2,8 @@ package com.su.ac.th.project.grader.service;
 
 import com.su.ac.th.project.grader.entity.UsersEntity;
 import com.su.ac.th.project.grader.exception.user.UserNotFoundException;
-import com.su.ac.th.project.grader.model.request.UsersRequest;
-import com.su.ac.th.project.grader.model.request.UsersUpdateRequest;
+import com.su.ac.th.project.grader.model.request.user.UsersRequest;
+import com.su.ac.th.project.grader.model.request.user.UsersUpdateRequest;
 import com.su.ac.th.project.grader.repository.jpa.UserRepository;
 import com.su.ac.th.project.grader.util.DtoEntityMapper;
 import org.springframework.stereotype.Service;

@@ -1,4 +1,4 @@
-package com.su.ac.th.project.grader.model.request;
+package com.su.ac.th.project.grader.model.request.user;
 
 import com.su.ac.th.project.grader.util.validator.optionalnotblank.OptionalNotBlank;
 import io.swagger.v3.oas.annotations.media.Schema;

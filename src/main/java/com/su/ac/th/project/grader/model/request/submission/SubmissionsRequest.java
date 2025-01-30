@@ -1,4 +1,4 @@
-package com.su.ac.th.project.grader.model.request;
+package com.su.ac.th.project.grader.model.request.submission;
 
 import com.su.ac.th.project.grader.util.validator.enumerated.IsEnum;
 import io.swagger.v3.oas.annotations.media.Schema;

@@ -2,8 +2,8 @@ package com.su.ac.th.project.grader.controller;
 
 import com.su.ac.th.project.grader.constant.HttpConstant;
 import com.su.ac.th.project.grader.model.BaseResponseModel;
-import com.su.ac.th.project.grader.model.request.ProblemRequest;
-import com.su.ac.th.project.grader.model.request.ProblemUpdateRequest;
+import com.su.ac.th.project.grader.model.request.problem.ProblemRequest;
+import com.su.ac.th.project.grader.model.request.problem.ProblemUpdateRequest;
 import com.su.ac.th.project.grader.service.ProblemsService;
 import jakarta.validation.Valid;
 import org.springframework.http.ResponseEntity;

@@ -1,7 +1,7 @@
 package com.su.ac.th.project.grader.controller;
 
-import com.su.ac.th.project.grader.model.request.UsersLoginRequest;
-import com.su.ac.th.project.grader.model.request.UsersRegRequest;
+import com.su.ac.th.project.grader.model.request.authentication.UsersLoginRequest;
+import com.su.ac.th.project.grader.model.request.authentication.UsersRegRequest;
 import com.su.ac.th.project.grader.service.AuthenticationService;
 import jakarta.validation.Valid;
 import org.springframework.web.bind.annotation.PostMapping;

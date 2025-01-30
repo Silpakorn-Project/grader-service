@@ -48,7 +48,6 @@ public class ProblemsService {
     }
 
     public int updateProblem(ProblemUpdateRequest problemUpdateRequest) {
-
         int rowUpdated = 0;
         ProblemsEntity problemsEntity = problemsRepository
                 .findById(problemUpdateRequest.getProblemId())
@@ -65,27 +64,12 @@ public class ProblemsService {
         }
 
         if (problemUpdateRequest.getDifficulty() != null) {
-            problemsEntity.setDifficulty(
-                    switch (problemUpdateRequest.getDifficulty()) {
-                        case "EASY" -> ProblemDifficulty.EASY;
-                        case "MEDIUM" -> ProblemDifficulty.MEDIUM;
-                        case "HARD" -> ProblemDifficulty.HARD;
-                        default -> throw new RuntimeException("Invalid difficulty");
-                    }
-            );
+            problemsEntity.setDifficulty(ProblemDifficulty.valueOf(problemUpdateRequest.getDifficulty()));
             rowUpdated += 1;
         }
 
         if (problemUpdateRequest.getType() != null) {
-            problemsEntity.setType(
-                    switch (problemUpdateRequest.getType()) {
-                        case "MATH" -> ProblemType.MATH;
-                        case "STRING" -> ProblemType.STRING;
-                        case "DATA_STRUCTURE" -> ProblemType.DATA_STRUCTURE;
-                        case "GRAPH" -> ProblemType.GRAPH;
-                        default -> throw new RuntimeException("Invalid type");
-                    }
-            );
+            problemsEntity.setType(ProblemType.valueOf(problemUpdateRequest.getType()));
             rowUpdated += 1;
         }
 

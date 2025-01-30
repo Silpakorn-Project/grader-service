@@ -3,13 +3,13 @@ package com.su.ac.th.project.grader.service;
 import com.su.ac.th.project.grader.entity.UsersEntity;
 import com.su.ac.th.project.grader.exception.user.UserNotFoundException;
 import com.su.ac.th.project.grader.model.request.UsersRequest;
+import com.su.ac.th.project.grader.model.request.UsersUpdateRequest;
 import com.su.ac.th.project.grader.repository.jpa.UserRepository;
 import com.su.ac.th.project.grader.util.DtoEntityMapper;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
 import java.util.List;
-import java.util.Objects;
 
 @Service
 public class UsersService {
@@ -31,25 +31,24 @@ public class UsersService {
         return 1;
     }
 
-    public int updateUser(UsersRequest usersRequest) {
+    public int updateUser(UsersUpdateRequest usersUpdateRequest) {
         int rowUpdated = 0;
-
         UsersEntity usersEntity = userRepository
-                .findById(usersRequest.getId())
-                .orElseThrow(() -> new UserNotFoundException(usersRequest.getId()));
+                .findById(usersUpdateRequest.getId())
+                .orElseThrow(() -> new UserNotFoundException(usersUpdateRequest.getId()));
 
-        if (usersEntity.getUsername() != null) {
-            usersEntity.setUsername(usersRequest.getUsername());
+        if (usersUpdateRequest.getUsername() != null) {
+            usersEntity.setUsername(usersUpdateRequest.getUsername());
             rowUpdated += 1;
         }
 
-        if (usersEntity.getPassword() != null) {
-            usersEntity.setPassword(usersRequest.getPassword());
+        if (usersUpdateRequest.getPassword() != null) {
+            usersEntity.setPassword(usersUpdateRequest.getPassword());
             rowUpdated += 1;
         }
 
-        if (usersEntity.getEmail() != null) {
-            usersEntity.setEmail(usersRequest.getEmail());
+        if (usersUpdateRequest.getEmail() != null) {
+            usersEntity.setEmail(usersUpdateRequest.getEmail());
             rowUpdated += 1;
         }
 

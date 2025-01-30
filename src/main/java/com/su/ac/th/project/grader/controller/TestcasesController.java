@@ -5,6 +5,7 @@ import com.su.ac.th.project.grader.model.BaseResponseModel;
 import com.su.ac.th.project.grader.model.request.TestcasesRequest;
 import com.su.ac.th.project.grader.model.request.TestcasesUpdateRequest;
 import com.su.ac.th.project.grader.service.TestcasesService;
+import jakarta.validation.Valid;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -41,7 +42,9 @@ public class TestcasesController {
     }
 
     @PostMapping("/")
-    public ResponseEntity<BaseResponseModel> createProblem(@RequestBody TestcasesRequest testcasesRequest) {
+    public ResponseEntity<BaseResponseModel> createProblem(
+            @Valid @RequestBody TestcasesRequest testcasesRequest
+    ) {
         return ResponseEntity.ok(BaseResponseModel.builder()
                 .timestamp(getDateTimeNow())
                 .code(HttpConstant.Status.SUCCESS)
@@ -51,7 +54,9 @@ public class TestcasesController {
     }
 
     @PutMapping("/")
-    public ResponseEntity<BaseResponseModel> updateProblem(@RequestBody TestcasesUpdateRequest testcasesUpdateRequest) {
+    public ResponseEntity<BaseResponseModel> updateProblem(
+            @Valid @RequestBody TestcasesUpdateRequest testcasesUpdateRequest
+    ) {
         return ResponseEntity.ok(BaseResponseModel.builder()
                 .timestamp(getDateTimeNow())
                 .code(HttpConstant.Status.SUCCESS)
@@ -61,7 +66,9 @@ public class TestcasesController {
     }
 
     @DeleteMapping("/")
-    public ResponseEntity<BaseResponseModel> deleteProblemById(@RequestBody TestcasesUpdateRequest testcasesUpdateRequest) {
+    public ResponseEntity<BaseResponseModel> deleteProblemById(
+            @Valid @RequestBody TestcasesUpdateRequest testcasesUpdateRequest
+    ) {
         return ResponseEntity.ok(BaseResponseModel.builder()
                 .timestamp(getDateTimeNow())
                 .code(HttpConstant.Status.SUCCESS)

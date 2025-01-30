@@ -47,7 +47,6 @@ public class SubmissionsService {
     }
 
     public int updateSubmission(SubmissionsUpdateRequest submissionsUpdateRequest) {
-
         int rowUpdated = 0;
         SubmissionsEntity submissionsEntity = submissionsRepository
                 .findById(submissionsUpdateRequest.getProblemId())
@@ -69,26 +68,12 @@ public class SubmissionsService {
         }
 
         if (!Objects.isNull(submissionsUpdateRequest.getLanguage())) {
-            submissionsEntity.setLanguage(
-                    switch (submissionsUpdateRequest.getLanguage()) {
-                        case "C" -> Language.C;
-                        case "JAVA" -> Language.JAVA;
-                        case "PYTHON" -> Language.PYTHON;
-                        default -> throw new RuntimeException("Invalid language");
-                    }
-            );
+            submissionsEntity.setLanguage(Language.valueOf(submissionsUpdateRequest.getLanguage()));
             rowUpdated += 1;
         }
 
         if (!Objects.isNull(submissionsUpdateRequest.getStatus())) {
-            submissionsEntity.setStatus(
-                    switch (submissionsUpdateRequest.getStatus()) {
-                        case "Pending" -> Status.Pending;
-                        case "Passed" -> Status.Passed;
-                        case "Failed" -> Status.Failed;
-                        default -> throw new RuntimeException("Invalid status");
-                    }
-            );
+            submissionsEntity.setStatus(Status.valueOf(submissionsUpdateRequest.getStatus()));
             rowUpdated += 1;
         }
         submissionsEntity.setUpdatedAt(LocalDateTime.now());

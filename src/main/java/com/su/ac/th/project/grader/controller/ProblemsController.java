@@ -5,6 +5,7 @@ import com.su.ac.th.project.grader.model.BaseResponseModel;
 import com.su.ac.th.project.grader.model.request.ProblemRequest;
 import com.su.ac.th.project.grader.model.request.ProblemUpdateRequest;
 import com.su.ac.th.project.grader.service.ProblemsService;
+import jakarta.validation.Valid;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -41,7 +42,9 @@ public class ProblemsController {
     }
 
     @PostMapping("/")
-    public ResponseEntity<BaseResponseModel> createProblem(@RequestBody ProblemRequest problemRequest) {
+    public ResponseEntity<BaseResponseModel> createProblem(
+            @Valid @RequestBody ProblemRequest problemRequest
+    ) {
         return ResponseEntity.ok(BaseResponseModel.builder()
                 .timestamp(getDateTimeNow())
                 .code(HttpConstant.Status.SUCCESS)
@@ -51,7 +54,9 @@ public class ProblemsController {
     }
 
     @PutMapping("/")
-    public ResponseEntity<BaseResponseModel> updateProblem(@RequestBody ProblemUpdateRequest problemUpdateRequest) {
+    public ResponseEntity<BaseResponseModel> updateProblem(
+            @Valid @RequestBody ProblemUpdateRequest problemUpdateRequest
+    ) {
         return ResponseEntity.ok(BaseResponseModel.builder()
                 .timestamp(getDateTimeNow())
                 .code(HttpConstant.Status.SUCCESS)
@@ -61,7 +66,9 @@ public class ProblemsController {
     }
 
     @DeleteMapping("/")
-    public ResponseEntity<BaseResponseModel> deleteProblemById(@RequestBody ProblemUpdateRequest problemUpdateRequest) {
+    public ResponseEntity<BaseResponseModel> deleteProblemById(
+            @Valid @RequestBody ProblemUpdateRequest problemUpdateRequest
+    ) {
         return ResponseEntity.ok(BaseResponseModel.builder()
                 .timestamp(getDateTimeNow())
                 .code(HttpConstant.Status.SUCCESS)
@@ -69,7 +76,6 @@ public class ProblemsController {
                 .data(problemsService.deleteProblemById(problemUpdateRequest))
                 .build());
     }
-
 
 
 }

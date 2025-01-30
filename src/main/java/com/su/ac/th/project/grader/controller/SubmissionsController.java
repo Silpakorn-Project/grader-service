@@ -5,6 +5,7 @@ import com.su.ac.th.project.grader.model.BaseResponseModel;
 import com.su.ac.th.project.grader.model.request.SubmissionsRequest;
 import com.su.ac.th.project.grader.model.request.SubmissionsUpdateRequest;
 import com.su.ac.th.project.grader.service.SubmissionsService;
+import jakarta.validation.Valid;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -41,7 +42,9 @@ public class SubmissionsController {
     }
 
     @PostMapping("/")
-    public ResponseEntity<BaseResponseModel> createProblem(@RequestBody SubmissionsRequest submissionsRequest) {
+    public ResponseEntity<BaseResponseModel> createProblem(
+            @Valid @RequestBody SubmissionsRequest submissionsRequest
+    ) {
         return ResponseEntity.ok(BaseResponseModel.builder()
                 .timestamp(getDateTimeNow())
                 .code(HttpConstant.Status.SUCCESS)
@@ -51,7 +54,9 @@ public class SubmissionsController {
     }
 
     @PutMapping("/")
-    public ResponseEntity<BaseResponseModel> updateProblem(@RequestBody SubmissionsUpdateRequest submissionsUpdateRequest) {
+    public ResponseEntity<BaseResponseModel> updateProblem(
+            @Valid @RequestBody SubmissionsUpdateRequest submissionsUpdateRequest
+    ) {
         return ResponseEntity.ok(BaseResponseModel.builder()
                 .timestamp(getDateTimeNow())
                 .code(HttpConstant.Status.SUCCESS)
@@ -61,7 +66,9 @@ public class SubmissionsController {
     }
 
     @DeleteMapping("/")
-    public ResponseEntity<BaseResponseModel> deleteProblemById(@RequestBody SubmissionsUpdateRequest submissionsUpdateRequest) {
+    public ResponseEntity<BaseResponseModel> deleteProblemById(
+            @Valid @RequestBody SubmissionsUpdateRequest submissionsUpdateRequest
+    ) {
         return ResponseEntity.ok(BaseResponseModel.builder()
                 .timestamp(getDateTimeNow())
                 .code(HttpConstant.Status.SUCCESS)

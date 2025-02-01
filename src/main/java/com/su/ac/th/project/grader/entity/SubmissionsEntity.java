@@ -30,7 +30,7 @@ public class SubmissionsEntity {
     private Language language;
 
     @Enumerated(EnumType.STRING)
-    private Status status = Status.Pending;
+    private Status status;
 
     @Column(nullable = false)
     private BigDecimal scorePercent;
@@ -40,7 +40,5 @@ public class SubmissionsEntity {
 
     @Column(nullable = false)
     private LocalDateTime updatedAt = LocalDateTime.now();
-
-
 
 }

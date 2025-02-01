@@ -111,9 +111,7 @@ public class SubmissionsService {
                 .toList();
 
         RunTestRequest runTestRequest = new RunTestRequest(submitRequest.getCode(), testCases);
-        RunTestResponse response = sandboxClient
-                .runTests(runTestRequest, submitRequest.getLanguage())
-                .block();
+        RunTestResponse response = sandboxClient.runTests(runTestRequest, submitRequest.getLanguage());
 
         if (response != null) {
             SubmissionsEntity submissionsEntity = DtoEntityMapper.mapToEntity(submitRequest, SubmissionsEntity.class);

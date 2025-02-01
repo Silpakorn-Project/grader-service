@@ -2,6 +2,7 @@ package com.su.ac.th.project.grader.exception;
 
 import com.su.ac.th.project.grader.exception.authentication.AuthenticationException;
 import com.su.ac.th.project.grader.exception.problem.ProblemNotFoundException;
+import com.su.ac.th.project.grader.exception.sandbox.SandboxClientException;
 import com.su.ac.th.project.grader.exception.sandbox.UnsupportedLanguageException;
 import com.su.ac.th.project.grader.exception.submission.SubmissionNotFoundException;
 import com.su.ac.th.project.grader.exception.testcase.TestCaseNotFoundException;
@@ -25,10 +26,13 @@ import static com.su.ac.th.project.grader.util.CommonUtil.getDateTimeNow;
 @ControllerAdvice
 public class GlobalExceptionHandler {
 
-    @ExceptionHandler(Exception.class)
+    @ExceptionHandler({
+            Exception.class,
+            SandboxClientException.class
+    })
     public ResponseEntity<BaseException> handleInternalServerError(Exception exception) {
         Logger logger = LoggerFactory.getLogger(getClass());
-        logger.error("Unhandled exception occurred: {}", exception.getMessage(), exception);
+        logger.error(exception.getMessage(), exception);
 
         BaseException body = BaseException.builder()
                 .timestamp(getDateTimeNow())

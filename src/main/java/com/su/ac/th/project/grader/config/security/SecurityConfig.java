@@ -1,6 +1,7 @@
-package com.su.ac.th.project.grader.config;
+package com.su.ac.th.project.grader.config.security;
 
-import com.su.ac.th.project.grader.config.filter.JwtAuthenticationFilter;
+import com.su.ac.th.project.grader.config.security.entrypoint.JwtAuthenticationEntryPoint;
+import com.su.ac.th.project.grader.config.security.filter.JwtAuthenticationFilter;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
@@ -15,6 +16,12 @@ import org.springframework.security.web.authentication.UsernamePasswordAuthentic
 @EnableWebSecurity
 public class SecurityConfig {
 
+    private final JwtAuthenticationEntryPoint jwtAuthenticationEntryPoint;
+
+    public SecurityConfig(JwtAuthenticationEntryPoint jwtAuthenticationEntryPoint) {
+        this.jwtAuthenticationEntryPoint = jwtAuthenticationEntryPoint;
+    }
+
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity http, JwtAuthenticationFilter jwtAuthenticationFilter) throws Exception {
         http
@@ -26,15 +33,17 @@ public class SecurityConfig {
                                 "/v3/api-docs/yaml",
                                 "/swagger-resources/**",
                                 "/webjars/**",
-                                "/api/auth/**"
+                                "/api/auth/**",
+                                "/api/health/check"
                         ).permitAll()
                         .anyRequest().authenticated()
                 )
                 .formLogin(AbstractHttpConfigurer::disable)
-                .httpBasic(AbstractHttpConfigurer::disable);
-
-        // Add the JwtAuthenticationFilter to the filter chain
-        http.addFilterBefore(jwtAuthenticationFilter, UsernamePasswordAuthenticationFilter.class);
+                .httpBasic(AbstractHttpConfigurer::disable)
+                .addFilterBefore(jwtAuthenticationFilter, UsernamePasswordAuthenticationFilter.class)
+                .securityMatcher("/api/**").exceptionHandling((exceptions) ->
+                        exceptions.authenticationEntryPoint(jwtAuthenticationEntryPoint)
+                );
 
         return http.build();
     }
@@ -43,5 +52,4 @@ public class SecurityConfig {
     public PasswordEncoder passwordEncoder() {
         return new BCryptPasswordEncoder();
     }
-
 }

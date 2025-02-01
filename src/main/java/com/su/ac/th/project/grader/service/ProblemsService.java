@@ -1,8 +1,10 @@
 package com.su.ac.th.project.grader.service;
 
+import com.su.ac.th.project.grader.constant.CommonConstant.*;
 import com.su.ac.th.project.grader.entity.ProblemsEntity;
-import com.su.ac.th.project.grader.model.request.ProblemRequest;
-import com.su.ac.th.project.grader.model.request.ProblemUpdateRequest;
+import com.su.ac.th.project.grader.exception.problem.ProblemNotFoundException;
+import com.su.ac.th.project.grader.model.request.problem.ProblemRequest;
+import com.su.ac.th.project.grader.model.request.problem.ProblemUpdateRequest;
 import com.su.ac.th.project.grader.model.response.ProblemsResponse;
 import com.su.ac.th.project.grader.repository.jpa.ProblemsRepository;
 import com.su.ac.th.project.grader.util.DtoEntityMapper;
@@ -10,9 +12,6 @@ import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
 import java.util.List;
-import java.util.Objects;
-
-import static com.su.ac.th.project.grader.exception.BusinessException.notFound;
 
 @Service
 public class ProblemsService {
@@ -34,7 +33,7 @@ public class ProblemsService {
 
         ProblemsEntity problemsEntity = problemsRepository
                 .findById(id)
-                .orElseThrow(() -> notFound(String.valueOf(id)));
+                .orElseThrow(() -> new ProblemNotFoundException(id));
 
         return DtoEntityMapper.mapToDto(problemsEntity, ProblemsResponse.class);
     }
@@ -47,12 +46,11 @@ public class ProblemsService {
         return 1;
     }
 
-    public int updateProblem(ProblemUpdateRequest problemUpdateRequest) {
-
+    public int updateProblem(ProblemUpdateRequest problemUpdateRequest, Long id) {
         int rowUpdated = 0;
         ProblemsEntity problemsEntity = problemsRepository
-                .findById(problemUpdateRequest.getProblemId())
-                .orElseThrow(() -> notFound(String.valueOf(problemUpdateRequest.getProblemId())));
+                .findById(id)
+                .orElseThrow(() -> new ProblemNotFoundException(id));
 
         if (problemsEntity.getTitle() != null) {
             problemsEntity.setTitle(problemUpdateRequest.getTitle());
@@ -65,27 +63,12 @@ public class ProblemsService {
         }
 
         if (problemUpdateRequest.getDifficulty() != null) {
-            problemsEntity.setDifficulty(
-                    switch (problemUpdateRequest.getDifficulty()) {
-                        case "EASY" -> ProblemsEntity.ProblemDifficulty.EASY;
-                        case "MEDIUM" -> ProblemsEntity.ProblemDifficulty.MEDIUM;
-                        case "HARD" -> ProblemsEntity.ProblemDifficulty.HARD;
-                        default -> throw new RuntimeException("Invalid difficulty");
-                    }
-            );
+            problemsEntity.setDifficulty(ProblemDifficulty.valueOf(problemUpdateRequest.getDifficulty()));
             rowUpdated += 1;
         }
 
         if (problemUpdateRequest.getType() != null) {
-            problemsEntity.setType(
-                    switch (problemUpdateRequest.getType()) {
-                        case "MATH" -> ProblemsEntity.ProblemType.MATH;
-                        case "STRING" -> ProblemsEntity.ProblemType.STRING;
-                        case "DATA_STRUCTURE" -> ProblemsEntity.ProblemType.DATA_STRUCTURE;
-                        case "GRAPH" -> ProblemsEntity.ProblemType.GRAPH;
-                        default -> throw new RuntimeException("Invalid type");
-                    }
-            );
+            problemsEntity.setType(ProblemType.valueOf(problemUpdateRequest.getType()));
             rowUpdated += 1;
         }
 
@@ -95,12 +78,8 @@ public class ProblemsService {
         return rowUpdated;
     }
 
-    public Object deleteProblemById(ProblemUpdateRequest problemUpdateRequest) {
-
-        if (Objects.isNull(problemUpdateRequest.getProblemId())) {
-            throw new RuntimeException("problemId cannot be null");
-        }
-        problemsRepository.deleteById(problemUpdateRequest.getProblemId());
+    public Object deleteProblemById(Long id) {
+        problemsRepository.deleteById(id);
         return null;
     }
 }

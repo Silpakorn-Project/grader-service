@@ -1,9 +1,12 @@
 package com.su.ac.th.project.grader.service;
 
+import com.su.ac.th.project.grader.constant.CommonConstant;
+import com.su.ac.th.project.grader.constant.CommonConstant.*;
 import com.su.ac.th.project.grader.entity.SubmissionsEntity;
-import com.su.ac.th.project.grader.model.request.SubmissionsRequest;
-import com.su.ac.th.project.grader.model.request.SubmissionsUpdateRequest;
+import com.su.ac.th.project.grader.exception.submission.SubmissionNotFoundException;
 import com.su.ac.th.project.grader.model.request.SubmitRequest;
+import com.su.ac.th.project.grader.model.request.submission.SubmissionsRequest;
+import com.su.ac.th.project.grader.model.request.submission.SubmissionsUpdateRequest;
 import com.su.ac.th.project.grader.model.response.SubmissionsResponse;
 import com.su.ac.th.project.grader.model.response.TestcasesResponse;
 import com.su.ac.th.project.grader.repository.jpa.SubmissionsRepository;
@@ -19,8 +22,6 @@ import java.math.RoundingMode;
 import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Objects;
-
-import static com.su.ac.th.project.grader.exception.BusinessException.notFound;
 
 @Service
 public class SubmissionsService {
@@ -45,7 +46,7 @@ public class SubmissionsService {
 
         SubmissionsEntity submissionsEntity = submissionsRepository
                 .findById(id)
-                .orElseThrow(() -> notFound(String.valueOf(id)));
+                .orElseThrow(() -> new SubmissionNotFoundException(id));
 
         return DtoEntityMapper.mapToDto(submissionsEntity, SubmissionsResponse.class);
     }
@@ -58,12 +59,11 @@ public class SubmissionsService {
         return 1;
     }
 
-    public int updateSubmission(SubmissionsUpdateRequest submissionsUpdateRequest) {
-
+    public int updateSubmission(SubmissionsUpdateRequest submissionsUpdateRequest, Long id) {
         int rowUpdated = 0;
         SubmissionsEntity submissionsEntity = submissionsRepository
-                .findById(submissionsUpdateRequest.getProblemId())
-                .orElseThrow(() -> notFound(String.valueOf(submissionsUpdateRequest.getProblemId())));
+                .findById(id)
+                .orElseThrow(() -> new SubmissionNotFoundException(id));
 
         if (!Objects.isNull(submissionsUpdateRequest.getUserId())) {
             submissionsEntity.setUserId(submissionsUpdateRequest.getUserId());
@@ -81,26 +81,12 @@ public class SubmissionsService {
         }
 
         if (!Objects.isNull(submissionsUpdateRequest.getLanguage())) {
-            submissionsEntity.setLanguage(
-                    switch (submissionsUpdateRequest.getLanguage()) {
-                        case "C" -> SubmissionsEntity.Language.C;
-                        case "JAVA" -> SubmissionsEntity.Language.JAVA;
-                        case "PYTHON" -> SubmissionsEntity.Language.PYTHON;
-                        default -> throw new RuntimeException("Invalid language");
-                    }
-            );
+            submissionsEntity.setLanguage(Language.valueOf(submissionsUpdateRequest.getLanguage()));
             rowUpdated += 1;
         }
 
         if (!Objects.isNull(submissionsUpdateRequest.getStatus())) {
-            submissionsEntity.setStatus(
-                    switch (submissionsUpdateRequest.getStatus()) {
-                        case "Pending" -> SubmissionsEntity.Status.Pending;
-                        case "Passed" -> SubmissionsEntity.Status.Passed;
-                        case "Failed" -> SubmissionsEntity.Status.Failed;
-                        default -> throw new RuntimeException("Invalid status");
-                    }
-            );
+            submissionsEntity.setStatus(Status.valueOf(submissionsUpdateRequest.getStatus()));
             rowUpdated += 1;
         }
         submissionsEntity.setUpdatedAt(LocalDateTime.now());
@@ -109,11 +95,8 @@ public class SubmissionsService {
         return rowUpdated;
     }
 
-    public Object deleteSubmissionById(SubmissionsUpdateRequest submissionsUpdateRequest) {
-        if (Objects.isNull(submissionsUpdateRequest.getSubmissionId())) {
-            throw new RuntimeException("submission cannot be null");
-        }
-        submissionsRepository.deleteById(submissionsUpdateRequest.getSubmissionId());
+    public Object deleteSubmissionById(Long id) {
+        submissionsRepository.deleteById(id);
         return null;
     }
 
@@ -132,8 +115,8 @@ public class SubmissionsService {
             BigDecimal scorePercent = BigDecimal
                     .valueOf((double) response.getTestcase_passed() / response.getTestcase_total() * 100)
                     .setScale(2, RoundingMode.HALF_UP);
-            SubmissionsEntity.Status status = response.isPassed() ?
-                    SubmissionsEntity.Status.Passed : SubmissionsEntity.Status.Failed;
+            CommonConstant.Status status = response.isPassed() ?
+                    CommonConstant.Status.Passed : CommonConstant.Status.Failed;
 
             submissionsEntity.setStatus(status);
             submissionsEntity.setScorePercent(scorePercent);

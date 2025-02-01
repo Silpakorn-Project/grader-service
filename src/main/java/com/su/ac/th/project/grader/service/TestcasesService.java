@@ -1,8 +1,9 @@
 package com.su.ac.th.project.grader.service;
 
 import com.su.ac.th.project.grader.entity.TestcasesEntity;
-import com.su.ac.th.project.grader.model.request.TestcasesRequest;
-import com.su.ac.th.project.grader.model.request.TestcasesUpdateRequest;
+import com.su.ac.th.project.grader.exception.testcase.TestCaseNotFoundException;
+import com.su.ac.th.project.grader.model.request.testcase.TestcasesRequest;
+import com.su.ac.th.project.grader.model.request.testcase.TestcasesUpdateRequest;
 import com.su.ac.th.project.grader.model.response.TestcasesResponse;
 import com.su.ac.th.project.grader.repository.jpa.TestcasesRepository;
 import com.su.ac.th.project.grader.util.DtoEntityMapper;
@@ -10,9 +11,6 @@ import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
 import java.util.List;
-import java.util.Objects;
-
-import static com.su.ac.th.project.grader.exception.BusinessException.notFound;
 
 @Service
 public class TestcasesService {
@@ -31,8 +29,7 @@ public class TestcasesService {
     public TestcasesResponse getTestcasesById(Long id) {
         TestcasesEntity testcasesEntity = testcasesRepository
                 .findById(id)
-                .orElseThrow(() -> notFound(String.valueOf(id)));
-
+                .orElseThrow(() -> new TestCaseNotFoundException(id));
         return DtoEntityMapper.mapToDto(testcasesEntity, TestcasesResponse.class);
     }
 
@@ -49,11 +46,11 @@ public class TestcasesService {
         return 1;
     }
 
-    public Object updateTestcases(TestcasesUpdateRequest testcasesUpdateRequest) {
+    public Object updateTestcases(TestcasesUpdateRequest testcasesUpdateRequest, Long id) {
         int rowUpdated = 0;
         TestcasesEntity testcasesEntity = testcasesRepository
-                .findById(testcasesUpdateRequest.getTestcaseId())
-                .orElseThrow(() -> notFound(String.valueOf(testcasesUpdateRequest.getTestcaseId())));
+                .findById(id)
+                .orElseThrow(() -> new TestCaseNotFoundException(id));
 
         if (testcasesEntity.getProblemId() != null) {
             testcasesEntity.setProblemId(testcasesUpdateRequest.getProblemId());
@@ -76,12 +73,8 @@ public class TestcasesService {
         return rowUpdated;
     }
 
-    public Object deleteTestcasesById(TestcasesUpdateRequest testcasesUpdateRequest) {
-
-        if (Objects.isNull(testcasesUpdateRequest.getTestcaseId())) {
-            throw new RuntimeException("testcaseId cannot be null");
-        }
-        testcasesRepository.deleteById(testcasesUpdateRequest.getTestcaseId());
+    public Object deleteTestcasesById(Long id) {
+        testcasesRepository.deleteById(id);
         return null;
     }
 }

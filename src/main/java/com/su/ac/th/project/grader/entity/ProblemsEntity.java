@@ -1,5 +1,6 @@
 package com.su.ac.th.project.grader.entity;
 
+import com.su.ac.th.project.grader.constant.CommonConstant.*;
 import jakarta.persistence.*;
 import lombok.Data;
 
@@ -24,17 +25,9 @@ public class ProblemsEntity {
     @Column(nullable = false)
     private ProblemDifficulty difficulty = ProblemDifficulty.EASY;
 
-    public enum ProblemDifficulty {
-        EASY, MEDIUM, HARD
-    }
-
     @Enumerated(EnumType.STRING)
     @Column(nullable = false)
     private ProblemType type = ProblemType.STRING;
-
-    public enum ProblemType {
-        MATH, DATA_STRUCTURE, GRAPH, STRING
-    }
 
     @Column(nullable = false)
     private LocalDateTime createdAt = LocalDateTime.now();

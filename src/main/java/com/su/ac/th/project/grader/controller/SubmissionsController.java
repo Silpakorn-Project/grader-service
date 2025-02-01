@@ -80,7 +80,9 @@ public class SubmissionsController {
     }
 
     @PostMapping("/submit")
-    public ResponseEntity<BaseResponseModel> submit(@RequestBody SubmitRequest submitRequest) {
+    public ResponseEntity<BaseResponseModel> submit(
+            @Valid @RequestBody SubmitRequest submitRequest
+    ) {
         return ResponseEntity.ok(BaseResponseModel.builder()
                 .timestamp(getDateTimeNow())
                 .code(HttpConstant.Status.SUCCESS)

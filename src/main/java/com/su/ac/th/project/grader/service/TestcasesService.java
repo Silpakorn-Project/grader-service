@@ -2,6 +2,7 @@ package com.su.ac.th.project.grader.service;
 
 import com.su.ac.th.project.grader.entity.TestcasesEntity;
 import com.su.ac.th.project.grader.exception.testcase.TestCaseNotFoundException;
+import com.su.ac.th.project.grader.exception.testcase.TestCasesNotFoundForProblemIdException;
 import com.su.ac.th.project.grader.model.request.testcase.TestcasesRequest;
 import com.su.ac.th.project.grader.model.request.testcase.TestcasesUpdateRequest;
 import com.su.ac.th.project.grader.model.response.TestcasesResponse;
@@ -33,8 +34,12 @@ public class TestcasesService {
         return DtoEntityMapper.mapToDto(testcasesEntity, TestcasesResponse.class);
     }
 
-    public List<TestcasesResponse> getTestcasesByProblemId(Long problemId) {
-        List<TestcasesEntity> testcasesEntities = testcasesRepository.findByProblemId(problemId);
+    public List<TestcasesResponse> getTestcasesByProblemId(Long id) {
+        List<TestcasesEntity> testcasesEntities = testcasesRepository.findByProblemId(id);
+
+        if (testcasesEntities.isEmpty()) {
+            throw new TestCasesNotFoundForProblemIdException(id);
+        }
 
         return DtoEntityMapper.mapListToDto(testcasesEntities, TestcasesResponse.class);
     }

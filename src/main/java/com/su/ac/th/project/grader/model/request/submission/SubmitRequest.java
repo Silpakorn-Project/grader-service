@@ -1,4 +1,4 @@
-package com.su.ac.th.project.grader.model.request;
+package com.su.ac.th.project.grader.model.request.submission;
 
 import lombok.Data;
 

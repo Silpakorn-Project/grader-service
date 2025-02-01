@@ -1,4 +1,4 @@
-package com.su.ac.th.project.grader.service.external.request;
+package com.su.ac.th.project.grader.model.request.sandbox;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;

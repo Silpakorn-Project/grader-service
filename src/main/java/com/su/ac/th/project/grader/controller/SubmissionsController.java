@@ -2,7 +2,7 @@ package com.su.ac.th.project.grader.controller;
 
 import com.su.ac.th.project.grader.constant.HttpConstant;
 import com.su.ac.th.project.grader.model.BaseResponseModel;
-import com.su.ac.th.project.grader.model.request.SubmitRequest;
+import com.su.ac.th.project.grader.model.request.submission.SubmitRequest;
 import com.su.ac.th.project.grader.model.request.submission.SubmissionsRequest;
 import com.su.ac.th.project.grader.model.request.submission.SubmissionsUpdateRequest;
 import com.su.ac.th.project.grader.service.SubmissionsService;

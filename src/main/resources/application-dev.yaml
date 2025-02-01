@@ -35,3 +35,9 @@ springdoc:
     enabled: true
   swagger-ui:
     enabled: true
+
+sandbox:
+  java:
+    url: http://localhost:3001/java-sandbox-service/sandbox
+  python:
+    url: http://localhost:3002/python-sandbox-service/sandbox

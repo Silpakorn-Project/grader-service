@@ -4,16 +4,14 @@ import com.su.ac.th.project.grader.constant.CommonConstant;
 import com.su.ac.th.project.grader.constant.CommonConstant.*;
 import com.su.ac.th.project.grader.entity.SubmissionsEntity;
 import com.su.ac.th.project.grader.exception.submission.SubmissionNotFoundException;
-import com.su.ac.th.project.grader.model.request.SubmitRequest;
+import com.su.ac.th.project.grader.model.request.submission.SubmitRequest;
 import com.su.ac.th.project.grader.model.request.submission.SubmissionsRequest;
 import com.su.ac.th.project.grader.model.request.submission.SubmissionsUpdateRequest;
 import com.su.ac.th.project.grader.model.response.SubmissionsResponse;
-import com.su.ac.th.project.grader.model.response.TestcasesResponse;
 import com.su.ac.th.project.grader.repository.jpa.SubmissionsRepository;
-import com.su.ac.th.project.grader.service.external.SandboxClient;
-import com.su.ac.th.project.grader.service.external.request.RunTestRequest;
-import com.su.ac.th.project.grader.service.external.request.TestCase;
-import com.su.ac.th.project.grader.service.external.response.RunTestResponse;
+import com.su.ac.th.project.grader.model.request.sandbox.RunTestRequest;
+import com.su.ac.th.project.grader.model.request.sandbox.TestCase;
+import com.su.ac.th.project.grader.model.response.RunTestResponse;
 import com.su.ac.th.project.grader.util.DtoEntityMapper;
 import org.springframework.stereotype.Service;
 
@@ -27,13 +25,15 @@ import java.util.Objects;
 public class SubmissionsService {
 
     private final SubmissionsRepository submissionsRepository;
-    private final SandboxClient sandboxClient;
+    private final SandboxClientService sandboxClient;
     private final TestcasesService testcasesService;
+    private final UsersService usersService;
 
-    public SubmissionsService(SubmissionsRepository submissionsRepository, SandboxClient sandboxClient, TestcasesService testcasesService) {
+    public SubmissionsService(SubmissionsRepository submissionsRepository, SandboxClientService sandboxClient, TestcasesService testcasesService, UsersService usersService) {
         this.submissionsRepository = submissionsRepository;
         this.sandboxClient = sandboxClient;
         this.testcasesService = testcasesService;
+        this.usersService = usersService;
     }
 
     public List<SubmissionsResponse> getAllSubmissions() {
@@ -102,12 +102,18 @@ public class SubmissionsService {
 
     public RunTestResponse submit(SubmitRequest submitRequest) {
 
-        List<TestcasesResponse> testCases = testcasesService.getTestcasesByProblemId(submitRequest.getProblemId());
+        // Check if user exist
+        usersService.getUserById(submitRequest.getUserId());
 
-        List<TestCase> testCasesRequest = testCases.stream().map(testCase -> new TestCase(testCase.getInputData(), testCase.getExpectedOutput())).toList();
+        List<TestCase> testCases = testcasesService.getTestcasesByProblemId(submitRequest.getProblemId())
+                .stream()
+                .map(TestCase::new)
+                .toList();
 
-        RunTestRequest runTestRequest = new RunTestRequest(submitRequest.getCode(), testCasesRequest);
-        RunTestResponse response = sandboxClient.runTests(runTestRequest, submitRequest.getLanguage()).block();
+        RunTestRequest runTestRequest = new RunTestRequest(submitRequest.getCode(), testCases);
+        RunTestResponse response = sandboxClient
+                .runTests(runTestRequest, submitRequest.getLanguage())
+                .block();
 
         if (response != null) {
             SubmissionsEntity submissionsEntity = DtoEntityMapper.mapToEntity(submitRequest, SubmissionsEntity.class);

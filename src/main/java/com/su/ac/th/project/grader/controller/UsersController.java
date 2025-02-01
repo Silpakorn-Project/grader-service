@@ -5,7 +5,6 @@ import com.su.ac.th.project.grader.model.BaseResponseModel;
 import com.su.ac.th.project.grader.model.request.user.UsersRequest;
 import com.su.ac.th.project.grader.model.request.user.UsersUpdateRequest;
 import com.su.ac.th.project.grader.service.UsersService;
-import io.swagger.v3.oas.annotations.Operation;
 import jakarta.validation.Valid;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.ResponseEntity;
@@ -24,7 +23,6 @@ public class UsersController {
         this.usersService = usersService;
     }
 
-    @Operation(summary = "Get all users")
     @GetMapping("/")
     public ResponseEntity<BaseResponseModel> getAllUsers() {
         return ResponseEntity.ok(BaseResponseModel.builder()
@@ -35,8 +33,19 @@ public class UsersController {
                 .build());
     }
 
+    @GetMapping("/{id}")
+    public ResponseEntity<BaseResponseModel> getUserById(@PathVariable Long id) {
+        return ResponseEntity.ok(BaseResponseModel.builder()
+                .timestamp(getDateTimeNow())
+                .message(HttpConstant.Message.SUCCESS)
+                .code(HttpConstant.Status.SUCCESS)
+                .data(usersService.getUserById(id))
+                .build());
+    }
+
     @PostMapping("/")
-    public ResponseEntity<BaseResponseModel> createUser(@Valid @RequestBody UsersRequest usersRequest) {
+    public ResponseEntity<BaseResponseModel> createUser(
+            @Valid @RequestBody UsersRequest usersRequest) {
         return ResponseEntity.ok(BaseResponseModel.builder()
                 .timestamp(getDateTimeNow())
                 .message(HttpConstant.Message.SUCCESS)

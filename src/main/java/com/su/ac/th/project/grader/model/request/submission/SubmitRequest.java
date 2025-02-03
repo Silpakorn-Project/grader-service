@@ -12,19 +12,19 @@ import static com.su.ac.th.project.grader.constant.CommonConstant.Language;
 public class SubmitRequest {
 
     @Schema(description = "User ID", example = "1")
-    @NotNull()
+    @NotNull
     private Long userId;
 
     @Schema(description = "Problem ID", example = "1")
-    @NotNull()
+    @NotNull
     private Long problemId;
 
     @Schema(description = "Code submitted by the user", example = "print('Hello World')")
-    @NotBlank()
+    @NotBlank
     private String code;
 
     @Schema(description = "Programming language used", example = "PYTHON")
-    @NotNull()
+    @NotNull
     @IsEnum(enumClass = Language.class)
     private String language;
 }

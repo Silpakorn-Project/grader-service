@@ -2,6 +2,7 @@ package com.su.ac.th.project.grader.config.security;
 
 import com.su.ac.th.project.grader.config.security.entrypoint.JwtAuthenticationEntryPoint;
 import com.su.ac.th.project.grader.config.security.filter.JwtAuthenticationFilter;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
@@ -18,6 +19,9 @@ public class SecurityConfig {
 
     private final JwtAuthenticationEntryPoint jwtAuthenticationEntryPoint;
 
+    @Value("${security.enabled:true}")
+    private boolean authEnabled;
+
     public SecurityConfig(JwtAuthenticationEntryPoint jwtAuthenticationEntryPoint) {
         this.jwtAuthenticationEntryPoint = jwtAuthenticationEntryPoint;
     }
@@ -26,24 +30,29 @@ public class SecurityConfig {
     public SecurityFilterChain securityFilterChain(HttpSecurity http, JwtAuthenticationFilter jwtAuthenticationFilter) throws Exception {
         http
                 .csrf(AbstractHttpConfigurer::disable)
-                .authorizeHttpRequests(auth -> auth
-                        .requestMatchers(
-                                "/swagger-ui/**",
-                                "/v3/api-docs/**",
-                                "/v3/api-docs/yaml",
-                                "/swagger-resources/**",
-                                "/webjars/**",
-                                "/api/auth/**",
-                                "/api/health/check"
-                        ).permitAll()
-                        .anyRequest().authenticated()
-                )
+                .authorizeHttpRequests(auth -> {
+                    if (authEnabled) {
+                        System.out.println("ENABLED");
+                        auth
+                                .requestMatchers(
+                                        "/swagger-ui/**",
+                                        "/v3/api-docs/**",
+                                        "/v3/api-docs/yaml",
+                                        "/swagger-resources/**",
+                                        "/webjars/**",
+                                        "/api/auth/**",
+                                        "/api/health/check"
+                                ).permitAll()
+                                .anyRequest().authenticated();
+                    } else {
+                        auth.anyRequest().permitAll();
+                    }
+                })
                 .formLogin(AbstractHttpConfigurer::disable)
                 .httpBasic(AbstractHttpConfigurer::disable)
                 .addFilterBefore(jwtAuthenticationFilter, UsernamePasswordAuthenticationFilter.class)
-                .securityMatcher("/api/**").exceptionHandling((exceptions) ->
-                        exceptions.authenticationEntryPoint(jwtAuthenticationEntryPoint)
-                );
+                .securityMatcher("/api/**")
+                .exceptionHandling((exceptions) -> exceptions.authenticationEntryPoint(jwtAuthenticationEntryPoint));
 
         return http.build();
     }

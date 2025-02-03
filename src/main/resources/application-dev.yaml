@@ -26,6 +26,7 @@ server:
 
 
 security:
+  enabled: true
   jwt:
     secret-key: mySecretKey123456789012345678901234
     expire-time: 3600000
@@ -37,7 +38,7 @@ springdoc:
     enabled: true
 
 sandbox:
-  java:
-    url: http://localhost:3001
   python:
-    url: http://localhost:3002
+    url: http://localhost:8001
+  java:
+    url: http://localhost:8002

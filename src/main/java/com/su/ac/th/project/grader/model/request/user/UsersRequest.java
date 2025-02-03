@@ -17,15 +17,15 @@ public class UsersRequest {
     @Schema(description = "User ID", example = "1")
     private Long id;
 
-    @Schema(description = "Username", example = "updated")
+    @Schema(description = "Username", example = "admin")
     @NotBlank
     private String username;
 
-    @Schema(description = "Password", example = "updated1234")
+    @Schema(description = "Password", example = "1234")
     @NotBlank
     private String password;
 
-    @Schema(description = "Email", example = "updated@gmail.com")
+    @Schema(description = "Email", example = "admin@gmail.com")
     @NotBlank
     @Email
     private String email;

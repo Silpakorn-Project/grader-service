@@ -2,6 +2,7 @@ package com.su.ac.th.project.grader.controller;
 
 import com.su.ac.th.project.grader.constant.HttpConstant;
 import com.su.ac.th.project.grader.model.BaseResponseModel;
+import com.su.ac.th.project.grader.model.request.submission.SubmitRequest;
 import com.su.ac.th.project.grader.model.request.submission.SubmissionsRequest;
 import com.su.ac.th.project.grader.model.request.submission.SubmissionsUpdateRequest;
 import com.su.ac.th.project.grader.service.SubmissionsService;
@@ -78,4 +79,15 @@ public class SubmissionsController {
                 .build());
     }
 
+    @PostMapping("/submit")
+    public ResponseEntity<BaseResponseModel> submit(
+            @Valid @RequestBody SubmitRequest submitRequest
+    ) {
+        return ResponseEntity.ok(BaseResponseModel.builder()
+                .timestamp(getDateTimeNow())
+                .code(HttpConstant.Status.SUCCESS)
+                .message(HttpConstant.Message.SUCCESS)
+                .data(submissionsService.submit(submitRequest))
+                .build());
+    }
 }

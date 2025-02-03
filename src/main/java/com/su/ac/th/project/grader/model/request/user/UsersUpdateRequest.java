@@ -14,15 +14,15 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 public class UsersUpdateRequest {
 
-    @Schema(description = "Username", example = "admin")
+    @Schema(description = "Username", example = "updated")
     @OptionalNotBlank
     private String username;
 
-    @Schema(description = "Password", example = "1234")
+    @Schema(description = "Password", example = "updated1234")
     @OptionalNotBlank
     private String password;
 
-    @Schema(description = "Email", example = "admin@gmail.com")
+    @Schema(description = "Email", example = "updated@gmail.com")
     @OptionalNotBlank
     @Email
     private String email;

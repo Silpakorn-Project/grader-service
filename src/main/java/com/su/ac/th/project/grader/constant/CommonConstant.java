@@ -15,7 +15,7 @@ public class CommonConstant {
     }
 
     public enum Status {
-        Pending, Passed, Failed
+        Passed, Failed
     }
 
 }

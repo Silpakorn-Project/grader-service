@@ -4,6 +4,7 @@ import com.su.ac.th.project.grader.entity.UsersEntity;
 import com.su.ac.th.project.grader.exception.user.UserNotFoundException;
 import com.su.ac.th.project.grader.model.request.user.UsersRequest;
 import com.su.ac.th.project.grader.model.request.user.UsersUpdateRequest;
+import com.su.ac.th.project.grader.model.response.UserResponse;
 import com.su.ac.th.project.grader.repository.jpa.UserRepository;
 import com.su.ac.th.project.grader.util.DtoEntityMapper;
 import org.springframework.stereotype.Service;
@@ -20,8 +21,16 @@ public class UsersService {
         this.userRepository = userRepository;
     }
 
-    public List<UsersEntity> getAllUsers() {
-        return userRepository.findAll();
+    public List<UserResponse> getAllUsers() {
+        List<UsersEntity> usersEntityList = userRepository.findAll();
+        return DtoEntityMapper.mapListToDto(usersEntityList, UserResponse.class);
+    }
+
+    public UserResponse getUserById(Long id) {
+        UsersEntity usersEntity = userRepository
+                .findById(id)
+                .orElseThrow(() -> new UserNotFoundException(id));
+        return DtoEntityMapper.mapToDto(usersEntity, UserResponse.class);
     }
 
     public int createUser(UsersRequest usersRequest) {
@@ -58,8 +67,8 @@ public class UsersService {
         return rowUpdated;
     }
 
-    public Long deleteUser(Long id) {
+    public Object deleteUser(Long id) {
         userRepository.deleteById(id);
-        return id;
+        return null;
     }
 }

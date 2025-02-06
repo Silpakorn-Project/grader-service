@@ -22,14 +22,15 @@ public class SubmissionsEntity {
     @Column(nullable = false)
     private Long problemId;
 
-    @Column(nullable = false)
+    @Lob
+    @Column(nullable = false, columnDefinition = "LONGTEXT")
     private String code;
 
     @Enumerated(EnumType.STRING)
     private Language language;
 
     @Enumerated(EnumType.STRING)
-    private Status status = Status.Pending;
+    private Status status;
 
     @Column(nullable = false)
     private BigDecimal scorePercent;
@@ -39,7 +40,5 @@ public class SubmissionsEntity {
 
     @Column(nullable = false)
     private LocalDateTime updatedAt = LocalDateTime.now();
-
-
 
 }

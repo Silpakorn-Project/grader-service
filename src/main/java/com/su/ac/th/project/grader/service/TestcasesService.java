@@ -3,6 +3,7 @@ package com.su.ac.th.project.grader.service;
 import com.su.ac.th.project.grader.entity.TestcasesEntity;
 import com.su.ac.th.project.grader.exception.testcase.TestCaseNotFoundException;
 import com.su.ac.th.project.grader.exception.testcase.TestCasesNotFoundForProblemIdException;
+import com.su.ac.th.project.grader.model.request.testcase.GetTestCasesQueryParams;
 import com.su.ac.th.project.grader.model.request.testcase.TestcasesRequest;
 import com.su.ac.th.project.grader.model.request.testcase.TestcasesUpdateRequest;
 import com.su.ac.th.project.grader.model.response.TestcasesResponse;
@@ -22,8 +23,13 @@ public class TestcasesService {
         this.testcasesRepository = testcasesRepository;
     }
 
-    public List<TestcasesResponse> getAllTestcases() {
-        List<TestcasesEntity> testcasesEntityList = testcasesRepository.findAll();
+    public List<TestcasesResponse> getTestCases(GetTestCasesQueryParams options) {
+        List<TestcasesEntity> testcasesEntityList;
+        if (options.getProblemId() != null) {
+            testcasesEntityList = testcasesRepository.findByProblemId(options.getProblemId());
+        } else {
+            testcasesEntityList = testcasesRepository.findAll();
+        }
         return DtoEntityMapper.mapListToDto(testcasesEntityList, TestcasesResponse.class);
     }
 

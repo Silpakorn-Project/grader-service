@@ -29,7 +29,9 @@ security:
   enabled: true
   jwt:
     secret-key: mySecretKey123456789012345678901234
-    expire-time: 3600000
+    expiration:
+      access-token: 1000 # 1 hour
+      refresh-token: 604800000 # 7 days
 
 springdoc:
   api-docs:

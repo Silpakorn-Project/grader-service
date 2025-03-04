@@ -32,7 +32,6 @@ public class SecurityConfig {
                 .csrf(AbstractHttpConfigurer::disable)
                 .authorizeHttpRequests(auth -> {
                     if (authEnabled) {
-                        System.out.println("ENABLED");
                         auth
                                 .requestMatchers(
                                         "/swagger-ui/**",

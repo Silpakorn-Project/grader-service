@@ -22,7 +22,7 @@ public class SubmissionsController {
         this.submissionsService = submissionsService;
     }
 
-    @GetMapping("/")
+    @GetMapping()
     public ResponseEntity<BaseResponseModel> getAllSubmissions() {
         return ResponseEntity.ok(BaseResponseModel.builder()
                 .timestamp(getDateTimeNow())
@@ -42,7 +42,7 @@ public class SubmissionsController {
                 .build());
     }
 
-    @PostMapping("/")
+    @PostMapping()
     public ResponseEntity<BaseResponseModel> createSubmission(
             @Valid @RequestBody SubmissionsRequest submissionsRequest
     ) {

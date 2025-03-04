@@ -1,17 +1,19 @@
 package com.su.ac.th.project.grader.service;
 
 import com.su.ac.th.project.grader.entity.UsersEntity;
-import com.su.ac.th.project.grader.exception.authentication.AuthenticationException;
+import com.su.ac.th.project.grader.exception.authentication.InvalidRefreshTokenException;
+import com.su.ac.th.project.grader.exception.authentication.InvalidUsernameOrPasswordException;
 import com.su.ac.th.project.grader.model.request.authentication.UsersLoginRequest;
 import com.su.ac.th.project.grader.model.request.authentication.UsersRegRequest;
 import com.su.ac.th.project.grader.model.response.UserTokenResponse;
 import com.su.ac.th.project.grader.repository.jpa.AuthenticationRepository;
 import com.su.ac.th.project.grader.util.DtoEntityMapper;
 import com.su.ac.th.project.grader.util.JwtUtil;
+import jakarta.servlet.http.HttpServletResponse;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
-import java.util.Optional;
+import java.util.Map;
 
 @Service
 public class AuthenticationService {
@@ -35,25 +37,44 @@ public class AuthenticationService {
         return authenticationRepository.save(u);
     }
 
-    public UserTokenResponse login(UsersLoginRequest usersLoginRequest) {
-        UsersEntity u = DtoEntityMapper.mapToEntity(usersLoginRequest, UsersEntity.class);
+    public UserTokenResponse login(UsersLoginRequest usersLoginRequest, HttpServletResponse response) {
+        UsersEntity userEntity = authenticationRepository
+                .findByUsername(usersLoginRequest.getUsername())
+                .orElseThrow(InvalidUsernameOrPasswordException::new);
 
-        Optional<UsersEntity> userEntity = authenticationRepository.findByUsername(u.getUsername());
+        Map<String, Object> claims = Map.of("userId", userEntity.getId());
+        String accessToken = jwtUtil.generateAccessToken(claims, userEntity.getUsername());
+        String refreshToken = jwtUtil.generateRefreshToken(claims, userEntity.getUsername());
 
-        if (userEntity.isEmpty()) {
-            AuthenticationException.invalidUsernameOrPassword();
-        }
+        jwtUtil.setRefreshTokenCookie(response, refreshToken);
 
-        if (passwordEncoder.matches(u.getPassword(), userEntity.get().getPassword())) {
-            String token = jwtUtil.generateToken(usersLoginRequest.getUsername());
-
-            return UserTokenResponse.builder()
-                    .username(usersLoginRequest.getUsername())
-                    .token(token)
-                    .build();
-        }
-
-        AuthenticationException.invalidUsernameOrPassword();
-        return null;
+        return UserTokenResponse.builder()
+                .userId(userEntity.getId())
+                .username(userEntity.getUsername())
+                .token(accessToken)
+                .build();
     }
+
+    public UserTokenResponse refreshAccessToken(String refreshToken) {
+        if (refreshToken == null || !jwtUtil.validateToken(refreshToken)) {
+            throw new InvalidRefreshTokenException();
+        }
+
+        Long userId = jwtUtil.extractUserId(refreshToken);
+        String username = jwtUtil.extractUsername(refreshToken);
+        Map<String, Object> claims = Map.of("userId", userId);
+
+        String newAccessToken = jwtUtil.generateAccessToken(claims, username);
+
+        return UserTokenResponse.builder()
+                .userId(userId)
+                .username(username)
+                .token(newAccessToken)
+                .build();
+    }
+
+    public void logout(HttpServletResponse response) {
+        jwtUtil.setRefreshTokenCookie(response, "");
+    }
+
 }

@@ -2,6 +2,7 @@ package com.su.ac.th.project.grader.controller;
 
 import com.su.ac.th.project.grader.constant.HttpConstant;
 import com.su.ac.th.project.grader.model.BaseResponseModel;
+import com.su.ac.th.project.grader.model.request.testcase.GetTestCasesQueryParams;
 import com.su.ac.th.project.grader.model.request.testcase.TestcasesRequest;
 import com.su.ac.th.project.grader.model.request.testcase.TestcasesUpdateRequest;
 import com.su.ac.th.project.grader.service.TestcasesService;
@@ -21,13 +22,14 @@ public class TestcasesController {
         this.testcasesService = testcasesService;
     }
 
-    @GetMapping("/")
-    public ResponseEntity<BaseResponseModel> getAllTestCases() {
+    @GetMapping()
+    public ResponseEntity<BaseResponseModel> getTestCases(
+            @ModelAttribute GetTestCasesQueryParams query) {
         return ResponseEntity.ok(BaseResponseModel.builder()
                 .timestamp(getDateTimeNow())
                 .code(HttpConstant.Status.SUCCESS)
                 .message(HttpConstant.Message.SUCCESS)
-                .data(testcasesService.getAllTestcases())
+                .data(testcasesService.getTestCases(query))
                 .build());
     }
 
@@ -41,7 +43,7 @@ public class TestcasesController {
                 .build());
     }
 
-    @PostMapping("/")
+    @PostMapping()
     public ResponseEntity<BaseResponseModel> createTestCase(
             @Valid @RequestBody TestcasesRequest testcasesRequest
     ) {

@@ -2,6 +2,8 @@ package com.su.ac.th.project.grader.constant;
 
 public class CommonConstant {
 
+    public static final String CONTEXT_PATH = "grader-service";
+
     public enum ProblemType {
         MATH, DATA_STRUCTURE, GRAPH, STRING
     }

@@ -21,7 +21,7 @@ public class ProblemsController {
         this.problemsService = problemsService;
     }
 
-    @GetMapping("/")
+    @GetMapping()
     public ResponseEntity<BaseResponseModel> getAllProblems() {
         return ResponseEntity.ok(BaseResponseModel.builder()
                 .timestamp(getDateTimeNow())
@@ -41,7 +41,7 @@ public class ProblemsController {
                 .build());
     }
 
-    @PostMapping("/")
+    @PostMapping()
     public ResponseEntity<BaseResponseModel> createProblem(
             @Valid @RequestBody ProblemRequest problemRequest
     ) {

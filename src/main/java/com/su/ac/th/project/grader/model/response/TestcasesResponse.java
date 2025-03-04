@@ -8,6 +8,7 @@ import java.time.LocalDateTime;
 @Data
 public class TestcasesResponse {
 
+    private Long testcaseId;
     private Long problemId;
     private String inputData;
     private String expectedOutput;

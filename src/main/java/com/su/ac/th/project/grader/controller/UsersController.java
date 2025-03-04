@@ -23,7 +23,7 @@ public class UsersController {
         this.usersService = usersService;
     }
 
-    @GetMapping("/")
+    @GetMapping()
     public ResponseEntity<BaseResponseModel> getAllUsers() {
         return ResponseEntity.ok(BaseResponseModel.builder()
                 .timestamp(getDateTimeNow())
@@ -33,19 +33,8 @@ public class UsersController {
                 .build());
     }
 
-    @GetMapping("/{id}")
-    public ResponseEntity<BaseResponseModel> getUserById(@PathVariable Long id) {
-        return ResponseEntity.ok(BaseResponseModel.builder()
-                .timestamp(getDateTimeNow())
-                .message(HttpConstant.Message.SUCCESS)
-                .code(HttpConstant.Status.SUCCESS)
-                .data(usersService.getUserById(id))
-                .build());
-    }
-
-    @PostMapping("/")
-    public ResponseEntity<BaseResponseModel> createUser(
-            @Valid @RequestBody UsersRequest usersRequest) {
+    @PostMapping()
+    public ResponseEntity<BaseResponseModel> createUser(@Valid @RequestBody UsersRequest usersRequest) {
         return ResponseEntity.ok(BaseResponseModel.builder()
                 .timestamp(getDateTimeNow())
                 .message(HttpConstant.Message.SUCCESS)

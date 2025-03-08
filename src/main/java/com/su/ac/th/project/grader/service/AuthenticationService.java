@@ -42,6 +42,10 @@ public class AuthenticationService {
                 .findByUsername(usersLoginRequest.getUsername())
                 .orElseThrow(InvalidUsernameOrPasswordException::new);
 
+        if (!passwordEncoder.matches(usersLoginRequest.getPassword(), userEntity.getPassword())) {
+            throw new InvalidUsernameOrPasswordException();
+        }
+
         Map<String, Object> claims = Map.of("userId", userEntity.getId());
         String accessToken = jwtUtil.generateAccessToken(claims, userEntity.getUsername());
         String refreshToken = jwtUtil.generateRefreshToken(claims, userEntity.getUsername());

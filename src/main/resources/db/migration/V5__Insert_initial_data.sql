@@ -11,3 +11,7 @@ VALUES
     (1, '0 0', '0', NOW(), NOW()),
     (2, 'hello', 'olleh', NOW(), NOW()),
     (2, 'world', 'dlrow', NOW(), NOW());
+
+INSERT INTO users (username, password, email)
+VALUES ('admin', '$2a$10$.YJ1FvGeZrqlHDpMyO5jieh/JLZyb9h8wMVYU8IJLYU9WjMg3BbDe', 'admin@gmail.com'),
+       ('admin2', '$2a$10$.YJ1FvGeZrqlHDpMyO5jieh/JLZyb9h8wMVYU8IJLYU9WjMg3BbDe', 'admin2@gmail.com');

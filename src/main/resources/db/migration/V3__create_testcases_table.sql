@@ -3,8 +3,8 @@ CREATE TABLE IF NOT EXISTS testcases (
     problem_id BIGINT NOT NULL,
     input_data VARCHAR(255) NOT NULL,
     expected_output VARCHAR(255) NOT NULL,
-    created_at DATETIME(6) NOT NULL,
-    updated_at DATETIME(6) NOT NULL,
+    created_at DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    updated_at DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
     PRIMARY KEY (testcase_id),
-    FOREIGN KEY (problem_id) REFERENCES problems(problem_id)
+    FOREIGN KEY (problem_id) REFERENCES problems(problem_id) ON DELETE CASCADE ON UPDATE CASCADE
 );

@@ -46,4 +46,25 @@ docker-compose down
 curl -X GET http://localhost:8000/grader-service/api/health/check
 ```
 
-###
+# Flyway
+
+### migrate
+
+```shell
+mvn flyway:migrate
+```
+
+### clean
+
+```shell
+mvn flyway:clean
+```
+
+### info
+```shell
+mvn flyway:info
+```
+
+
+
+

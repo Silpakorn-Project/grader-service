@@ -11,7 +11,7 @@ public class UsersLoginRequest {
     @NotBlank
     private String username;
 
-    @Schema(description = "Password", example = "1234")
+    @Schema(description = "Password", example = "admin123")
     @NotBlank
     private String password;
 

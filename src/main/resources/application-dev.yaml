@@ -44,3 +44,5 @@ sandbox:
     url: http://localhost:8001
   java:
     url: http://localhost:8002
+  c:
+    url: http://localhost:8003

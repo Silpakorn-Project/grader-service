@@ -14,16 +14,20 @@ public class SandboxClientService {
 
     private final WebClient javaSandboxClient;
     private final WebClient pythonSandboxClient;
+    private final WebClient cSandboxClient;
+
+    private static final String JAVA_SANDBOX_API_ENDPOINT = "/java-sandbox-service";
+    private static final String PYTHON_SANDBOX_API_ENDPOINT = "/python-sandbox-service";
+    private static final String C_SANDBOX_API_ENDPOINT = "/c-sandbox-service";
 
     public SandboxClientService(WebClient.Builder webClientBuilder,
                                 @Value("${sandbox.java.url}") String javaSandboxBaseUrl,
-                                @Value("${sandbox.python.url}") String pythonSandboxBaseUrl
+                                @Value("${sandbox.python.url}") String pythonSandboxBaseUrl,
+                                @Value("${sandbox.c.url}") String cSandboxBaseUrl
     ) {
-        String JAVA_SANDBOX_API_ENDPOINT = "/java-sandbox-service";
-        String PYTHON_SANDBOX_API_ENDPOINT = "/python-sandbox-service";
-
         this.javaSandboxClient = webClientBuilder.baseUrl(javaSandboxBaseUrl + JAVA_SANDBOX_API_ENDPOINT).build();
         this.pythonSandboxClient = webClientBuilder.baseUrl(pythonSandboxBaseUrl + PYTHON_SANDBOX_API_ENDPOINT).build();
+        this.cSandboxClient = webClientBuilder.baseUrl(cSandboxBaseUrl + C_SANDBOX_API_ENDPOINT).build();
     }
 
     public RunTestResponse runTests(RunTestRequest submissionRequest, String language) {
@@ -45,6 +49,7 @@ public class SandboxClientService {
         return switch (language.toUpperCase()) {
             case "JAVA" -> javaSandboxClient;
             case "PYTHON" -> pythonSandboxClient;
+            case "C" -> cSandboxClient;
             default -> throw new UnsupportedLanguageException(language);
         };
     }

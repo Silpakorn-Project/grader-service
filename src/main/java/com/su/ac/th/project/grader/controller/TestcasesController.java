@@ -2,9 +2,10 @@ package com.su.ac.th.project.grader.controller;
 
 import com.su.ac.th.project.grader.constant.HttpConstant;
 import com.su.ac.th.project.grader.model.BaseResponseModel;
-import com.su.ac.th.project.grader.model.request.testcase.GetTestCasesQueryParams;
+import com.su.ac.th.project.grader.model.PaginationResponse;
 import com.su.ac.th.project.grader.model.request.testcase.TestcasesRequest;
 import com.su.ac.th.project.grader.model.request.testcase.TestcasesUpdateRequest;
+import com.su.ac.th.project.grader.model.response.TestcasesResponse;
 import com.su.ac.th.project.grader.service.TestcasesService;
 import jakarta.validation.Valid;
 import org.springframework.http.ResponseEntity;
@@ -24,12 +25,25 @@ public class TestcasesController {
 
     @GetMapping()
     public ResponseEntity<BaseResponseModel> getTestCases(
-            @ModelAttribute GetTestCasesQueryParams query) {
+            @RequestParam(required = false) Long problemId,
+            @RequestParam(required = false) Integer offset,
+            @RequestParam(required = false) Integer limit,
+            @RequestParam(defaultValue = "testcaseId") String sortBy,
+            @RequestParam(defaultValue = "asc") String sortType
+    ) {
+        PaginationResponse<TestcasesResponse> testcasesResponse =
+                testcasesService.getTestCases(problemId, offset, limit, sortBy, sortType);
+
         return ResponseEntity.ok(BaseResponseModel.builder()
                 .timestamp(getDateTimeNow())
                 .code(HttpConstant.Status.SUCCESS)
                 .message(HttpConstant.Message.SUCCESS)
-                .data(testcasesService.getTestCases(query))
+                .offset(offset)
+                .limit(limit)
+                .totalRecords(testcasesResponse.getTotalPages())
+                .totalPages(testcasesResponse.getTotalPages())
+                .dataCount(testcasesResponse.getData().size())
+                .data(testcasesResponse.getData())
                 .build());
     }
 

@@ -3,16 +3,22 @@ package com.su.ac.th.project.grader.service;
 import com.su.ac.th.project.grader.entity.TestcasesEntity;
 import com.su.ac.th.project.grader.exception.testcase.TestCaseNotFoundException;
 import com.su.ac.th.project.grader.exception.testcase.TestCasesNotFoundForProblemIdException;
-import com.su.ac.th.project.grader.model.request.testcase.GetTestCasesQueryParams;
+import com.su.ac.th.project.grader.model.PaginationResponse;
 import com.su.ac.th.project.grader.model.request.testcase.TestcasesRequest;
 import com.su.ac.th.project.grader.model.request.testcase.TestcasesUpdateRequest;
 import com.su.ac.th.project.grader.model.response.TestcasesResponse;
 import com.su.ac.th.project.grader.repository.jpa.TestcasesRepository;
 import com.su.ac.th.project.grader.util.DtoEntityMapper;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
 import java.util.List;
+
+import static com.su.ac.th.project.grader.util.DtoEntityMapper.mapListToDto;
 
 @Service
 public class TestcasesService {
@@ -23,14 +29,17 @@ public class TestcasesService {
         this.testcasesRepository = testcasesRepository;
     }
 
-    public List<TestcasesResponse> getTestCases(GetTestCasesQueryParams options) {
-        List<TestcasesEntity> testcasesEntityList;
-        if (options.getProblemId() != null) {
-            testcasesEntityList = testcasesRepository.findByProblemId(options.getProblemId());
-        } else {
-            testcasesEntityList = testcasesRepository.findAll();
+    public PaginationResponse<TestcasesResponse> getTestCases(
+            Long problemId, Integer offset, Integer limit, String sortBy, String sortType) {
+
+        if (isPaginationValid(offset, limit)) {
+            Pageable pageable = createPageable(offset, limit, sortBy, sortType);
+            Page<TestcasesEntity> testcasesEntityPage = fetchTestCases(problemId, pageable);
+            return createTestcasesResponse(testcasesEntityPage);
         }
-        return DtoEntityMapper.mapListToDto(testcasesEntityList, TestcasesResponse.class);
+
+        List<TestcasesEntity> testcasesEntityList = fetchTestCases(problemId);
+        return createTestcasesResponse(testcasesEntityList);
     }
 
     public TestcasesResponse getTestcasesById(Long id) {
@@ -47,7 +56,7 @@ public class TestcasesService {
             throw new TestCasesNotFoundForProblemIdException(id);
         }
 
-        return DtoEntityMapper.mapListToDto(testcasesEntities, TestcasesResponse.class);
+        return mapListToDto(testcasesEntities, TestcasesResponse.class);
     }
 
     public int createTestcase(TestcasesRequest testcasesRequest) {
@@ -87,5 +96,52 @@ public class TestcasesService {
     public Object deleteTestcasesById(Long id) {
         testcasesRepository.deleteById(id);
         return null;
+    }
+
+
+    private Page<TestcasesEntity> fetchTestCases(Long problemId, Pageable pageable) {
+        return (problemId == null)
+                ? testcasesRepository.findAll(pageable)
+                : testcasesRepository.findByProblemId(problemId, pageable);
+    }
+
+    private List<TestcasesEntity> fetchTestCases(Long problemId) {
+        return (problemId == null)
+                ? testcasesRepository.findAll()
+                : testcasesRepository.findByProblemId(problemId);
+    }
+
+    private PaginationResponse<TestcasesResponse> createTestcasesResponse(Page<TestcasesEntity> testcasesPage) {
+        List<TestcasesResponse> testcasesResponses = DtoEntityMapper.mapListToDto(testcasesPage.getContent(), TestcasesResponse.class);
+
+        PaginationResponse<TestcasesResponse> response = new PaginationResponse<>();
+        response.setData(testcasesResponses);
+        response.setTotalRecords(testcasesPage.getTotalElements());
+        response.setTotalPages(testcasesPage.getTotalPages());
+
+        return response;
+    }
+
+    private PaginationResponse<TestcasesResponse> createTestcasesResponse(List<TestcasesEntity> testcasesList) {
+        List<TestcasesResponse> testcasesResponses = DtoEntityMapper.mapListToDto(testcasesList, TestcasesResponse.class);
+
+        PaginationResponse<TestcasesResponse> response = new PaginationResponse<>();
+        response.setData(testcasesResponses);
+        response.setTotalRecords((long) testcasesList.size());
+        response.setTotalPages(1);
+
+        return response;
+    }
+
+    private boolean isPaginationValid(Integer offset, Integer limit) {
+        return offset != null && offset > 0 && limit != null && limit > 0;
+    }
+
+    private Pageable createPageable(Integer offset, Integer limit, String sortBy, String sortType) {
+        return PageRequest.of(offset - 1, limit, Sort.by(getSortDirection(sortType), sortBy));
+    }
+
+    private Sort.Direction getSortDirection(String sortType) {
+        return "asc".equalsIgnoreCase(sortType) ? Sort.Direction.ASC : Sort.Direction.DESC;
     }
 }

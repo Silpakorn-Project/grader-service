@@ -9,6 +9,7 @@ public class UserTokenResponse {
 
     private Long userId;
     private String username;
+    private String email;
     private String token;
 
 }

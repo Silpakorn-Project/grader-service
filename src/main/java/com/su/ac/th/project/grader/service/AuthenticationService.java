@@ -3,6 +3,7 @@ package com.su.ac.th.project.grader.service;
 import com.su.ac.th.project.grader.entity.UsersEntity;
 import com.su.ac.th.project.grader.exception.authentication.InvalidRefreshTokenException;
 import com.su.ac.th.project.grader.exception.authentication.InvalidUsernameOrPasswordException;
+import com.su.ac.th.project.grader.exception.user.UserNotFoundException;
 import com.su.ac.th.project.grader.model.request.authentication.UsersLoginRequest;
 import com.su.ac.th.project.grader.model.request.authentication.UsersRegRequest;
 import com.su.ac.th.project.grader.model.response.UserTokenResponse;
@@ -40,13 +41,17 @@ public class AuthenticationService {
     public UserTokenResponse login(UsersLoginRequest usersLoginRequest, HttpServletResponse response) {
         UsersEntity userEntity = authenticationRepository
                 .findByUsername(usersLoginRequest.getUsername())
-                .orElseThrow(InvalidUsernameOrPasswordException::new);
+                .orElseThrow(() -> new UserNotFoundException(usersLoginRequest.getUsername()));
 
         if (!passwordEncoder.matches(usersLoginRequest.getPassword(), userEntity.getPassword())) {
             throw new InvalidUsernameOrPasswordException();
         }
 
-        Map<String, Object> claims = Map.of("userId", userEntity.getId());
+        Map<String, Object> claims = Map.of(
+                "userId", userEntity.getId(),
+                "email", userEntity.getEmail()
+        );
+
         String accessToken = jwtUtil.generateAccessToken(claims, userEntity.getUsername());
         String refreshToken = jwtUtil.generateRefreshToken(claims, userEntity.getUsername());
 
@@ -55,6 +60,7 @@ public class AuthenticationService {
         return UserTokenResponse.builder()
                 .userId(userEntity.getId())
                 .username(userEntity.getUsername())
+                .email(userEntity.getEmail())
                 .token(accessToken)
                 .build();
     }
@@ -65,14 +71,19 @@ public class AuthenticationService {
         }
 
         Long userId = jwtUtil.extractUserId(refreshToken);
+        String email = jwtUtil.extractEmail(refreshToken);
         String username = jwtUtil.extractUsername(refreshToken);
-        Map<String, Object> claims = Map.of("userId", userId);
+        Map<String, Object> claims = Map.of(
+                "userId", userId,
+                "email", email
+        );
 
         String newAccessToken = jwtUtil.generateAccessToken(claims, username);
 
         return UserTokenResponse.builder()
                 .userId(userId)
                 .username(username)
+                .email(email)
                 .token(newAccessToken)
                 .build();
     }

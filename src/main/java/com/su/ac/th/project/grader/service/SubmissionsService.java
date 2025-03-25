@@ -4,15 +4,21 @@ import com.su.ac.th.project.grader.constant.CommonConstant;
 import com.su.ac.th.project.grader.constant.CommonConstant.*;
 import com.su.ac.th.project.grader.entity.SubmissionsEntity;
 import com.su.ac.th.project.grader.exception.submission.SubmissionNotFoundException;
-import com.su.ac.th.project.grader.model.request.submission.SubmitRequest;
-import com.su.ac.th.project.grader.model.request.submission.SubmissionsRequest;
-import com.su.ac.th.project.grader.model.request.submission.SubmissionsUpdateRequest;
+import com.su.ac.th.project.grader.model.PaginationRequest;
+import com.su.ac.th.project.grader.model.PaginationResponse;
+import com.su.ac.th.project.grader.model.request.submission.*;
 import com.su.ac.th.project.grader.model.response.SubmissionsResponse;
 import com.su.ac.th.project.grader.repository.jpa.SubmissionsRepository;
 import com.su.ac.th.project.grader.model.request.sandbox.RunTestRequest;
 import com.su.ac.th.project.grader.model.request.sandbox.TestCase;
 import com.su.ac.th.project.grader.model.response.RunTestResponse;
+import com.su.ac.th.project.grader.repository.jpa.spefication.SubmissionsSpecification;
 import com.su.ac.th.project.grader.util.DtoEntityMapper;
+import com.su.ac.th.project.grader.util.PaginationUtil;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
+import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
 
 import java.math.BigDecimal;
@@ -36,19 +42,42 @@ public class SubmissionsService {
         this.usersService = usersService;
     }
 
-    public List<SubmissionsResponse> getAllSubmissions() {
+    public PaginationResponse<SubmissionsResponse> getSubmissions(
+            PaginationRequest paginationRequest, SubmissionsSearchCriteria searchCriteria
+    ) {
+        Specification<SubmissionsEntity> spec = Specification
+                .where(SubmissionsSpecification.hasUserId(searchCriteria.getUserId()))
+                .and(SubmissionsSpecification.hasProblemId(searchCriteria.getProblemId()))
+                .and(SubmissionsSpecification.hasLanguage(searchCriteria.getLanguage()))
+                .and(SubmissionsSpecification.hasStatus(searchCriteria.getStatus()));
 
-        List<SubmissionsEntity> submissionsEntityList = submissionsRepository.findAll();
-        return DtoEntityMapper.mapListToDto(submissionsEntityList, SubmissionsResponse.class);
+        Sort sort = paginationRequest.getSortBy() != null && paginationRequest.getSortType() != null
+                ? Sort.by(paginationRequest.getSortType(), paginationRequest.getSortBy())
+                : Sort.unsorted();
+
+        if (PaginationUtil.isPaginationValid(paginationRequest.getOffset(), paginationRequest.getLimit())) {
+            Pageable pageable = PaginationUtil.createPageable(
+                    paginationRequest.getOffset(),
+                    paginationRequest.getLimit(),
+                    sort);
+
+            Page<SubmissionsEntity> submissionsPage = submissionsRepository.findAll(spec, pageable);
+            return PaginationUtil.createPaginationResponse(submissionsPage, SubmissionsResponse.class);
+        }
+
+        List<SubmissionsEntity> submissionsEntityList = submissionsRepository.findAll(spec, sort);
+        return PaginationUtil.createPaginationResponse(submissionsEntityList, SubmissionsResponse.class);
     }
 
-    public SubmissionsResponse getSubmissionById(Long id) {
+    private PaginationResponse<SubmissionsResponse> createTestcasesResponse(Page<SubmissionsEntity> submissionsPage) {
+        List<SubmissionsResponse> submissionsResponses = DtoEntityMapper.mapListToDto(submissionsPage.getContent(), SubmissionsResponse.class);
 
-        SubmissionsEntity submissionsEntity = submissionsRepository
-                .findById(id)
-                .orElseThrow(() -> new SubmissionNotFoundException(id));
+        PaginationResponse<SubmissionsResponse> response = new PaginationResponse<>();
+        response.setData(submissionsResponses);
+        response.setTotalRecords(submissionsPage.getTotalElements());
+        response.setTotalPages(submissionsPage.getTotalPages());
 
-        return DtoEntityMapper.mapToDto(submissionsEntity, SubmissionsResponse.class);
+        return response;
     }
 
     public int createSubmission(SubmissionsRequest submissionsRequest) {

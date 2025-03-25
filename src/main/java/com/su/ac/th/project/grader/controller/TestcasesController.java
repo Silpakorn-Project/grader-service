@@ -2,12 +2,14 @@ package com.su.ac.th.project.grader.controller;
 
 import com.su.ac.th.project.grader.constant.HttpConstant;
 import com.su.ac.th.project.grader.model.BaseResponseModel;
+import com.su.ac.th.project.grader.model.PaginationRequest;
 import com.su.ac.th.project.grader.model.PaginationResponse;
 import com.su.ac.th.project.grader.model.request.testcase.TestcasesRequest;
 import com.su.ac.th.project.grader.model.request.testcase.TestcasesUpdateRequest;
 import com.su.ac.th.project.grader.model.response.TestcasesResponse;
 import com.su.ac.th.project.grader.service.TestcasesService;
 import jakarta.validation.Valid;
+import org.springdoc.core.annotations.ParameterObject;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -25,25 +27,22 @@ public class TestcasesController {
 
     @GetMapping()
     public ResponseEntity<BaseResponseModel> getTestCases(
-            @RequestParam(required = false) Long problemId,
-            @RequestParam(required = false) Integer offset,
-            @RequestParam(required = false) Integer limit,
-            @RequestParam(defaultValue = "testcaseId") String sortBy,
-            @RequestParam(defaultValue = "asc") String sortType
+            @ParameterObject PaginationRequest paginationRequest,
+            @RequestParam(required = false) Long problemId
     ) {
-        PaginationResponse<TestcasesResponse> testcasesResponse =
-                testcasesService.getTestCases(problemId, offset, limit, sortBy, sortType);
+        PaginationResponse<TestcasesResponse> response =
+                testcasesService.getTestCases(paginationRequest, problemId);
 
         return ResponseEntity.ok(BaseResponseModel.builder()
                 .timestamp(getDateTimeNow())
                 .code(HttpConstant.Status.SUCCESS)
                 .message(HttpConstant.Message.SUCCESS)
-                .offset(offset)
-                .limit(limit)
-                .totalRecords(testcasesResponse.getTotalPages())
-                .totalPages(testcasesResponse.getTotalPages())
-                .dataCount(testcasesResponse.getData().size())
-                .data(testcasesResponse.getData())
+                .offset(paginationRequest.getOffset())
+                .limit(paginationRequest.getLimit())
+                .totalRecords(response.getTotalPages())
+                .totalPages(response.getTotalPages())
+                .dataCount(response.getData().size())
+                .data(response.getData())
                 .build());
     }
 

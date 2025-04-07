@@ -65,10 +65,18 @@ public class TestcasesService {
     }
 
     public int createTestcase(TestcasesRequest testcasesRequest) {
-        TestcasesEntity testcasesEntity = DtoEntityMapper.mapToEntity(testcasesRequest, TestcasesEntity.class);
-        testcasesRepository.save(testcasesEntity);
+        List<TestcasesEntity> entities = testcasesRequest.getTestcases().stream()
+                .map(tc -> {
+                    TestcasesEntity entity = new TestcasesEntity();
+                    entity.setProblemId(testcasesRequest.getProblemId());
+                    entity.setInputData(tc.getInputData());
+                    entity.setExpectedOutput(tc.getExpectedOutput());
+                    return entity;
+                })
+                .toList();
 
-        return 1;
+        testcasesRepository.saveAll(entities);
+        return entities.size();
     }
 
     public Object updateTestcases(TestcasesUpdateRequest testcasesUpdateRequest, Long id) {

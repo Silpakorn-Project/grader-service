@@ -9,4 +9,8 @@ public class PaginationRequest {
     private int limit;
     private String sortBy = "createdAt";
     private Sort.Direction sortType = Sort.Direction.ASC;
+
+    public void setSortType(String sortType) {
+        this.sortType = Sort.Direction.valueOf(sortType.toUpperCase());
+    }
 }

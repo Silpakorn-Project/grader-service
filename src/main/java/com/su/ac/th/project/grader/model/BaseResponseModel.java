@@ -19,7 +19,7 @@ public class BaseResponseModel {
     private Object data;
     private Integer offset;
     private Integer limit;
-    private Integer totalRecords;
+    private Long totalRecords;
     private Integer totalPages;
     private Integer dataCount;
 }

@@ -1,5 +1,6 @@
 package com.su.ac.th.project.grader.service;
 
+import com.su.ac.th.project.grader.constant.Role;
 import com.su.ac.th.project.grader.entity.UsersEntity;
 import com.su.ac.th.project.grader.exception.authentication.InvalidRefreshTokenException;
 import com.su.ac.th.project.grader.exception.authentication.InvalidUsernameOrPasswordException;
@@ -49,7 +50,8 @@ public class AuthenticationService {
 
         Map<String, Object> claims = Map.of(
                 "userId", userEntity.getId(),
-                "email", userEntity.getEmail()
+                "email", userEntity.getEmail(),
+                "role", userEntity.getRole().name()
         );
 
         String accessToken = jwtUtil.generateAccessToken(claims, userEntity.getUsername());
@@ -61,6 +63,7 @@ public class AuthenticationService {
                 .userId(userEntity.getId())
                 .username(userEntity.getUsername())
                 .email(userEntity.getEmail())
+                .role(userEntity.getRole())
                 .token(accessToken)
                 .build();
     }
@@ -73,9 +76,11 @@ public class AuthenticationService {
         Long userId = jwtUtil.extractUserId(refreshToken);
         String email = jwtUtil.extractEmail(refreshToken);
         String username = jwtUtil.extractUsername(refreshToken);
+        String role = jwtUtil.extractRole(refreshToken);
         Map<String, Object> claims = Map.of(
                 "userId", userId,
-                "email", email
+                "email", email,
+                "role", role
         );
 
         String newAccessToken = jwtUtil.generateAccessToken(claims, username);
@@ -84,6 +89,7 @@ public class AuthenticationService {
                 .userId(userId)
                 .username(username)
                 .email(email)
+                .role(Role.valueOf(role))
                 .token(newAccessToken)
                 .build();
     }

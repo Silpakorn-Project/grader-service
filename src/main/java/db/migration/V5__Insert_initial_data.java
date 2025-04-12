@@ -29,20 +29,27 @@ public class V5__Insert_initial_data extends BaseJavaMigration {
 
         insertData("INSERT INTO testcases (problem_id, input_data, expected_output, created_at, updated_at) VALUES (?, ?, ?, ?, ?)",
                 List.of(
+                        // Problem 1: Sum of Two Numbers
                         new Object[]{1, "3 5", "8", NOW, NOW},
                         new Object[]{1, "10 20", "30", NOW, NOW},
                         new Object[]{1, "-1 1", "0", NOW, NOW},
                         new Object[]{1, "0 0", "0", NOW, NOW},
+
+                        // Problem 2: String Reversal
                         new Object[]{2, "hello", "olleh", NOW, NOW},
-                        new Object[]{2, "world", "dlrow", NOW, NOW}
+                        new Object[]{2, "world", "dlrow", NOW, NOW},
+                        new Object[]{2, "abcdef", "fedcba", NOW, NOW},
+                        new Object[]{2, "12345", "54321", NOW, NOW}
                 )
         );
 
         BCryptPasswordEncoder passwordEncoder = new BCryptPasswordEncoder();
-        insertData("INSERT INTO users (username, password, email, created_at, updated_at) VALUES (?, ?, ?, ?, ?)",
+        insertData(
+                "INSERT INTO users (username, password, email, role, created_at, updated_at) VALUES (?, ?, ?, ?, ?, ?)",
                 List.of(
-                        new Object[]{"admin", passwordEncoder.encode("admin123"), "admin@gmail.com", NOW, NOW},
-                        new Object[]{"admin2", passwordEncoder.encode("admin123"), "admin2@gmail.com", NOW, NOW}
+                        new Object[]{"admin", passwordEncoder.encode("admin123"), "admin@gmail.com", "ADMIN", NOW, NOW},
+                        new Object[]{"admin2", passwordEncoder.encode("admin123"), "admin2@gmail.com", "ADMIN", NOW, NOW},
+                        new Object[]{"user", passwordEncoder.encode("user123"), "user@gmail.com", "USER", NOW, NOW}
                 )
         );
     }

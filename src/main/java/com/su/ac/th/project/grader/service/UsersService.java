@@ -92,13 +92,13 @@ public class UsersService {
         return null;
     }
 
-//    public void incrementUserScore(Long id, int points) {
-//        UsersEntity user = userRepository.findById(id)
-//                .orElseThrow(() -> new UserNotFoundException(id));
-//
-//        user.setScore(user.getScore() + points);
-//        user.setUpdatedAt(LocalDateTime.now());
-//
-//        userRepository.save(user);
-//    }
+    public void incrementUserScore(Long id, int points) {
+        UsersEntity user = userRepository.findById(id)
+                .orElseThrow(() -> new UserNotFoundException(id));
+
+        user.setScore(user.getScore() + points);
+        user.setUpdatedAt(LocalDateTime.now());
+
+        userRepository.save(user);
+    }
 }

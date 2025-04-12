@@ -21,8 +21,6 @@ import org.springframework.data.domain.Sort;
 import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
 
-import java.math.BigDecimal;
-import java.math.RoundingMode;
 import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Objects;
@@ -130,8 +128,6 @@ public class SubmissionsService {
     }
 
     public RunTestResponse submit(SubmitRequest submitRequest) {
-
-        // Check if user exist
         usersService.getUserById(submitRequest.getUserId());
 
         List<TestCase> testCases = testcasesService.getTestcasesByProblemId(submitRequest.getProblemId())
@@ -145,14 +141,27 @@ public class SubmissionsService {
         if (response != null) {
             SubmissionsEntity submissionsEntity = DtoEntityMapper.mapToEntity(submitRequest, SubmissionsEntity.class);
 
-            BigDecimal scorePercent = BigDecimal
-                    .valueOf((double) response.getTestcase_passed() / response.getTestcase_total() * 100)
-                    .setScale(2, RoundingMode.HALF_UP);
-            CommonConstant.Status status = response.isPassed() ?
-                    CommonConstant.Status.Passed : CommonConstant.Status.Failed;
+            int scorePercent = (int) Math.round(
+                    (double) response.getTestcase_passed() / response.getTestcase_total() * 100
+            );
+
+            CommonConstant.Status status = response.isPassed()
+                    ? CommonConstant.Status.Passed
+                    : CommonConstant.Status.Failed;
 
             submissionsEntity.setStatus(status);
-            submissionsEntity.setScorePercent(scorePercent);
+            submissionsEntity.setScore(scorePercent);
+
+
+            boolean hasPassed = submissionsRepository.existsByUserIdAndProblemIdAndStatus(
+                    submitRequest.getUserId(),
+                    submitRequest.getProblemId(),
+                    CommonConstant.Status.Passed
+            );
+
+            if (!hasPassed) {
+                usersService.incrementUserScore(submitRequest.getUserId(), scorePercent);
+            }
 
             submissionsRepository.save(submissionsEntity);
         }

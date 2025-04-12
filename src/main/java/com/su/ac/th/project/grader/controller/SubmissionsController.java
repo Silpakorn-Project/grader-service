@@ -37,7 +37,7 @@ public class SubmissionsController {
                 .message(HttpConstant.Message.SUCCESS)
                 .offset(paginationRequest.getOffset())
                 .limit(paginationRequest.getLimit())
-                .totalRecords(response.getTotalPages())
+                .totalRecords(response.getTotalRecords())
                 .totalPages(response.getTotalPages())
                 .dataCount(response.getData().size())
                 .data(response.getData())

@@ -5,7 +5,7 @@ CREATE TABLE IF NOT EXISTS submissions (
     code LONGTEXT NOT NULL,
     language ENUM('JAVA', 'PYTHON', 'C') NOT NULL,
     status ENUM('Passed', 'Failed') NOT NULL,
-    score_percent DECIMAL(5,2) NOT NULL,
+    score INT NOT NULL,
     created_at DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
     updated_at DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
     PRIMARY KEY (submission_id),

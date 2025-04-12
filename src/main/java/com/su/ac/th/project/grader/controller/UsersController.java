@@ -2,11 +2,16 @@ package com.su.ac.th.project.grader.controller;
 
 import com.su.ac.th.project.grader.constant.HttpConstant;
 import com.su.ac.th.project.grader.model.BaseResponseModel;
+import com.su.ac.th.project.grader.model.PaginationRequest;
+import com.su.ac.th.project.grader.model.PaginationResponse;
 import com.su.ac.th.project.grader.model.request.user.UsersRequest;
 import com.su.ac.th.project.grader.model.request.user.UsersUpdateRequest;
+import com.su.ac.th.project.grader.model.response.SubmissionsResponse;
+import com.su.ac.th.project.grader.model.response.UserResponse;
 import com.su.ac.th.project.grader.service.UsersService;
 import jakarta.validation.Valid;
 import lombok.extern.slf4j.Slf4j;
+import org.springdoc.core.annotations.ParameterObject;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -24,16 +29,35 @@ public class UsersController {
     }
 
     @GetMapping()
-    public ResponseEntity<BaseResponseModel> getAllUsers() {
+    public ResponseEntity<BaseResponseModel> getAllUsers(
+            @ParameterObject PaginationRequest paginationRequest
+    ) {
+        PaginationResponse<UserResponse> response = usersService.getAllUsers(paginationRequest);
+
         return ResponseEntity.ok(BaseResponseModel.builder()
                 .timestamp(getDateTimeNow())
                 .message(HttpConstant.Message.SUCCESS)
                 .code(HttpConstant.Status.SUCCESS)
-                .data(usersService.getAllUsers())
+                .offset(paginationRequest.getOffset())
+                .limit(paginationRequest.getLimit())
+                .totalRecords(response.getTotalRecords())
+                .totalPages(response.getTotalPages())
+                .dataCount(response.getData().size())
+                .data(response.getData())
                 .build());
     }
 
     @PostMapping()
+    public ResponseEntity<BaseResponseModel> getUserById(@PathVariable("id") Long id) {
+        return ResponseEntity.ok(BaseResponseModel.builder()
+                .timestamp(getDateTimeNow())
+                .code(HttpConstant.Status.SUCCESS)
+                .message(HttpConstant.Message.SUCCESS)
+                .data(usersService.getUserById(id))
+                .build());
+    }
+
+    @PostMapping("/id")
     public ResponseEntity<BaseResponseModel> createUser(@Valid @RequestBody UsersRequest usersRequest) {
         return ResponseEntity.ok(BaseResponseModel.builder()
                 .timestamp(getDateTimeNow())

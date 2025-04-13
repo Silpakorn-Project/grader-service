@@ -13,6 +13,7 @@ import com.su.ac.th.project.grader.repository.jpa.ProblemsRepository;
 import com.su.ac.th.project.grader.repository.jpa.spefication.ProblemsSpecification;
 import com.su.ac.th.project.grader.util.DtoEntityMapper;
 import com.su.ac.th.project.grader.util.PaginationUtil;
+import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
@@ -23,13 +24,10 @@ import java.time.LocalDateTime;
 import java.util.List;
 
 @Service
+@RequiredArgsConstructor
 public class ProblemsService {
 
     private final ProblemsRepository problemsRepository;
-
-    public ProblemsService(ProblemsRepository problemsRepository) {
-        this.problemsRepository = problemsRepository;
-    }
 
     public PaginationResponse<ProblemsResponse> getAllProblems(
             PaginationRequest paginationRequest, ProblemSearchCriteria searchCriteria
@@ -56,7 +54,6 @@ public class ProblemsService {
 
         List<ProblemsEntity> problemsEntityList = problemsRepository.findAll(spec, sort);
         return PaginationUtil.createPaginationResponse(problemsEntityList, ProblemsResponse.class);
-
     }
 
     public ProblemsResponse getProblemById(Long id) {
@@ -111,5 +108,11 @@ public class ProblemsService {
     public Object deleteProblemById(Long id) {
         problemsRepository.deleteById(id);
         return null;
+    }
+
+    public Long getRandomProblems() {
+        ProblemsResponse problemsResponse = DtoEntityMapper.mapToDto(
+                problemsRepository.getRandomProblems(), ProblemsResponse.class);
+        return  problemsResponse.getProblemId();
     }
 }

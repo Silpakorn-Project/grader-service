@@ -95,5 +95,15 @@ public class ProblemsController {
                 .build());
     }
 
+    @GetMapping("/randomId")
+    public ResponseEntity<BaseResponseModel> getRandomProblems() {
+        return ResponseEntity.ok(BaseResponseModel.builder()
+                .timestamp(getDateTimeNow())
+                .code(HttpConstant.Status.SUCCESS)
+                .message(HttpConstant.Message.SUCCESS)
+                .data(problemsService.getRandomProblems())
+                .build());
+    }
+
 
 }

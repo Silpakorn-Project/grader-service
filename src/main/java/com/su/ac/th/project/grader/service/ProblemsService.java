@@ -8,19 +8,17 @@ import com.su.ac.th.project.grader.model.request.problem.ProblemUpdateRequest;
 import com.su.ac.th.project.grader.model.response.ProblemsResponse;
 import com.su.ac.th.project.grader.repository.jpa.ProblemsRepository;
 import com.su.ac.th.project.grader.util.DtoEntityMapper;
+import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
 import java.util.List;
 
 @Service
+@RequiredArgsConstructor
 public class ProblemsService {
 
     private final ProblemsRepository problemsRepository;
-
-    public ProblemsService(ProblemsRepository problemsRepository) {
-        this.problemsRepository = problemsRepository;
-    }
 
     public List<ProblemsResponse> getAllProblems() {
 
@@ -81,5 +79,11 @@ public class ProblemsService {
     public Object deleteProblemById(Long id) {
         problemsRepository.deleteById(id);
         return null;
+    }
+
+    public Long getRandomProblems() {
+        ProblemsResponse problemsResponse = DtoEntityMapper.mapToDto(
+                problemsRepository.getRandomProblems(), ProblemsResponse.class);
+        return  problemsResponse.getProblemId();
     }
 }

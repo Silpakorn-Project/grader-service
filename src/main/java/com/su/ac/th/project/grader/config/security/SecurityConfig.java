@@ -40,7 +40,8 @@ public class SecurityConfig {
                                         "/swagger-resources/**",
                                         "/webjars/**",
                                         "/api/auth/**",
-                                        "/api/health/check"
+                                        "/api/health/check",
+                                        "/api/problems/randomId"
                                 ).permitAll()
                                 .anyRequest().authenticated();
                     } else {

@@ -27,4 +27,7 @@ public class SubmitRequest {
     @NotNull
     @IsEnum(enumClass = Language.class)
     private String language;
+
+    @Schema(description = "Should the submission be saved")
+    private boolean saveSubmission = false;
 }

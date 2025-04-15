@@ -138,10 +138,10 @@ public class SubmissionsService {
         RunTestRequest runTestRequest = new RunTestRequest(submitRequest.getCode(), testCases);
         RunTestResponse response = sandboxClient.runTests(runTestRequest, submitRequest.getLanguage());
 
-        if (response != null) {
+        if (submitRequest.isSaveSubmission() && response != null) {
             SubmissionsEntity submissionsEntity = DtoEntityMapper.mapToEntity(submitRequest, SubmissionsEntity.class);
 
-            int scorePercent = (int) Math.round(
+            int score = (int) Math.round(
                     (double) response.getTestcase_passed() / response.getTestcase_total() * 100
             );
 
@@ -150,7 +150,7 @@ public class SubmissionsService {
                     : CommonConstant.Status.Failed;
 
             submissionsEntity.setStatus(status);
-            submissionsEntity.setScore(scorePercent);
+            submissionsEntity.setScore(score);
 
 
             boolean hasPassed = submissionsRepository.existsByUserIdAndProblemIdAndStatus(
@@ -160,7 +160,7 @@ public class SubmissionsService {
             );
 
             if (!hasPassed) {
-                usersService.incrementUserScore(submitRequest.getUserId(), scorePercent);
+                usersService.incrementUserScore(submitRequest.getUserId(), score);
             }
 
             submissionsRepository.save(submissionsEntity);

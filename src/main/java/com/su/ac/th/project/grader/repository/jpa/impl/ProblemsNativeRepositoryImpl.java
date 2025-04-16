@@ -34,8 +34,11 @@ public class ProblemsNativeRepositoryImpl implements ProblemsNativeRepository {
                            p.description AS description,
                            p.difficulty AS difficulty,
                            p.type AS type,
-                           MAX(s.status) AS status,
-                           COALESCE(MAX(s.score), 0) AS score
+                           CASE
+                             WHEN MAX(s.score) = 100 THEN 'Passed'
+                             WHEN COUNT(s.submission_id) > 0 THEN 'Attempted'
+                             ELSE 'Unattempted'
+                           END AS status
                     FROM problems p
                     LEFT JOIN submissions s ON p.problem_id = s.problem_id AND s.user_id = :userId
                     WHERE 1=1
@@ -64,7 +67,14 @@ public class ProblemsNativeRepositoryImpl implements ProblemsNativeRepository {
         sql.append(" GROUP BY p.problem_id ");
 
         if (criteria.getStatus() != null) {
-            sql.append(" HAVING MAX(s.status) = :status ");
+            sql.append(" HAVING ");
+            sql.append("""
+                        CASE
+                          WHEN MAX(s.score) = 100 THEN 'Passed'
+                          WHEN COUNT(s.submission_id) > 0 THEN 'Attempted'
+                          ELSE 'Unattempted'
+                        END = :status
+                    """);
             params.put("status", criteria.getStatus());
         }
 

@@ -22,6 +22,7 @@ import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
+import java.util.Arrays;
 import java.util.List;
 import java.util.Objects;
 
@@ -65,17 +66,6 @@ public class SubmissionsService {
 
         List<SubmissionsEntity> submissionsEntityList = submissionsRepository.findAll(spec, sort);
         return PaginationUtil.createPaginationResponse(submissionsEntityList, SubmissionsResponse.class);
-    }
-
-    private PaginationResponse<SubmissionsResponse> createTestcasesResponse(Page<SubmissionsEntity> submissionsPage) {
-        List<SubmissionsResponse> submissionsResponses = DtoEntityMapper.mapListToDto(submissionsPage.getContent(), SubmissionsResponse.class);
-
-        PaginationResponse<SubmissionsResponse> response = new PaginationResponse<>();
-        response.setData(submissionsResponses);
-        response.setTotalRecords(submissionsPage.getTotalElements());
-        response.setTotalPages(submissionsPage.getTotalPages());
-
-        return response;
     }
 
     public int createSubmission(SubmissionsRequest submissionsRequest) {
@@ -152,7 +142,6 @@ public class SubmissionsService {
             submissionsEntity.setStatus(status);
             submissionsEntity.setScore(score);
 
-
             boolean hasPassed = submissionsRepository.existsByUserIdAndProblemIdAndStatus(
                     submitRequest.getUserId(),
                     submitRequest.getProblemId(),
@@ -164,6 +153,28 @@ public class SubmissionsService {
             }
 
             submissionsRepository.save(submissionsEntity);
+        }
+
+        // Only return the first 3 failed test cases
+        if (response != null) {
+            RunTestResponse.TestResult[] filteredCases;
+
+            if (response.isPassed()) {
+                filteredCases = Arrays.stream(response.getTest_cases())
+                        .filter(RunTestResponse.TestResult::isPassed)
+                        .limit(3)
+                        .toArray(RunTestResponse.TestResult[]::new);
+            } else {
+                List<RunTestResponse.TestResult> failedList = Arrays.stream(response.getTest_cases())
+                        .filter(t -> !t.isPassed())
+                        .toList();
+
+                filteredCases = failedList.stream()
+                        .skip(Math.max(0, failedList.size() - 3))
+                        .toArray(RunTestResponse.TestResult[]::new);
+            }
+
+            response.setTest_cases(filteredCases);
         }
 
         return response;

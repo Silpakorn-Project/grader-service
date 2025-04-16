@@ -14,6 +14,7 @@ public class SubmissionsResponse {
     private String code;
     private String language;
     private String status;
+    private Integer score;
 
     @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss")
     private LocalDateTime createdAt;

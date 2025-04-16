@@ -1,6 +1,7 @@
 package com.su.ac.th.project.grader.exception;
 
 import com.su.ac.th.project.grader.exception.authentication.AuthenticationException;
+import com.su.ac.th.project.grader.exception.authentication.DuplicateUserException;
 import com.su.ac.th.project.grader.exception.authentication.InvalidRefreshTokenException;
 import com.su.ac.th.project.grader.exception.authentication.InvalidUsernameOrPasswordException;
 import com.su.ac.th.project.grader.exception.problem.ProblemNotFoundException;
@@ -17,7 +18,7 @@ import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.servlet.resource.NoResourceFoundException;
 
-import java.util.HashMap;
+import java.util.LinkedHashMap;
 import java.util.Map;
 
 import static com.su.ac.th.project.grader.constant.HttpConstant.Status;
@@ -44,18 +45,16 @@ public class GlobalExceptionHandler {
     }
 
     @ExceptionHandler({
-            AuthenticationException.class,
-            InvalidUsernameOrPasswordException.class,
-            InvalidRefreshTokenException.class
+            DuplicateUserException.class
     })
-    public ResponseEntity<BaseException> handleAuthenticationException(Exception ex) {
+    public ResponseEntity<BaseException> handleConflictError(Exception ex) {
         BaseException body = BaseException.builder()
                 .timestamp(getDateTimeNow())
                 .message(ex.getMessage())
-                .code(Status.UNAUTHORIZED)
+                .code(Status.CONFLICT)
                 .build();
 
-        return new ResponseEntity<>(body, HttpStatus.UNAUTHORIZED);
+        return new ResponseEntity<>(body, HttpStatus.CONFLICT);
     }
 
     @ExceptionHandler({
@@ -76,19 +75,38 @@ public class GlobalExceptionHandler {
         return new ResponseEntity<>(body, HttpStatus.NOT_FOUND);
     }
 
+    @ExceptionHandler({
+            AuthenticationException.class,
+            InvalidUsernameOrPasswordException.class,
+            InvalidRefreshTokenException.class
+    })
+    public ResponseEntity<BaseException> handleAuthenticationException(Exception ex) {
+        BaseException body = BaseException.builder()
+                .timestamp(getDateTimeNow())
+                .message(ex.getMessage())
+                .code(Status.UNAUTHORIZED)
+                .build();
+
+        return new ResponseEntity<>(body, HttpStatus.UNAUTHORIZED);
+    }
+
     @ExceptionHandler(MethodArgumentNotValidException.class)
     public ResponseEntity<BaseException> handleValidationExceptions(MethodArgumentNotValidException ex) {
-        Map<String, String> errors = new HashMap<>();
-        ex.getBindingResult()
-                .getFieldErrors()
-                .forEach(error -> errors.put(error.getField(), error.getDefaultMessage()));
+        Map<String, String> validationErrors = new LinkedHashMap<>();
+
+        ex.getBindingResult().getFieldErrors().forEach(error -> {
+            String fieldName = error.getField();
+            String rejectedValue = String.valueOf(error.getRejectedValue());
+            validationErrors.put(fieldName, String.format("Invalid value '%s'", rejectedValue));
+        });
 
         BaseException body = BaseException.builder()
                 .timestamp(getDateTimeNow())
-                .message(errors.toString())
+                .message("Validation failed, see data for more details.")
                 .code(Status.BAD_REQUEST)
+                .data(validationErrors)
                 .build();
 
-        return new ResponseEntity<>(body, HttpStatus.BAD_REQUEST);
+        return ResponseEntity.badRequest().body(body);
     }
 }

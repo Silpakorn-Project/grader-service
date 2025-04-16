@@ -17,6 +17,6 @@ public class TestcasesResponse {
     private LocalDateTime createdAt;
 
     @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss")
-    private LocalDateTime updateAt;
+    private LocalDateTime updatedAt;
 
 }

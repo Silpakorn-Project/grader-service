@@ -44,4 +44,15 @@ public class ProblemRequest {
     @IsEnum(enumClass = ProblemType.class)
     private String type = String.valueOf(ProblemType.MATH);
 
+    public void setDifficulty(String difficulty) {
+        if (difficulty != null) {
+            this.difficulty = difficulty.toUpperCase();
+        }
+    }
+
+    public void setType(String type) {
+        if (type != null) {
+            this.type = type.toUpperCase();
+        }
+    }
 }

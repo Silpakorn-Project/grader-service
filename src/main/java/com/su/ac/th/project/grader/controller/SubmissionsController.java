@@ -2,11 +2,13 @@ package com.su.ac.th.project.grader.controller;
 
 import com.su.ac.th.project.grader.constant.HttpConstant;
 import com.su.ac.th.project.grader.model.BaseResponseModel;
-import com.su.ac.th.project.grader.model.request.submission.SubmitRequest;
-import com.su.ac.th.project.grader.model.request.submission.SubmissionsRequest;
-import com.su.ac.th.project.grader.model.request.submission.SubmissionsUpdateRequest;
+import com.su.ac.th.project.grader.model.PaginationRequest;
+import com.su.ac.th.project.grader.model.PaginationResponse;
+import com.su.ac.th.project.grader.model.request.submission.*;
+import com.su.ac.th.project.grader.model.response.SubmissionsResponse;
 import com.su.ac.th.project.grader.service.SubmissionsService;
 import jakarta.validation.Valid;
+import org.springdoc.core.annotations.ParameterObject;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -23,22 +25,22 @@ public class SubmissionsController {
     }
 
     @GetMapping()
-    public ResponseEntity<BaseResponseModel> getAllSubmissions() {
-        return ResponseEntity.ok(BaseResponseModel.builder()
-                .timestamp(getDateTimeNow())
-                .code(HttpConstant.Status.SUCCESS)
-                .message(HttpConstant.Message.SUCCESS)
-                .data(submissionsService.getAllSubmissions())
-                .build());
-    }
+    public ResponseEntity<BaseResponseModel> getSubmissions(
+            @ParameterObject PaginationRequest paginationRequest,
+            @ParameterObject SubmissionsSearchCriteria searchCriteria
+    ) {
+        PaginationResponse<SubmissionsResponse> response = submissionsService.getSubmissions(paginationRequest, searchCriteria);
 
-    @GetMapping("/{id}")
-    public ResponseEntity<BaseResponseModel> getSubmissionById(@PathVariable("id") Long id) {
         return ResponseEntity.ok(BaseResponseModel.builder()
                 .timestamp(getDateTimeNow())
                 .code(HttpConstant.Status.SUCCESS)
                 .message(HttpConstant.Message.SUCCESS)
-                .data(submissionsService.getSubmissionById(id))
+                .offset(paginationRequest.getOffset())
+                .limit(paginationRequest.getLimit())
+                .totalRecords(response.getTotalRecords())
+                .totalPages(response.getTotalPages())
+                .dataCount(response.getData().size())
+                .data(response.getData())
                 .build());
     }
 

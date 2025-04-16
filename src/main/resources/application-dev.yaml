@@ -41,8 +41,8 @@ springdoc:
 
 sandbox:
   python:
-    url: http://localhost:8001
+    url: ${SPRING_PYTHON_URL:http://localhost:8001}
   java:
-    url: http://localhost:8002
+    url: ${SPRING_JAVA_URL:http://localhost:8002}
   c:
-    url: http://localhost:8003
+    url: ${SPRING_C_URL:http://localhost:8003}

@@ -4,7 +4,7 @@ import com.su.ac.th.project.grader.model.response.LeaderboardResponse;
 
 import java.util.List;
 
-public interface LeaderboardRepository {
+public interface LeaderboardNativeRepository {
     List<LeaderboardResponse> getLeaderboard(Integer offset, Integer limit);
 
     LeaderboardResponse getUserRanking(Long userId);

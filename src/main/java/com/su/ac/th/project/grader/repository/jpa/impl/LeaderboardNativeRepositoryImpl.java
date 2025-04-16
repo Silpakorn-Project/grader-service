@@ -1,7 +1,7 @@
 package com.su.ac.th.project.grader.repository.jpa.impl;
 
 import com.su.ac.th.project.grader.model.response.LeaderboardResponse;
-import com.su.ac.th.project.grader.repository.jpa.LeaderboardRepository;
+import com.su.ac.th.project.grader.repository.jpa.LeaderboardNativeRepository;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Repository;
 
@@ -9,10 +9,10 @@ import java.sql.Types;
 import java.util.List;
 
 @Repository
-public class LeaderboardRepositoryImpl implements LeaderboardRepository {
+public class LeaderboardNativeRepositoryImpl implements LeaderboardNativeRepository {
     private final JdbcTemplate jdbcTemplate;
 
-    public LeaderboardRepositoryImpl(JdbcTemplate jdbcTemplate) {
+    public LeaderboardNativeRepositoryImpl(JdbcTemplate jdbcTemplate) {
         this.jdbcTemplate = jdbcTemplate;
     }
 

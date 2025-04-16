@@ -3,7 +3,7 @@ package com.su.ac.th.project.grader.service;
 import com.su.ac.th.project.grader.exception.user.UserNotFoundException;
 import com.su.ac.th.project.grader.model.PaginationResponse;
 import com.su.ac.th.project.grader.model.response.LeaderboardResponse;
-import com.su.ac.th.project.grader.repository.jpa.LeaderboardRepository;
+import com.su.ac.th.project.grader.repository.jpa.LeaderboardNativeRepository;
 import com.su.ac.th.project.grader.util.PaginationUtil;
 import org.springframework.stereotype.Service;
 
@@ -11,9 +11,9 @@ import java.util.List;
 
 @Service
 public class LeaderboardService {
-    private final LeaderboardRepository leaderboardRepository;
+    private final LeaderboardNativeRepository leaderboardRepository;
 
-    public LeaderboardService(LeaderboardRepository leaderboardRepository) {
+    public LeaderboardService(LeaderboardNativeRepository leaderboardRepository) {
         this.leaderboardRepository = leaderboardRepository;
     }
 

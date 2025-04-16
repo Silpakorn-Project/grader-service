@@ -4,7 +4,6 @@ import com.su.ac.th.project.grader.constant.CommonConstant.*;
 import jakarta.persistence.*;
 import lombok.Data;
 
-import java.math.BigDecimal;
 import java.time.LocalDateTime;
 
 @Data
@@ -33,7 +32,7 @@ public class SubmissionsEntity {
     private Status status;
 
     @Column(nullable = false)
-    private BigDecimal scorePercent;
+    private Integer score;
 
     @Column(nullable = false, updatable = false)
     private LocalDateTime createdAt = LocalDateTime.now();

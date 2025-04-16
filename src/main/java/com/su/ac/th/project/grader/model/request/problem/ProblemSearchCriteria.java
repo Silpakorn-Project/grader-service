@@ -9,6 +9,7 @@ public class ProblemSearchCriteria {
     private String description;
     private CommonConstant.ProblemDifficulty difficulty;
     private CommonConstant.ProblemType type;
+    private String status;
 
     public void setDifficulty(String difficulty) {
         this.difficulty = CommonConstant.ProblemDifficulty.valueOf(difficulty.toUpperCase());

@@ -47,6 +47,17 @@ public class PaginationUtil {
         return response;
     }
 
+    public static <D> PaginationResponse<D> createPaginationResponse(
+            List<D> dtoList, long totalRecords, int totalPages
+    ) {
+        PaginationResponse<D> response = new PaginationResponse<>();
+        response.setData(dtoList);
+        response.setTotalRecords(totalRecords);
+        response.setTotalPages(totalPages);
+        return response;
+    }
+
+
     private static Sort.Direction getSortDirection(String sortType) {
         return "asc".equalsIgnoreCase(sortType) ? Sort.Direction.ASC : Sort.Direction.DESC;
     }

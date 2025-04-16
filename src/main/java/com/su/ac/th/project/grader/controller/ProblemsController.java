@@ -30,9 +30,10 @@ public class ProblemsController {
     @GetMapping()
     public ResponseEntity<BaseResponseModel> getAllProblems(
             @ParameterObject PaginationRequest paginationRequest,
-            @ParameterObject ProblemSearchCriteria searchCriteria
+            @ParameterObject ProblemSearchCriteria searchCriteria,
+            @RequestParam(required = false) Long userId
     ) {
-        PaginationResponse<ProblemsResponse> response = problemsService.getAllProblems(paginationRequest, searchCriteria);
+        PaginationResponse<ProblemsResponse> response = problemsService.getAllProblems(paginationRequest, searchCriteria, userId);
 
         return ResponseEntity.ok(BaseResponseModel.builder()
                 .timestamp(getDateTimeNow())

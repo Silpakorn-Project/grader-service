@@ -20,20 +20,84 @@ public class V5__Insert_initial_data extends BaseJavaMigration {
         DataSource dataSource = new SingleConnectionDataSource(context.getConnection(), true);
         this.jdbcTemplate = new JdbcTemplate(dataSource);
 
+        String sumProblemDescription = """
+                Given two integers, return their sum.
+
+                Write a program that takes two integers as input and outputs their sum.
+
+                ## Example 1:
+
+                ```
+                Input: a = 3, b = 5
+                Output: 8
+                ```
+
+                ## Example 2:
+
+                ```
+                Input: a = -1, b = 1
+                Output: 0
+                ```
+
+                ## Example 3:
+
+                ```
+                Input: a = 10, b = 20
+                Output: 30
+                ```
+
+                ## Constraints:
+
+                * -2^31 <= a, b <= 2^31 - 1
+                * The result will be within the range of a 32-bit integer
+                """;
+
+        String reverseProblemDescription = """
+                Given a string, return it reversed.
+
+                Write a program that takes a string as input and returns a new string with the characters in reverse order.
+
+                ## Example 1:
+
+                ```
+                Input: s = "hello"
+                Output: "olleh"
+                ```
+
+                ## Example 2:
+
+                ```
+                Input: s = "world"
+                Output: "dlrow"
+                ```
+
+                ## Example 3:
+
+                ```
+                Input: s = "12345"
+                Output: "54321"
+                ```
+
+                ## Constraints:
+
+                * 1 <= s.length <= 100
+                * s consists of printable ASCII characters
+                """;
+
         insertData("INSERT INTO problems (problem_id, title, description, difficulty, type, created_at, updated_at) VALUES (?, ?, ?, ?, ?, ?, ?)",
                 List.of(
-                        new Object[]{1, "Sum of Two Numbers", "Write a program to find the sum of two numbers.", "EASY", "MATH", NOW, NOW},
-                        new Object[]{2, "String Reversal", "Write a program to reverse a string.", "MEDIUM", "STRING", NOW, NOW}
+                        new Object[]{1, "Sum of Two Numbers", sumProblemDescription, "EASY", "MATH", NOW, NOW},
+                        new Object[]{2, "String Reversal", reverseProblemDescription, "MEDIUM", "STRING", NOW, NOW}
                 )
         );
 
         insertData("INSERT INTO testcases (problem_id, input_data, expected_output, created_at, updated_at) VALUES (?, ?, ?, ?, ?)",
                 List.of(
                         // Problem 1: Sum of Two Numbers
-                        new Object[]{1, "3 5", "8", NOW, NOW},
-                        new Object[]{1, "10 20", "30", NOW, NOW},
-                        new Object[]{1, "-1 1", "0", NOW, NOW},
-                        new Object[]{1, "0 0", "0", NOW, NOW},
+                        new Object[]{1, "3\n5", "8", NOW, NOW},
+                        new Object[]{1, "10\n20", "30", NOW, NOW},
+                        new Object[]{1, "-1\n1", "0", NOW, NOW},
+                        new Object[]{1, "0\n0", "0", NOW, NOW},
 
                         // Problem 2: String Reversal
                         new Object[]{2, "hello", "olleh", NOW, NOW},

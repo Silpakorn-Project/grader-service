@@ -2,6 +2,7 @@ package com.su.ac.th.project.grader.service;
 
 import com.su.ac.th.project.grader.constant.Role;
 import com.su.ac.th.project.grader.entity.UsersEntity;
+import com.su.ac.th.project.grader.exception.authentication.DuplicateUserException;
 import com.su.ac.th.project.grader.exception.authentication.InvalidRefreshTokenException;
 import com.su.ac.th.project.grader.exception.authentication.InvalidUsernameOrPasswordException;
 import com.su.ac.th.project.grader.exception.user.UserNotFoundException;
@@ -31,11 +32,18 @@ public class AuthenticationService {
     }
 
     public UsersEntity register(UsersRegRequest usersRegRequest) {
+        if (authenticationRepository.findByUsername(usersRegRequest.getUsername()).isPresent()) {
+            throw new DuplicateUserException("Username already in use.");
+        }
+
+        if (authenticationRepository.findByEmail(usersRegRequest.getEmail()).isPresent()) {
+            throw new DuplicateUserException("Email already in use.");
+        }
+
         String passwordHashed = passwordEncoder.encode(usersRegRequest.getPassword());
         usersRegRequest.setPassword(passwordHashed);
 
         UsersEntity u = DtoEntityMapper.mapToEntity(usersRegRequest, UsersEntity.class);
-
         return authenticationRepository.save(u);
     }
 

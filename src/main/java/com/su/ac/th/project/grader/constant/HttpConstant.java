@@ -8,6 +8,7 @@ public class HttpConstant {
         public static final int UNAUTHORIZED = 401;
         public static final int FORBIDDEN = 403;
         public static final int NOT_FOUND = 404;
+        public static final int CONFLICT = 409;
         public static final int INTERNAL_SERVER_ERROR = 500;
     }
 
@@ -17,6 +18,7 @@ public class HttpConstant {
         public static final String UNAUTHORIZED = "Unauthorized";
         public static final String FORBIDDEN = "Forbidden";
         public static final String NOT_FOUND = "Not Found";
+        public static final String CONFLICT = "Conflict";
         public static final String INTERNAL_SERVER_ERROR = "Internal Server Error";
     }
 

@@ -13,7 +13,6 @@ import static com.su.ac.th.project.grader.util.CommonUtil.getDateTimeNow;
 
 @RestController
 @RequestMapping("/api/leaderboard")
-@PermitAll
 public class LeaderboardController {
     private final LeaderboardService leaderboardService;
 

@@ -1,5 +1,6 @@
 package com.su.ac.th.project.grader.service;
 
+import com.su.ac.th.project.grader.exception.user.UserNotFoundException;
 import com.su.ac.th.project.grader.model.PaginationResponse;
 import com.su.ac.th.project.grader.model.response.LeaderboardResponse;
 import com.su.ac.th.project.grader.repository.jpa.LeaderboardRepository;
@@ -19,24 +20,21 @@ public class LeaderboardService {
     public PaginationResponse<LeaderboardResponse> getLeaderboard(Integer offset, Integer limit) {
         if (PaginationUtil.isPaginationValid(offset, limit)) {
             List<LeaderboardResponse> entries = leaderboardRepository.getLeaderboard(offset - 1, limit);
-            Integer totalCount = leaderboardRepository.getTotalCount();
-            Integer totalPages = (totalCount + limit - 1) / limit;
+            Integer totalRecords = leaderboardRepository.getTotalCount();
+            int totalPages = (totalRecords + limit - 1) / limit;
 
-            return PaginationResponse.<LeaderboardResponse>builder()
-                    .data(entries)
-                    .totalRecords(totalCount.longValue())
-                    .totalPages(totalPages)
-                    .build();
+            return PaginationUtil.createPaginationResponse(entries, totalRecords, totalPages);
         }
 
-        throw new RuntimeException();
+        List<LeaderboardResponse> allEntries = leaderboardRepository.getLeaderboard(0, Integer.MAX_VALUE);
+        return  PaginationUtil.createPaginationResponse(allEntries, allEntries.size(), 1);
     }
 
     public LeaderboardResponse getUserRanking(Long userId) {
         LeaderboardResponse result = leaderboardRepository.getUserRanking(userId);
 
         if (result == null) {
-            throw new RuntimeException("User not found or has no score.");
+            throw new UserNotFoundException(userId);
         }
 
         return result;

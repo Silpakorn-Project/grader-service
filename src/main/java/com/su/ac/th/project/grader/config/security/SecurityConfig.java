@@ -43,7 +43,8 @@ public class SecurityConfig {
                                         "/webjars/**",
                                         "/api/auth/**",
                                         "/api/health/check",
-                                        "/api/problems/randomId"
+                                        "/api/problems/randomId",
+                                        "/api/leaderboard/**"
                                 ).permitAll()
                                 .anyRequest().authenticated();
                     } else {

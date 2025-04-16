@@ -1,23 +1,24 @@
-name: Grader Service
+name: CI/CD
+
+permissions:
+  contents: write
+  pull-requests: read
 
 on:
   push:
     branches:
-      - main
+      - build-dev
   pull_request:
     branches:
-      - main
+      - build-dev
 
 jobs:
-  build:
+  test:
+    name: Lint & Test
     runs-on: ubuntu-latest
-
     steps:
-      - name: Checkout code
-        uses: actions/checkout@v2
-
-      - name: Set up Docker
-        uses: docker/setup-buildx-action@v3
+      - name: Checkout repository
+        uses: actions/checkout@v4
 
       - name: Set up JDK 21
         uses: actions/setup-java@v3
@@ -26,50 +27,98 @@ jobs:
           distribution: 'temurin'
 
       - name: Build with Maven
-        run: | 
+        run: |
           mvn clean install -DskipTests
-
-      - name: Create Docker Network
-        run: |
-          docker network create app-network
-
-      - name: Run Container Mysql:8.1 Mock
-        run: |
-          docker run -d \
-          --name db \
-          --network app-network \
-          -e MYSQL_ROOT_PASSWORD=password \
-          -e MYSQL_DATABASE=grader \
-          -p 3307:3306 \
-          --health-interval=10s \
-          --health-timeout=5s \
-          --health-retries=5 \
-          mysql:8.1
 
       - name: Run Unit Test
         run: |
           mvn test
+  
+    #   - name: Run check
+    #     run: bun check
 
-      - name: Build Docker Image
-        run: |
-          docker build -t grader-service:latest .
+    #   - name: Run Linter
+    #     run: bun lint
 
-      - name: Run Container Grader Service
-        run: |
-          docker run -d \
-          --name grader-service \
-          --network app-network \
-          -e SPRING_DATASOURCE_URL=jdbc:mysql://db:3306/grader \
-          -p 8000:8000 \
-          grader-service:latest
+    #   - name: Run Tests
+    #     run: bun run test
 
-      - name: Wait 10 seconds
-        run: |
-          sleep 10
+  version:
+    name: set version
+    needs: test
+    runs-on: ubuntu-latest
+    outputs:
+      new_version: ${{ steps.versioning.outputs.new_version }} # ✅ ส่งค่าออกจาก job
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
 
-      - name: Curl to check if the service is running
+      - name: Get Labels from PR (only for PR)
+        id: get-labels
+        if : github.event_name == 'pull_request'
         run: |
-          curl -X GET http://localhost:8000/grader-service/api/health/check || exit 1
+          LABELS=$(gh pr view ${{ github.event.pull_request.number }} --json labels --jq '.labels[].name')
+          echo "Labels: $LABELS"
+          echo "labels=$LABELS" >> $GITHUB_ENV
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Set up versioning
+        id: versioning
+        run: |
+          git fetch --tags
+          LATEST_TAG=$(git describe --tags $(git rev-list --tags --max-count=1) || echo "v0.0.0")
+          echo "Latest tag: $LATEST_TAG"
+          
+          VERSION=$(echo $LATEST_TAG | sed 's/v//')
+          MAJOR=$(echo $VERSION | cut -d. -f1)
+          MINOR=$(echo $VERSION | cut -d. -f2)
+          PATCH=$(echo $VERSION | cut -d. -f3)
+          
+          if git log -1 --pretty=%B | grep -q '\[major\]' || [[ "${{ env.labels }}" == *"major"* ]]; then
+              MAJOR=$((MAJOR + 1))
+              MINOR=0
+              PATCH=0
+          elif git log -1 --pretty=%B | grep -q '\[minor\]' || [[ "${{ env.labels }}" == *"minor"* ]]; then
+              MINOR=$((MINOR + 1))
+              PATCH=0
+          else
+              PATCH=$((PATCH + 1))
+          fi
+          
+          NEW_VERSION="v$MAJOR.$MINOR.$PATCH"
+          echo "Old version: $LATEST_TAG"
+          echo "New version: $NEW_VERSION"
+          
+          echo "new_version=$NEW_VERSION" >> $GITHUB_OUTPUT # ส่งไป job อื่น
+          echo "old_version=$LATEST_TAG" >> $GITHUB_OUTPUT
+
+  build:
+    name: Build Image & Push to Docker Hub
+    needs: version
+    if: github.event_name == 'push'
+    runs-on: ubuntu-latest
+    steps:
+
+      - name: Use version from previous job
+        run: |
+          echo "Received version: ${{ needs.version.outputs.new_version }}"
+
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Set up JDK 21
+        uses: actions/setup-java@v3
+        with:
+          java-version: '21'
+          distribution: 'temurin'
+
+      - name: Build with Maven
+        run: |
+          mvn clean install -DskipTests
+
+      - name: Set up Docker
+        uses: docker/setup-buildx-action@v3
 
       - name: Log in to Docker Hub
         uses: docker/login-action@v2
@@ -77,8 +126,24 @@ jobs:
           username: ${{ secrets.DOCKER_USERNAME }}
           password: ${{ secrets.DOCKER_PASSWORD }}
 
-      - name: Push Docker image
+      - name: Build Docker image
         run: |
-            docker tag grader-service:latest ${{ secrets.DOCKER_USERNAME }}/grader-service:latest
-            docker push ${{ secrets.DOCKER_USERNAME }}/grader-service:latest
+          docker build -t grader-service . 
+          docker tag grader-service ${{ secrets.DOCKER_USERNAME }}/grader-service:latest
+          docker push ${{ secrets.DOCKER_USERNAME }}/grader-service:latest
+
+          # Tag the image with the new version
+          docker tag grader-service ${{ secrets.DOCKER_USERNAME }}/grader-service:${{ needs.version.outputs.new_version }}
+          docker push ${{ secrets.DOCKER_USERNAME }}/grader-service:${{ needs.version.outputs.new_version }}
+
+      - name: Create Git tag for version
+        run: |
+          # Set Git committer identity
+          git config --global user.name "GitHub Actions"
+          git config --global user.email "actions@github.com"
           
+          # Create and push the Git tag
+          git tag -a "${{ needs.version.outputs.new_version }}" -m "Release version ${{ needs.version.outputs.new_version }}"
+          git push origin "${{ needs.version.outputs.new_version }}"
+      
+

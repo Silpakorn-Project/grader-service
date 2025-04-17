@@ -117,9 +117,7 @@ public class SubmissionsService {
         return null;
     }
 
-    public RunTestResponse submit(SubmitRequest submitRequest) {
-        usersService.getUserById(submitRequest.getUserId());
-
+    public RunTestResponse runTests(SubmitRequest submitRequest) {
         List<TestCase> testCases = testcasesService.getTestcasesByProblemId(submitRequest.getProblemId())
                 .stream()
                 .map(TestCase::new)
@@ -127,6 +125,57 @@ public class SubmissionsService {
 
         RunTestRequest runTestRequest = new RunTestRequest(submitRequest.getCode(), testCases);
         RunTestResponse response = sandboxClient.runTests(runTestRequest, submitRequest.getLanguage());
+
+        // Only return the first 3 failed test cases
+        if (response != null) {
+            RunTestResponse.TestResult[] filteredCases;
+
+            if (response.isPassed()) {
+                filteredCases = Arrays.stream(response.getTest_cases())
+                        .filter(RunTestResponse.TestResult::isPassed)
+                        .limit(3)
+                        .toArray(RunTestResponse.TestResult[]::new);
+            } else {
+                List<RunTestResponse.TestResult> failedList = Arrays.stream(response.getTest_cases())
+                        .filter(t -> !t.isPassed())
+                        .toList();
+
+                filteredCases = failedList.stream()
+                        .skip(Math.max(0, failedList.size() - 3))
+                        .toArray(RunTestResponse.TestResult[]::new);
+            }
+
+            response.setTest_cases(filteredCases);
+        }
+        // Only return the first 3 failed test cases
+        if (response != null) {
+            RunTestResponse.TestResult[] filteredCases;
+
+            if (response.isPassed()) {
+                filteredCases = Arrays.stream(response.getTest_cases())
+                        .filter(RunTestResponse.TestResult::isPassed)
+                        .limit(3)
+                        .toArray(RunTestResponse.TestResult[]::new);
+            } else {
+                List<RunTestResponse.TestResult> failedList = Arrays.stream(response.getTest_cases())
+                        .filter(t -> !t.isPassed())
+                        .toList();
+
+                filteredCases = failedList.stream()
+                        .skip(Math.max(0, failedList.size() - 3))
+                        .toArray(RunTestResponse.TestResult[]::new);
+            }
+
+            response.setTest_cases(filteredCases);
+        }
+
+        return response;
+    }
+
+    public RunTestResponse submit(SubmitRequest submitRequest) {
+        usersService.getUserById(submitRequest.getUserId());
+
+        RunTestResponse response = this.runTests(submitRequest);
 
         if (submitRequest.isSaveSubmission() && response != null) {
             SubmissionsEntity submissionsEntity = DtoEntityMapper.mapToEntity(submitRequest, SubmissionsEntity.class);
@@ -153,28 +202,6 @@ public class SubmissionsService {
             }
 
             submissionsRepository.save(submissionsEntity);
-        }
-
-        // Only return the first 3 failed test cases
-        if (response != null) {
-            RunTestResponse.TestResult[] filteredCases;
-
-            if (response.isPassed()) {
-                filteredCases = Arrays.stream(response.getTest_cases())
-                        .filter(RunTestResponse.TestResult::isPassed)
-                        .limit(3)
-                        .toArray(RunTestResponse.TestResult[]::new);
-            } else {
-                List<RunTestResponse.TestResult> failedList = Arrays.stream(response.getTest_cases())
-                        .filter(t -> !t.isPassed())
-                        .toList();
-
-                filteredCases = failedList.stream()
-                        .skip(Math.max(0, failedList.size() - 3))
-                        .toArray(RunTestResponse.TestResult[]::new);
-            }
-
-            response.setTest_cases(filteredCases);
         }
 
         return response;

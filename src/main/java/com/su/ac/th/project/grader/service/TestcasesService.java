@@ -85,11 +85,6 @@ public class TestcasesService {
                 .findById(id)
                 .orElseThrow(() -> new TestCaseNotFoundException(id));
 
-        if (testcasesEntity.getProblemId() != null) {
-            testcasesEntity.setProblemId(testcasesUpdateRequest.getProblemId());
-            rowUpdated += 1;
-        }
-
         if (testcasesEntity.getInputData() != null) {
             testcasesEntity.setInputData(testcasesUpdateRequest.getInputData());
             rowUpdated += 1;

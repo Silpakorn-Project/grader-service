@@ -92,4 +92,16 @@ public class SubmissionsController {
                 .data(submissionsService.submit(submitRequest))
                 .build());
     }
+
+    @PostMapping("/run-tests")
+    public ResponseEntity<BaseResponseModel> runTests(
+            @Valid @RequestBody SubmitRequest submitRequest
+    ) {
+        return ResponseEntity.ok(BaseResponseModel.builder()
+                .timestamp(getDateTimeNow())
+                .code(HttpConstant.Status.SUCCESS)
+                .message(HttpConstant.Message.SUCCESS)
+                .data(submissionsService.runTests(submitRequest))
+                .build());
+    }
 }

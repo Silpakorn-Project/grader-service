@@ -4,9 +4,9 @@ import com.su.ac.th.project.grader.constant.HttpConstant;
 import com.su.ac.th.project.grader.model.BaseResponseModel;
 import com.su.ac.th.project.grader.model.PaginationRequest;
 import com.su.ac.th.project.grader.model.PaginationResponse;
+import com.su.ac.th.project.grader.model.request.user.IncreaseScoreRequest;
 import com.su.ac.th.project.grader.model.request.user.UsersRequest;
 import com.su.ac.th.project.grader.model.request.user.UsersUpdateRequest;
-import com.su.ac.th.project.grader.model.response.SubmissionsResponse;
 import com.su.ac.th.project.grader.model.response.UserResponse;
 import com.su.ac.th.project.grader.service.UsersService;
 import jakarta.validation.Valid;
@@ -87,6 +87,18 @@ public class UsersController {
                 .message(HttpConstant.Message.SUCCESS)
                 .code(HttpConstant.Status.SUCCESS)
                 .data(usersService.deleteUser(id))
+                .build());
+    }
+
+    @PatchMapping("/{id}/score")
+    public ResponseEntity<BaseResponseModel> increaseUserScore(
+            @RequestBody IncreaseScoreRequest request,
+            @PathVariable Long id) {
+        return ResponseEntity.ok(BaseResponseModel.builder()
+                .timestamp(getDateTimeNow())
+                .message(HttpConstant.Message.SUCCESS)
+                .code(HttpConstant.Status.SUCCESS)
+                .data(usersService.incrementUserScore(id, request.getScore()))
                 .build());
     }
 }

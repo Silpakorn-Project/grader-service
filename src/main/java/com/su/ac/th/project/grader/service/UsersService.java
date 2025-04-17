@@ -92,7 +92,7 @@ public class UsersService {
         return null;
     }
 
-    public void incrementUserScore(Long id, int points) {
+    public Object incrementUserScore(Long id, int points) {
         UsersEntity user = userRepository.findById(id)
                 .orElseThrow(() -> new UserNotFoundException(id));
 
@@ -100,5 +100,6 @@ public class UsersService {
         user.setUpdatedAt(LocalDateTime.now());
 
         userRepository.save(user);
+        return null;
     }
 }
